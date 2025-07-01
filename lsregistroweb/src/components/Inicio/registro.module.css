@@ -201,11 +201,12 @@
 
 .passwordToggle {
     position: absolute;
-    right: 21%;
+    right: 23%;
     top: 30%;
     cursor: pointer;
     
 }
 .ojos {
-    width: 15px;
+    width: 13px;
+    filter: opacity(0.6);
 }
