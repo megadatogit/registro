@@ -3,6 +3,8 @@ import styles from './registro.module.css';
 import srcLogo from '../Inicio/LS-imagotipo-horizontal.svg';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg'
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg'
+import Logo from '../Logo/Logo';
+import BotonA from '../Botones/BotonA';
 
 const Inicio = () => {
   
@@ -43,7 +45,7 @@ const Inicio = () => {
         <p><span className={styles.liga}>Inicia sesion aquí</span> para continuar donde te quedaste</p>
       </div>
       <div className={styles.cntFormulario}>
-        <div className={styles.imgLogo}><img src={srcLogo}></img></div>
+        <Logo/>
         <div className={styles.formulario}>
           <form name="registro" method="" action="">
             <div className={styles.cntImput}>
@@ -67,7 +69,7 @@ const Inicio = () => {
                 className={styles.passwordToggle} // Clase CSS para posicionar el ojo
                 onClick={togglePasswordVisibility} // Manejador de clic
               >
-                {showConfirmPassword ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" /> : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />} {/* Icono de ojo abierto o cerrado */}
+                {showPassword ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" /> : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />} {/* Icono de ojo abierto o cerrado */}
               </span>
             </div>
 
@@ -92,7 +94,8 @@ const Inicio = () => {
               <label className={styles.terminos}> <p>He leído y acepto <span><a>Términos y Condiciones</a></span> y nuestras <span><a>Políticas de privacidad</a></span></p></label>
             </div>
             <div>
-              <p><button className={styles.boton} type="submit">Crear cuenta</button></p>
+              <p><BotonA
+              textoBoton="Crear cuenta"/></p>
             </div>
           </form>
         </div>

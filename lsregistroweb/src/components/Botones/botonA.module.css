@@ -1,0 +1,10 @@
+
+.boton {
+    appearance: none;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    width: 60%;
+    background-color: #5981c6;
+    color: white;
+}

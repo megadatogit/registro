@@ -157,6 +157,7 @@
         padding: 0.5rem;
         width: 55%;
         border-radius: 6px;
+        outline-color: #5981c6;
     }
 }
 
@@ -209,4 +210,70 @@
 .ojos {
     width: 13px;
     filter: opacity(0.6);
+}
+
+@media (max-width: 950px) {
+
+    .cntBienvenida > :nth-child(3),
+    .cntBienvenida > :nth-child(5),
+    .cntBienvenida > :nth-child(6),
+    .cntPasos {
+        display: none;
+        
+    }
+
+    .cntBienvenida{
+        background-image: none;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .cntBienvenida::after {
+        display: none;
+    }
+    .contenedorRegistro {
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-image: url(./Mask.png);
+        position: relative;
+        z-index: 1;
+    }
+    
+    .imgLogo {
+        min-width: 40%;
+        
+        
+    }
+
+    .contenedorRegistro::before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width:  100%;
+        background-color: #3b63a8 ;
+        filter: opacity(0.4);
+        z-index: -1;
+    }
+
+    .cntFormulario {
+        min-width: 100%;
+    }
+
+    .formulario {
+        width: 90%;
+    }
+
+    .cntImput > input:focus-visible {
+        appearance: none;
+        outline-color: #5981c6;
+    }
+    
 }

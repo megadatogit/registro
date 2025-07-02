@@ -1,0 +1,42 @@
+
+
+
+@media (max-width: 950px) {
+
+    .cntVerificacion{
+
+        padding-top: 3rem;
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cntInputs {
+        display: flex;
+        width: 100%;
+        margin: 2rem auto;
+    }
+
+    .inputs {
+        appearance: none;
+        border: 1px solid #5981c6;
+        border-radius: 6px;
+        margin: .25rem;
+        width: 1.5rem;
+        height: 2.25rem;
+
+
+    }
+
+    .cntBoton {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+
+    }
+
+}
