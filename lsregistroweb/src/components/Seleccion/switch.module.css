@@ -1,0 +1,11 @@
+.cntSwitch {
+    position: relative;
+    width: 230px;
+    max-width: 240px;
+    height: 30px;
+    border: 2px dashed;
+}
+
+.switch {
+
+}

@@ -5,8 +5,17 @@ import srcAbierto from './eye-password-see-view-svgrepo-com.svg'
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg'
 import Logo from '../Logo/Logo';
 import BotonA from '../Botones/BotonA';
+import { useForm } from 'react-hook-form'
+import Switch from '../Seleccion/Switch';
 
 const Inicio = () => {
+
+  const { register, handleSubmit, formState: {error}} = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Datos validados", data)
+
+  }
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -46,10 +55,21 @@ const Inicio = () => {
       </div>
       <div className={styles.cntFormulario}>
         <Logo/>
+        <Switch/>
         <div className={styles.formulario}>
-          <form name="registro" method="" action="">
+          <form name="registro" method="" action="" onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.cntImput}>
-              <input type="mail" name="correo" id="correo" placeholder="Correo electrónico"></input>
+              <input 
+              type="mail" 
+              id="correo" 
+              placeholder="Correo electrónico"
+              {...register("correo", { 
+                required: "Este campo es obligatorio", pattern: {
+                  value: /^\S+@\S+$/i, 
+                  message: "Correo no valido"
+                }
+              })}
+              ></input>
               {/* <label for="correo">Correo electrónico</label> */}
             </div>
             <div className={styles.cntImput}>
