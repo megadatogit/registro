@@ -5,6 +5,7 @@
     justify-content: space-evenly;
     align-items: center;
     overflow: hidden;
+    
 }
 
 .cntBienvenida{
@@ -38,19 +39,17 @@
 
 }
 
-.cntBienvenida > :nth-child(1){
+.cntSaludo {
+    display: flex;
+    flex-direction: column;
+    & .cntLogo {
+        display: none;
+    }
+
+}
+
+.cntSaludo div > :nth-child(1) {
     font-size: 2rem;
-    margin: 0;
-    line-height: 1.5;
-}
-.cntBienvenida > :nth-child(2){
-    font-size: 1.3rem;
-    margin: 0;
-    margin-bottom: 1.5rem;
-}
-.cntBienvenida > :nth-child(3){
-    font-size: 0.8rem;
-    margin-bottom: 3rem;
 }
 
 
@@ -112,6 +111,13 @@
     margin: 0.5rem;
 }
 
+.cntDerechos {
+    display: block;
+}
+.derechos {
+    font-size: 0.6rem;
+    text-align: center;
+}
 
 .liga {
     text-decoration: underline;
@@ -144,6 +150,10 @@
     min-width: 330px;
 }
 
+.cntDerechosForm {
+    display: none;
+}
+
 .cntImput {
     
     display: flex;
@@ -171,7 +181,8 @@
     
 }
 
-.terminos > p {
+.terminos > p,
+.iniciarSesion > p {
     width: 100%;
     text-wrap: balance;
     font-size: 0.6rem;
@@ -187,6 +198,12 @@
             }
         }
 
+}
+
+.iniciarSesion > p {
+    text-align: center;
+    margin: 0;
+    line-height: 1.6;
 }
 
 .boton {
@@ -214,8 +231,36 @@
 
 @media (max-width: 950px) {
 
+    .cntSaludo {
+        display: flex;
+        flex-direction: column-reverse;
+        
+        & .cntLogo {
+            margin: 0 auto;
+            display: inline-block;
+            width: 100%;
+            max-width: 250px;
+            
+            text-align: center;
+            
+        }
+    }
+
+    .cntDerechosInfo{
+        display: none;
+    }
+
+    .cntDerechosForm {
+        display: block;
+    }
+
+    .logoForm {
+        display: none;
+    }
+
+    
+    .cntBienvenida > :nth-child(2),
     .cntBienvenida > :nth-child(3),
-    .cntBienvenida > :nth-child(5),
     .cntBienvenida > :nth-child(6),
     .cntPasos {
         display: none;
@@ -267,9 +312,12 @@
         min-width: 100%;
     }
 
+
     .formulario {
         width: 90%;
     }
+
+    
 
     .cntImput > input:focus-visible {
         appearance: none;

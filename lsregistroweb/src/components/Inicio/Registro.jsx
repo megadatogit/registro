@@ -7,16 +7,18 @@ import Logo from '../Logo/Logo';
 import BotonA from '../Botones/BotonA';
 import { useForm } from 'react-hook-form'
 import Switch from '../Seleccion/Switch';
+import Derechos from './Derechos';
+
 
 const Inicio = () => {
 
-  const { register, handleSubmit, formState: {error}} = useForm();
+  const { register, handleSubmit, formState: { error } } = useForm();
 
   const onSubmit = (data) => {
     console.log("Datos validados", data)
 
   }
-  
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -33,42 +35,54 @@ const Inicio = () => {
   return (
     <div className={styles.contenedorRegistro}>
       <div className={styles.cntBienvenida}>
-        <p>¡Bienvenido a Liber Salus!</p>
-        <p>Afíliate y toma el control de tu bienestar</p>
-        <p>Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.<br/>
-        Este proceso es sencillo y sólo toma tres pasos:</p>
+        <div className={styles.cntSaludo}>
+          <div>
+            <p>¡Bienvenido a Liber Salus!</p>
+            <p >Afíliate y toma el control de tu bienestar</p>
+          </div>
+          <div className={styles.cntLogo}>
+            <Logo />
+          </div>
+        </div>
+        <p>Para comenzar a usar nuestra plataforma, necesitas crear un usuario y afiliarte.<br />
+          Este proceso es sencillo y sólo toma tres pasos:</p>
         <div className={styles.cntPasos}>
           <div className={styles.elementoPaso}>
-            <p className={styles.paso}>Crea tu usuario: <br/>
-            Llena tus datos personales.</p>
+            <p className={styles.paso}>Crea tu usuario: <br />
+              Llena tus datos personales.</p>
           </div>
           <div className={styles.elementoPaso}>
-            <p className={styles.paso}>Sube tus documentos: <br/>
-            CURP, INE y comprobante de domicilio</p>
+            <p className={styles.paso}>Sube tus documentos: <br />
+              CURP, INE y comprobante de domicilio</p>
           </div>
           <div className={styles.elementoPaso}>
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
           </div>
         </div>
-        <p>¿Ya tienes una cuenta?</p>
-        <p><span className={styles.liga}>Inicia sesion aquí</span> para continuar donde te quedaste</p>
+
+        <div className={styles.cntDerechosInfo}>
+          <Derechos/>
+        </div>
+
       </div>
       <div className={styles.cntFormulario}>
-        <Logo/>
-        <Switch/>
         <div className={styles.formulario}>
+          <div className={styles.logoForm}>
+            <Logo/>
+          </div>
           <form name="registro" method="" action="" onSubmit={handleSubmit(onSubmit)}>
+            <Switch />
             <div className={styles.cntImput}>
-              <input 
-              type="mail" 
-              id="correo" 
-              placeholder="Correo electrónico"
-              {...register("correo", { 
-                required: "Este campo es obligatorio", pattern: {
-                  value: /^\S+@\S+$/i, 
-                  message: "Correo no valido"
-                }
-              })}
+              <input
+                type="mail"
+                id="correo"
+                placeholder="Correo electrónico"
+                {...register("correo", {
+                  required: "Este campo es obligatorio", pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Correo no valido"
+                  }
+                })}
               ></input>
               {/* <label for="correo">Correo electrónico</label> */}
             </div>
@@ -110,14 +124,20 @@ const Inicio = () => {
             </div>
 
             <div className={styles.cntPoliticas}>
-              <input type="checkbox" name="politicas"/>
+              <input type="checkbox" name="politicas" />
               <label className={styles.terminos}> <p>He leído y acepto <span><a>Términos y Condiciones</a></span> y nuestras <span><a>Políticas de privacidad</a></span></p></label>
             </div>
             <div>
               <p><BotonA
-              textoBoton="Crear cuenta"/></p>
+                textoBoton="Crear cuenta" /></p>
             </div>
+
           </form>
+          <div className={styles.iniciarSesion}><p>¿Ya tienes una cuenta?</p>
+            <p><span className={styles.liga}>Inicia sesion aquí</span> para continuar donde te quedaste</p></div>
+        </div>
+        <div className={styles.cntDerechosForm}>
+          <Derechos/>
         </div>
       </div>
     </div>

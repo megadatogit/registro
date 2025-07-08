@@ -1,11 +1,71 @@
 .cntSwitch {
     position: relative;
-    width: 230px;
-    max-width: 240px;
+    width: 60%;
+    margin: 0 auto;
+    
     height: 30px;
-    border: 2px dashed;
+    /* border: 2px dashed; */
+    background-color: #d7eafb;
+    border-radius: 8px;
+    height: 32px;
+    display: flex;
+    
+    align-items: center;
+}
+
+.input {
+    position: absolute;
+    z-index: 1;
+    visibility: hidden;
 }
 
 .switch {
-
+    position: relative;
+    background-color: #5981c6 ;
+    display: flex;
+    width: 50%;
+    height: 100%;
+    border-radius: 8px;
+    appearance: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
 }
+
+.cntSwitch::before {
+    position: absolute;
+    content: 'Personal de Salud';
+    z-index: 1;
+    font-size: 0.75rem;
+    color: white;
+    display: flex;
+    left: calc(75% );
+    transform: translateX(-50%);
+    width: fit-content;
+    text-align: center;
+    display: block;
+    
+}
+
+.cntSwitch::after {
+    position: absolute;
+    font-size: 0.75rem;
+    color: white;
+    content: 'Paciente';
+    left: 25%;
+    transform: translateX(-50%);
+}
+
+
+.cntSwitch > [type="checkbox"]:checked + label {
+    transform: translateX(100%);
+}
+
+.cntSwitch input[type="checkbox"]:checked + label::before {
+    color: red;
+}
+
+
+
+
+
