@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Importa useState
+import React, { useState } from 'react';
 import styles from './registro.module.css';
 import srcLogo from '../Inicio/LS-imagotipo-horizontal.svg';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg'
@@ -9,32 +9,39 @@ import { useForm } from 'react-hook-form'
 import Switch from '../Seleccion/Switch';
 import Derechos from './Derechos';
 
-
 const Inicio = () => {
+  // Estados para mostrar/ocultar contraseña
+  const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
 
-  const { register, handleSubmit, formState: { error } } = useForm();
+  // RHF setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm({ mode: "onChange" });
 
+  // Watchers
+  const passwordValue = watch("contrasena", "");
+  const terminos = watch("politicas", false);
+
+  // Submit handler
   const onSubmit = (data) => {
     console.log("Datos validados", data)
-
+    // Aquí va el envío a backend...
   }
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Función para alternar la visibilidad de la contraseña principal
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  // Función para alternar la visibilidad de la contraseña de confirmación
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  // Alternar visibilidad de contraseñas
+  const alternarPassword = () => setMostrarPassword(prev => !prev);
+  const alternarConfirmPassword = () => setMostrarConfirmPassword(prev => !prev);
 
   return (
     <div className={styles.contenedorRegistro}>
       <div className={styles.cntBienvenida}>
+        {/* ...tu bloque de bienvenida aquí... */}
+
         <div className={styles.cntSaludo}>
           <div>
             <p>¡Bienvenido a Liber Salus!</p>
@@ -63,78 +70,146 @@ const Inicio = () => {
         <div className={styles.cntDerechosInfo}>
           <Derechos/>
         </div>
-
       </div>
       <div className={styles.cntFormulario}>
         <div className={styles.formulario}>
           <div className={styles.logoForm}>
             <Logo/>
           </div>
-          <form name="registro" method="" action="" onSubmit={handleSubmit(onSubmit)}>
+          <form name="registro" onSubmit={handleSubmit(onSubmit)}>
             <Switch />
+
+            {/* Correo */}
             <div className={styles.cntImput}>
               <input
-                type="mail"
+                type="email"
                 id="correo"
                 placeholder="Correo electrónico"
                 {...register("correo", {
-                  required: "Este campo es obligatorio", pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Correo no valido"
+                  required: "Este campo es obligatorio",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Correo no válido"
                   }
                 })}
-              ></input>
-              {/* <label for="correo">Correo electrónico</label> */}
-            </div>
-            <div className={styles.cntImput}>
-              <input type="text" name="telefono" id="telefono" placeholder="Telefono celular" maxLength="10"></input>
-              {/* <label for="teléfono">Teléfono celular</label> */}
+                className={errors.correo ? styles.errorInput : ""}
+              />
+              {errors.correo && <span className={styles.error}>{errors.correo.message}</span>}
             </div>
 
-            {/* Input de Contraseña principal */}
+            {/* Teléfono */}
             <div className={styles.cntImput}>
               <input
-                type={showPassword ? "text" : "password"} // Cambia el tipo según el estado
-                name="contrasena"
+                type="text"
+                id="telefono"
+                placeholder="Teléfono celular"
+                maxLength="10"
+                {...register("telefono", {
+                  required: "Teléfono requerido",
+                  minLength: { 
+                    value: 10, 
+                    message: "Debe tener 10 dígitos" },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Solo números"
+                  }
+                })}
+                className={errors.telefono ? styles.errorInput : ""}
+              />
+              {errors.telefono && <span className={styles.error}>{errors.telefono.message}</span>}
+            </div>
+
+            {/* Contraseña */}
+            <div className={styles.cntImput}>
+              <input
+                type={mostrarPassword ? "text" : "password"}
                 id="contrasena"
                 placeholder="Contraseña"
+                {...register("contrasena", {
+                  required: "Contraseña requerida",
+                  pattern: {
+                    value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])[\s\S]{8,}$/,
+                    message: "Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo."
+                  }
+                })}
+                className={errors.contrasena ? `${styles.errorInput}` : ""}
               />
               <span
-                className={styles.passwordToggle} // Clase CSS para posicionar el ojo
-                onClick={togglePasswordVisibility} // Manejador de clic
+                className={styles.passwordToggle}
+                onClick={alternarPassword}
+                tabIndex={0}
+                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && alternarPassword()}
+                aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                role="button"
               >
-                {showPassword ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" /> : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />} {/* Icono de ojo abierto o cerrado */}
+                {mostrarPassword
+                  ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" />
+                  : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />}
               </span>
+              {errors.contrasena && <span className={styles.error}>{errors.contrasena.message}</span>}
             </div>
 
-            {/* Input de Confirmar Contraseña */}
+            {/* Confirmar contraseña */}
             <div className={styles.cntImput}>
               <input
-                type={showConfirmPassword ? "text" : "password"} // Cambia el tipo según el estado
-                name="confirmContra"
-                id="confirmContra" // Asegúrate de que el id sea único
+                type={mostrarConfirmPassword ? "text" : "password"}
+                id="confirmContra"
                 placeholder="Confirmar contraseña"
+                {...register("confirmContra", {
+                  required: "Confirma tu contraseña",
+                  validate: value =>
+                    value === passwordValue || "Las contraseñas no coinciden"
+                })}
+                className={errors.confirmContra ? styles.errorInput : ""}
               />
               <span
-                className={styles.passwordToggle} // Clase CSS para posicionar el ojo
-                onClick={toggleConfirmPasswordVisibility} // Manejador de clic
+                className={styles.passwordToggle}
+                onClick={alternarConfirmPassword}
+                tabIndex={0}
+                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && alternarConfirmPassword()}
+                aria-label={mostrarConfirmPassword ? "Ocultar confirmación" : "Mostrar confirmación"}
+                role="button"
               >
-                {showConfirmPassword ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" /> : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />} {/* Icono de ojo abierto o cerrado */}
+                {mostrarConfirmPassword
+                  ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" />
+                  : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />}
               </span>
+              {errors.confirmContra && <span className={styles.error}>{errors.confirmContra.message}</span>}
             </div>
 
+            {/* Políticas */}
             <div className={styles.cntPoliticas}>
-              <input type="checkbox" name="politicas" />
-              <label className={styles.terminos}> <p>He leído y acepto <span><a>Términos y Condiciones</a></span> y nuestras <span><a>Políticas de privacidad</a></span></p></label>
-            </div>
-            <div>
-              <p><BotonA
-                textoBoton="Crear cuenta" /></p>
+              <div className={styles.cntChk}>
+                <input
+                type="checkbox"
+                id="politicas"
+                {...register("politicas", {
+                  required: {
+                    value: true,
+                    message: "Acepta los términos y condiciones"
+                  }
+                })}
+                className={errors.politicas ? styles.errorInput : ""}
+              />
+              <label className={styles.terminos} htmlFor="politicas">
+                <p>He leído y acepto <span><a href="#">Términos y Condiciones</a></span> y nuestras <span><a href="#">Políticas de privacidad</a></span></p>
+              </label>
+              </div>
+              {errors.politicas && <span className={styles.error}>{errors.politicas.message}</span>}
             </div>
 
+            <div>
+              <p>
+                <BotonA
+                  textoBoton="Crear cuenta"
+                  // Puedes pasarle una prop disabled si RHF detecta errores: disabled={Object.keys(errors).length > 0}
+                />
+              </p>
+            </div>
           </form>
           <div className={styles.iniciarSesion}><p>¿Ya tienes una cuenta?</p>
-            <p><span className={styles.liga}>Inicia sesion aquí</span> para continuar donde te quedaste</p></div>
+            <p><span className={styles.liga}>Inicia sesión aquí</span> para continuar donde te quedaste</p>
+          </div>
         </div>
         <div className={styles.cntDerechosForm}>
           <Derechos/>

@@ -12,7 +12,6 @@ const Confirmacion = () => {
         <div className={styles.cntConfirmacion}>
             <div className={styles.logoCnt}><Logo /></div>
             
-
             <TextoPrincipal
             textoPrincipal="Confirmemos tu información de contacto"
             />
@@ -24,7 +23,7 @@ const Confirmacion = () => {
 
             
 
-            <form>
+            <form className={styles.fieldset}>
                 <fieldset className={styles.fieldset}>
 
                     

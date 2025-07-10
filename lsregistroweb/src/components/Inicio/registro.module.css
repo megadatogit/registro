@@ -35,7 +35,7 @@
     width:  100%;
     min-width: 320px;
     background-color: #3b63a8 ;
-    filter: opacity(0.4);
+    filter: opacity(0.6);
 
 }
 
@@ -158,29 +158,71 @@
     
     display: flex;
     justify-content: center;
+    align-items: center;
     position: relative;
     /* border: 2px dashed; */
     margin-top: 1rem;
+    flex-direction: column;
+    
+    
     & input {
         appearance: none;
         border: 1px solid #8f8f8f;
         padding: 0.5rem;
         width: 55%;
         border-radius: 6px;
+        outline: none;
         outline-color: #5981c6;
+        
     }
+    
+    & input:focus {
+        outline: none;
+        outline-color: #5981c6;
+        
+    }
+
+    & input.errorInput {
+        border: 2.5px solid #e95757 !important;
+        outline: none;
+    }
+}
+
+
+.error {
+    color: #ec3b3b;
+    font-size: 0.6rem;
+    display: block;
+    margin: 0.4em auto;
+    width: 80%;
+    text-decoration: none;
+    
+    
+}
+
+.errorInput {
+    background-color: rgb(252, 236, 236);
+    outline: none;
+    border: 1px solid #e95757;
+    
+    outline-color: #e95757 !important;
+    
+    
 }
 
 .cntPoliticas {
     margin: 2rem auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 60%;
     
 }
-
+.cntChk {
+    display: flex;
+}
 .terminos > p,
 .iniciarSesion > p {
     width: 100%;
@@ -190,13 +232,7 @@
     margin-left: 1rem;
     line-height: 1.2;
 
-        & span {
-            color: blue;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
+        
 
 }
 
@@ -220,14 +256,16 @@
 .passwordToggle {
     position: absolute;
     right: 23%;
-    top: 30%;
     cursor: pointer;
+    display: flex;
+    top: 30%;
     
 }
 .ojos {
     width: 13px;
     filter: opacity(0.6);
 }
+
 
 @media (max-width: 950px) {
 
@@ -253,6 +291,7 @@
     .cntDerechosForm {
         display: block;
         color: white;
+        width: 80%;
     }
 
     .logoForm {
@@ -279,6 +318,7 @@
 
     .cntBienvenida::after {
         display: none;
+        filter: opacity(0.6);
     }
     .contenedorRegistro {
         flex-direction: column;
@@ -305,7 +345,7 @@
         bottom: 0;
         width:  100%;
         background-color: #3b63a8 ;
-        filter: opacity(0.4);
+        filter: opacity(0.6);
         z-index: -1;
     }
 
@@ -319,7 +359,10 @@
         color: white;
     }
 
-    
+    .error {
+        color: #aa2020;
+
+    }
 
     .cntImput > input:focus-visible {
         appearance: none;

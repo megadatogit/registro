@@ -57,13 +57,11 @@
 }
 
 
-.cntSwitch > [type="checkbox"]:checked + label {
+.cntSwitch > input[type="checkbox"]:checked + label {
     transform: translateX(100%);
 }
 
-.cntSwitch input[type="checkbox"]:checked + label::before {
-    color: red;
-}
+
 
 
 
