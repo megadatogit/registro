@@ -5,7 +5,7 @@ import srcLogo from './LS-imagotipo-horizontal.svg'
 
 const Logo = () => {
   return (
-    <div className={styles.imgLogo}><img src={srcLogo}></img></div>
+    <div className={styles.cntLogo}><img src={srcLogo}></img></div>
   )
 }
 

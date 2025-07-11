@@ -4,36 +4,32 @@
   width: 100%;
   height: 100dvh;
   margin: 0 auto;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  
 }
 
-
-
-.cntConfirmacion> :nth-child(2),
-.cntConfirmacion> :nth-child(3) {
-
+.cntConfirmacion > :nth-child(2),
+.cntConfirmacion > :nth-child(3) {
+  
   width: 55%;
   text-align: center;
   font-weight: 500;
   line-height: 1.4;
 }
 
-.logoCnt {
-  width: 50%;
-}
 
-.cntConfirmacion> :nth-child(2) {
+.cntConfirmacion > :nth-child(2) {
   font-size: 2rem;
   width: 80%;
   font-weight: 500;
   margin: 1rem;
+  padding-top: 0;
 }
 
-.cntConfirmacion> :nth-child(1) {
+.cntConfirmacion > :nth-child(1) {
   margin-top: 3rem;
   min-width: 40%;
 }

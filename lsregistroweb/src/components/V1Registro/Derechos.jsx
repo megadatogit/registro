@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './registro.module.css'
+import styles from './v1registro.module.css'
 
 const Derechos = () => {
   return (

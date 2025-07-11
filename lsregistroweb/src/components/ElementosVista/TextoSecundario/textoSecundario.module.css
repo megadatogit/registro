@@ -1,0 +1,13 @@
+.cntTextoSecundario {
+    margin: 0 auto;
+    width: fit-content;
+    padding: 0;
+}
+
+.textoSecundario{
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.2;
+
+}

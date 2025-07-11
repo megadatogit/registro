@@ -39,6 +39,7 @@
 
 }
 
+
 .cntSaludo {
     display: flex;
     flex-direction: column;
@@ -135,6 +136,10 @@
     
 }
 
+.logoForm {
+    margin: 1rem auto 2rem;
+    width: 50%;
+}
 
 .imgLogo {
     width: 23%;

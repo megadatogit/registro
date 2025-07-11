@@ -1,0 +1,15 @@
+.cntTextoPrincipal {
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.textoPrincipal {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+

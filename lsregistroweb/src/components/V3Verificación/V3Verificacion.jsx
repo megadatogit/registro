@@ -1,15 +1,18 @@
 import React from 'react'
-import styles from './verificacion.module.css'
-import Logo from '../Logo/Logo'
+import styles from './v3verificacion.module.css'
+import Logo from '../ElementosVista/Logo/Logo'
 import BotonA from '../Botones/BotonA'
 
-import TextoPrincipal from '../Textos/TextoPrincipal'
-import TextoSecundario from '../Textos/TextoSecundario'
+import TextoPrincipal from '../ElementosVista/TextoPrincipal/TextoPrincipal'
+import TextoSecundario from '../ElementosVista/TextoSecundario/TextoSecundario'
 
 const Verificacion = () => {
   return (
     <div className={styles.cntVerificacion}>
-        <Logo/>
+        <div className={styles.cntLogo}>
+          <Logo/>
+        </div>
+        
         <TextoPrincipal
         textoPrincipal="Ingresar el código de verificación"
         />
@@ -84,7 +87,7 @@ const Verificacion = () => {
       </form>
       <p id="message" ></p>
 
-      <p>P</p>
+      <p>¿No ewciviste el código? <a className={styles.reenviar}>Reenviar</a></p>
     
         
 

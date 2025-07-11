@@ -1,0 +1,102 @@
+.cntVerificacion {
+
+    background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%);
+    color: rgb(70, 69, 69);
+    width: 100%;
+    height: 100dvh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+}
+
+.cntLogo {
+    margin-top: 3rem;
+    min-width: 40%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.cntInputs {
+    display: flex;
+    width: 100%;
+    margin: 2rem auto;
+    justify-content: center;
+}
+
+.inputs {
+    appearance: none;
+    border: 1px solid #5981c6;
+    border-radius: 6px;
+    margin: .25rem;
+    width: 1.5rem;
+    height: 2.25rem;
+
+
+}
+
+.cntBoton {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+
+}
+
+.reenviar {
+    color: #5981c6;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+@media (max-width: 950px) {
+
+    .cntVerificacion {
+
+        padding-top: 3rem;
+        margin: 0 auto;
+        width: 90%;
+        text-align: center;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cntInputs {
+        display: flex;
+        width: 100%;
+        margin: 2rem auto;
+    }
+
+    .inputs {
+        appearance: none;
+        border: 1px solid #5981c6;
+        border-radius: 6px;
+        margin: .25rem;
+        width: 1.5rem;
+        height: 2.25rem;
+
+
+    }
+
+    .cntBoton {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+
+    }
+
+    .reenviar {
+        color: #5981c6;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+}

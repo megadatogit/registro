@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import styles from './registro.module.css';
-import srcLogo from '../Inicio/LS-imagotipo-horizontal.svg';
+import styles from './v1registro.module.css';
+import srcLogo from './LS-imagotipo-horizontal.svg';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg'
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg'
-import Logo from '../Logo/Logo';
+import Logo from '../ElementosVista/Logo/Logo';
 import BotonA from '../Botones/BotonA';
 import { useForm } from 'react-hook-form'
 import Switch from '../Seleccion/Switch';
@@ -71,6 +71,7 @@ const Inicio = () => {
           <Derechos/>
         </div>
       </div>
+      
       <div className={styles.cntFormulario}>
         <div className={styles.formulario}>
           <div className={styles.logoForm}>
