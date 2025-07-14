@@ -10,13 +10,14 @@ import Logo from './components/ElementosVista/Logo/Logo'
 import TextoPrincipal from './components/ElementosVista/TextoPrincipal/TextoPrincipal'
 import TextoSecundario from './components/ElementosVista/TextoSecundario/TextoSecundario'
 import V5ComprIdentidad from './components/V5ComprIdentidad/V5ComprIdentidad'
+import V6Adjuntar from './components/V6Adjuntar/V6Adjuntar'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <V5ComprIdentidad
+      <V6Adjuntar
       />
     </>
   )

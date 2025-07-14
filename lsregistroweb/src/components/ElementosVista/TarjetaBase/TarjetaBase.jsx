@@ -2,18 +2,17 @@ import React from 'react'
 import styles from './tarjetaBase.module.css'
 import BotonA from '../../Botones/BotonA'
 
-const TarjetaBase = () => {
+const TarjetaBase = ({accion, descripcion, textoBoton}) => {
   return (
     <div className={styles.cntTarjetaBase}>
         <div className={styles.cntImg}>
             <img></img>
         </div>
         <div className={styles.cntTxt}>
-            <p>Escanea tus documentos</p>
-            <p>Toma una foto de tu documento directamente desde la cámara.<br/>
-Ideal si no tienes el archivo guardado aún.</p>
+            <p>{accion}</p>
+            <p>{descripcion}</p>
         <BotonA
-        textoBoton="Escanear Documentos"
+        textoBoton={textoBoton}
         />
         </div>
 

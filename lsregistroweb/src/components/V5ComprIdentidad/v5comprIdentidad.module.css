@@ -16,6 +16,10 @@
     min-width: 40%;
 }
 
+.cntTexto {   
+    width: 90%;
+}
+
 .opciones {
     display: flex;
     flex-direction: column;
@@ -32,4 +36,14 @@
     margin: 3rem 2rem;
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 950px) {
+
+    .cntComprIdentidad {
+        height: auto;
+    }
 }
