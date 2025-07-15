@@ -11,13 +11,14 @@ import TextoPrincipal from './components/ElementosVista/TextoPrincipal/TextoPrin
 import TextoSecundario from './components/ElementosVista/TextoSecundario/TextoSecundario'
 import V5ComprIdentidad from './components/V5ComprIdentidad/V5ComprIdentidad'
 import V6Adjuntar from './components/V6Adjuntar/V6Adjuntar'
+import V7Recibidos from './components/V7Recibidos/V7Recibidos'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <V6Adjuntar
+      <V7Recibidos
       />
     </>
   )
