@@ -12,13 +12,14 @@ import TextoSecundario from './components/ElementosVista/TextoSecundario/TextoSe
 import V5ComprIdentidad from './components/V5ComprIdentidad/V5ComprIdentidad'
 import V6Adjuntar from './components/V6Adjuntar/V6Adjuntar'
 import V7Recibidos from './components/V7Recibidos/V7Recibidos'
+import V5ACompletarIne from './components/V5ACompletarIne/V5ACompletarIne'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <V7Recibidos
+      <V5ACompletarIne
       />
     </>
   )

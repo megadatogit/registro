@@ -1,6 +1,6 @@
 .cntTarjetaBase {
     width: 90%;
-    min-width: 20rem;
+    min-width: 18rem;
     max-width: 25rem;
     /* border: 2px dashed; */
     background-color: white;
@@ -31,6 +31,25 @@
 
 
 @media (max-width: 950px ) {
+    
+
+
+    .cntTarjetaBase {
+        width: 80%;
+        
+        
+        max-width: 25rem;
+        /* border: 2px dashed; */
+        background-color: white;
+        padding: 1rem;
+        display: flex;
+        gap: 1rem;
+        border-radius: 12px;
+        align-items: center;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+
+    }
+    
     .cntImg {
         width: 60%;
     }

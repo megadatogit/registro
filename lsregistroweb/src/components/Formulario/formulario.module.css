@@ -1,0 +1,211 @@
+.cntFormulario {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .formulario {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .input {
+    outline: none;
+    border: 1px solid #8f8f8f;
+    appearance: none;
+    height: 2rem;
+    border-radius: 6px;
+    padding-left: 0.5rem;
+    transition: 0.15s ease;
+  }
+
+  .input:focus {
+    border: 3px solid #5981c6;
+  }
+
+  .select {
+    appearance: none;
+    border: 1px solid #484848;
+    height: 2rem;
+    padding-left: 0.5rem;
+    background-color: #fff;
+    transition: 0.3s ease;
+  }
+
+  .select:focus {
+    outline: none;
+    border: 3px solid #5981c6;
+  }
+
+  .input::placeholder,
+  .formulario .input[type="date"] {
+    filter: opacity(0.7);
+  }
+
+  .formulario .input[type="date"] {
+    max-width: 15rem;
+  }
+  .formulario .input[type="date"] {
+    max-width: 15rem;
+  }
+
+  .formulario .select {
+    appearance: none;
+    outline: none;
+    border: 1px solid #484848;
+    height: 2rem;
+    border-radius: 6px;
+    padding-left: 0.5rem;
+  }
+
+  .select option[value=""] {
+    color: #888;
+    
+  }
+
+  .select option:disabled {
+    color: #888;
+  }
+
+  .select {
+    border: 1px solid #484848;
+    
+  }
+  .select:focus {
+    border-color: none;
+    box-shadow: 0 0 0 2px #5981c6;
+    outline: none;
+  }
+
+  .cntBoton {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .volver {
+    margin-top: 2rem;
+    width: 100%;
+    text-align: center;
+    color: #5981c6;
+  }
+
+@media (max-width: 950px) {
+  .cntFormulario {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .formulario {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .input {
+    outline: none;
+    border: 1px solid #8f8f8f;
+    appearance: none;
+    height: 2rem;
+    border-radius: 6px;
+    padding-left: 0.5rem;
+    transition: 0.15s ease;
+  }
+
+  .input:focus {
+    border: 3px solid #5981c6;
+  }
+
+  .select {
+    appearance: none;
+    border: 1px solid #484848;
+    height: 2rem;
+    padding-left: 0.5rem;
+    background-color: #fff;
+    transition: 0.3s ease;
+  }
+
+  .select:focus {
+    outline: none;
+    border: 3px solid #5981c6;
+  }
+
+  .input::placeholder,
+  .formulario .input[type="date"] {
+    filter: opacity(0.7);
+  }
+
+  .formulario .input[type="date"] {
+    max-width: 15rem;
+  }
+  .formulario .input[type="date"] {
+    max-width: 15rem;
+  }
+
+  .formulario .select {
+    appearance: none;
+    outline: none;
+    border: 1px solid #484848;
+    height: 2rem;
+    border-radius: 6px;
+    padding-left: 0.5rem;
+  }
+
+  .select option[value=""] {
+    color: #888;
+  }
+
+  .select option:disabled {
+    color: #888;
+  }
+
+  .select {
+    border: 1px solid #484848;
+    
+  }
+  .select:focus {
+    border-color: none;
+    box-shadow: 0 0 0 2px #5981c6;
+    outline: none;
+  }
+
+  .cntBoton {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .volver {
+    margin-top: 2rem;
+    width: 100%;
+    text-align: center;
+    color: #5981c6;
+  }
+
+
+}
+

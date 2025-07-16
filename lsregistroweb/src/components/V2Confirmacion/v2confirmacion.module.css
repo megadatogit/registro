@@ -130,13 +130,13 @@ form>fieldset:nth-child(3) {
 
   }
 
-  form> :nth-child(3) {
+  /* form> :nth-child(3) {
     display: inline-block;
     text-align: center;
     text-decoration: underline;
     color: rgb(89, 89, 202);
     width: 100%;
     cursor: pointer;
-  }
+  } */
 
 }
