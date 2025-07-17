@@ -93,6 +93,8 @@
   .cntBoton {
     text-align: center;
     margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
   }
   
   .volver {
@@ -197,6 +199,8 @@
   .cntBoton {
     text-align: center;
     margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
   }
   
   .volver {

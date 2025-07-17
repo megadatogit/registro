@@ -1,46 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./formulario.module.css";
 import BotonA from "../Botones/BotonA";
+import { useField } from "../../hooks/useField";
 
 const Formulario = () => {
-  const [curp, setCurp] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [apellido1, setApellido1] = useState("");
-  const [apellido2, setApellido2] = useState("");
-  const [fechaNac, setFechaNac] = useState("");
-  const [sexo, setSexo] = useState("");
+  const curp      = useField({ type: 'text', placeholder: 'Ingresa tu curp', pattern:'^[A-Z]{4}\\d{6}[HM][A-Z]{5}[A-Z\\d]\\d$', maxLength: 18, required: true, toUpper: true })
+  const nombre    = useField({ type: 'text', placeholder: 'Ingresa tu nombre(s)', required: true })
+  const apellido1 = useField({ type: 'text', placeholder: 'Ingresa tu primer apellido', required: true })
+  const apellido2 = useField({ type: 'text', placeholder: 'Ingresa tu segundo apellido'})
+  const fechaNac  = useField({ type: 'date', required: true})
+  const sexo      = useField({ as: 'select', required: true})
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table({ curp, nombre, apellido1, apellido2, fechaNac, sexo });
+    console.table({ 
+      curp: curp.value, 
+      nombre: nombre.value, 
+      apellido1: apellido1.value, 
+      apellido2: apellido2.value, 
+      fechaNac: fechaNac.value, 
+      sexo: sexo.value 
+    })
   };
 
-  const reset = () => {
-    setCurp("");
-    setNombre("");
-    setApellido1("");
-    setApellido2("");
-    setFechaNac("");
-    setSexo("");
+  const resetAll = () => {
+    [curp, nombre, apellido1, apellido2, fechaNac, sexo].forEach(f=>f.reset())
   };
 
   return (
     <div className={styles.cntFormulario}>
-      <form onSubmit={handleSubmit} className={styles.formulario
-      }>
+      <form onSubmit={handleSubmit} className={styles.formulario}>
         {/* CURP A 18 CARACTERES */}
-        {/* CURP corregido */}
         <label className={styles.label}>
           CURP:
-          <input
+          <input 
             className={styles.input}
-            type='text'
-            placeholder='Ingresa tu CURP'
-            value={curp}
-            onChange={e => setCurp(e.target.value.toUpperCase())}
-            pattern='^[A-Z]{4}\\d{6}[HM][A-Z]{5}[A-Z\\d]\\d$'
-            maxLength={18}
-            required
+            {...curp.inputProps}
           />
         </label>
 
@@ -50,11 +45,7 @@ const Formulario = () => {
           Nombre(s):
           <input
             className={styles.input}
-            type="text"
-            placeholder="Ingresa tu nombre(s)"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            required
+            {...nombre.inputProps}
           />
         </label>
 
@@ -63,12 +54,8 @@ const Formulario = () => {
           Primer Apellido:
           <input
             className={styles.input}
-            type="text"
-            placeholder="Ingresa tu primer apellido"
-            value={apellido1}
-            onChange={(e) => setApellido1(e.target.value)}
-            required
-          />
+            {...apellido1.inputProps}
+            />
         </label>
 
         {/* SEGUNDO APELLIDO */}
@@ -76,11 +63,7 @@ const Formulario = () => {
           Segundo Apellido:
           <input
             className={styles.input}
-            type="text"
-            placeholder="Ingresa tu segundo Apellido"
-            value={apellido2}
-            onChange={(e) => setApellido2(e.target.value)}
-            required
+            {...apellido2.inputProps}
           />
         </label>
 
@@ -89,11 +72,7 @@ const Formulario = () => {
           Fecha de nacimiento
           <input
             className={styles.input}
-            type="date"
-            placeholder="DD / MM / 0000"
-            value={fechaNac}
-            onChange={(e) => setFechaNac(e.target.value)}
-            required
+            {...fechaNac.inputProps}
           />
         </label>
 
@@ -102,9 +81,7 @@ const Formulario = () => {
           Sexo:
           <select
           className={styles.select}
-            value={sexo}
-            onChange={(e) => setSexo(e.target.value)}
-            required
+          {...sexo.inputProps}
           >
             <option value="">Selecciona tu sexo</option>
             <option value="H">HOMBRE</option>
@@ -116,7 +93,17 @@ const Formulario = () => {
         {/* BOTON */}
 
         <div className={styles.cntBoton}>
-          <BotonA textoBoton="Siguiente" />
+          
+          <BotonA
+          variant='secondary'
+          onClick={resetAll}
+          >
+            Limpiar
+          </BotonA>
+          <BotonA
+          variant='primary'
+          type='submit'
+          >Enviar</BotonA>
         </div>
       </form>
 

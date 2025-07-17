@@ -1,4 +1,4 @@
-
+/* 
 .boton {
     appearance: none;
     padding: 0.5rem 1.5rem;
@@ -6,4 +6,36 @@
     border-radius: 8px;
     background-color: #5981c6;
     color: white;
+} */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: none;
+  border-radius: .5rem;
+  padding: .5rem 1.25rem;
+  cursor: pointer;
+  transition: background-color .15s ease, transform .1s ease;
+}
+
+/* Variantes */
+.primary   { background: #4b82fc; color: #fff; }
+.secondary { background: #e2e8f0; color: #1a202c; }
+.danger    { background: #e53e3e; color: #fff; }
+.primary:hover   { background: #3666d6; }
+.secondary:hover { background: #cbd5e0; }
+.danger:hover    { background: #c53030; }
+
+/* Tamaños */
+.sm { font-size: .75rem; padding: .375rem .875rem; }
+.md { font-size: .875rem; }
+.lg { font-size: 1rem;   padding: .75rem 1.5rem; }
+
+.loading { cursor: progress; opacity: .6; }
+
+.boton:focus-visible {
+  outline: 3px solid #93c5fd;     /* focus-ring accesible */
+  outline-offset: 2px;
 }
