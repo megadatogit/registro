@@ -4,5 +4,7 @@ export default [
     index("routes/home.tsx"),
     route("Acerca", "routes/Acerca.tsx"),
     route("Registro", "routes/Registro.tsx"),
-    route("posts/:postId", "routes/post.tsx"),
+    route("about", "routes/about.tsx"),
+    route("posts/:id", "routes/post.tsx"),
+    
 ] satisfies RouteConfig;
