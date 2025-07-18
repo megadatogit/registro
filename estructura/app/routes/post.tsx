@@ -1,7 +1,7 @@
 import { useLoaderData, useParams } from 'react-router';
 import type { Route } from './+types/post';
 
-export async function clientLoader({params}: Route.ClientLoaderArgs) {
+export async function clientLoader({params}: Route.ClientActionArgs) {
 
   console.log("clientLoader", params)
   const { id } = params;
@@ -23,10 +23,10 @@ const Post = () => {
     const {title, body, id} = useLoaderData();
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <p>{body}</p>
-      <p>Post ID: {id}</p>
+    <div className='flex flex-col-reverse w-'>
+      <h1 className='text-2xl text-amber-600 '>{title}</h1>
+      <p className='italic'>{body}</p>
+      <p className='font-extrabold'>Post ID: {id}</p>
     </div>
   )
 }

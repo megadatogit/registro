@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Estilos personalizados -->
+<meta charset="utf-8"/>
+<title>Visualización de Signos Vitales</title>
+<style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    header { background-color: #0a74da; color: white; padding: 1rem; text-align: center; }
+    .input-container {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1rem; padding: 1rem; flex-wrap: wrap;
+    }
+    input[type="text"], input[type="number"], select {
+      padding: 0.5rem; font-size: 1rem;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    iframe.fade {
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+    }
+    iframe.fade.show {
+      opacity: 1;
+    }
+
+    input, button, select {
+      max-width: 100%;
+    }
+
+    .spinner-border {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+    .card-animada {
+      opacity: 0;
+      transform: scale(0.95) translateY(30px);
+      transition: all 0.6s ease-in-out;
+    }
+
+    .card-animada.mostrar {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+
+
+    /* Botones */
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #0a74da, #009eba);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  color: #0a3969;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+/* Inputs y Selects */
+input[type="text"], input[type="number"], input[type="date"], select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(3px);
+  transition: box-shadow 0.2s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 116, 218, 0.3);
+}
+
+/* Contenedor de formularios con efecto vidrio */
+#formAgregar,
+#formEdicion {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Card hover */
+.card.grafica-card {
+  height: 400px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card.grafica-card iframe {
+  height: 300px;
+}
+
+.card.grafica-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+}
+
+/* Mensajes de resultado */
+#resultado_nombre,
+#resultado_valor {
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  display: inline-block;
+}
+
+/* Mejorar datalist visualmente en navegadores compatibles */
+datalist option {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+
+
+
+    iframe { width: 100%; height: 85vh; border: none; }
+    .hidden { display: none; }
+
+    .grafica-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .grafica-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+  .grafica-expandida {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  z-index: 9999;
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  animation: zoomIn 0.3s ease;
+  border-radius: 12px;
+}
+
+.boton-cerrar {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 50%;
+  z-index: 10000;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.boton-cerrar:hover {
+  background-color: #bd2130;
+  transform: scale(1.1);
+}
+
+
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+    
+
+    
+  </style>
+</head>
+<body>
+<header>
+<h2>Visualización de Signos Vitales</h2>
+</header>
+<div class="input-container">
+<label for="nombre_persona">Buscar persona:</label>
+<input id="nombre_persona" list="personas" placeholder="Escribe un nombre..."/>
+<datalist id="personas"></datalist>
+<input id="id_person" type="hidden" value="1"/>
+<button onclick="cargarGrafica()">Cargar</button>
+<p id="resultado_nombre" style="font-weight: bold; color: #0a74da;"></p>
+
+
+<!-- Botones -->
+<button id="btnAgregar" onclick="activarAgregar()">Agregar</button>
+<div id="formEdicion" style="display: none; margin-top: 1rem;">
+  <label for="medicion">Medición:</label>
+  <select id="medicion" onchange="cargarFechasYBuscar()" disabled></select>
+
+  <label for="fecha">Fecha:</label>
+  <input list="fechas" id="fecha" placeholder="Selecciona o busca una fecha" disabled>
+  <datalist id="fechas"></datalist>
+
+  <div style="margin-top: 0.5rem;">
+    <label>Buscar por:</label>
+    <input list="lista_dias" type="text" id="dia" placeholder="Día" style="width: 60px;">
+    <datalist id="lista_dias"></datalist>
+
+    <input list="lista_meses" type="text" id="mes" placeholder="Mes" style="width: 60px;">
+    <datalist id="lista_meses"></datalist>
+
+    <input list="lista_anios" type="text" id="anio" placeholder="Año" style="width: 80px;">
+    <datalist id="lista_anios"></datalist>
+
+    <button onclick="buscarPorFecha()">Buscar</button>
+  </div>
+
+  <div id="infoMedicion" style="margin-top: 1rem;">
+    <p id="resultado_valor" style="font-weight: bold; color: green;"></p>
+    <label for="nuevo_valor">Nuevo valor:</label>
+    <input type="number" id="nuevo_valor" step="0.01">
+    <button onclick="enviarActualizacion()">Actualizar</button>
+  </div>
+</div>
+<button disabled="" id="btnEditar" onclick="activarEdicion()">Editar</button>
+<!-- 🔽 Formulario de agregar -->
+<form id="formAgregar" style="display:none; flex-direction: column; gap: 1rem;">
+  <label for="fecha_agregar">Fecha de medición:</label>
+  <input type="date" id="fecha_agregar" class="form-control form-control-sm" style="max-width: 150px;" />
+
+
+  <div class="container-fluid py-4">
+   <div class="row justify-content-center align-items-center">
+    <!-- 🩺 Signos Vitales -->
+    <div class="col-md-6">
+      <h5>🩺 Signos Vitales</h5>
+      <div id="bloque_signos" class="p-3 rounded border bg-light-subtle"></div>
+    </div>
+
+    <!-- 📏 Medidas Corporales -->
+    <div class="col-md-6">
+      <h5>📏 Medidas Corporales</h5>
+      <div id="bloque_medidas" class="p-3 rounded border bg-light-subtle"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  <button type="button" onclick="enviarTodasLasMediciones()">Añadir mediciones</button>
+</form>
+
+
+
+
+
+<!-- Contenedor de las gráficas -->
+<div class="container-fluid py-4">
+  <div class="row justify-content-center align-items-center" id="graficas-container">
+    <!-- Cada gráfica se carga en una card Bootstrap -->
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica1')">
+        <div class="card-header">Presion</div>
+        <iframe id="grafica1" class="fade show" src="http://localhost:8070/graficas/presion?id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica2')">
+        <div class="card-header">Temperatura</div>
+        <iframe id="grafica2"class="fade show" src="http://localhost:8070/graficas/temperatura?id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica3')">
+        <div class="card-header">Frecuencia</div>
+        <iframe id="grafica3" class="fade show"src="http://localhost:8070/graficas/frecuencia?id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica4')">
+        <div class="card-header">Oxigenacion</div>
+        <iframe id="grafica4" class="fade show"src="http://localhost:8070/graficas/oxigenacion?id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica5')">
+        <div class="card-header">Cintura</div>
+        <iframe id="grafica5" class="fade show"src="http://localhost:8070/grafica?tipo=cintura&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica6')">
+        <div class="card-header">Cadera</div>
+        <iframe id="grafica6" class="fade show"src="http://localhost:8070/grafica?tipo=cadera&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica7')">
+        <div class="card-header">Brazo relajado</div>
+        <iframe id="grafica7" class="fade show"src="http://localhost:8070/grafica?tipo=brazo relajado&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica8')">
+        <div class="card-header">Muñeca</div>
+        <iframe id="grafica8" class="fade show"src="http://localhost:8070/grafica?tipo=muñeca&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica9')">
+        <div class="card-header">Pantorrilla</div>
+        <iframe id="grafica9" class="fade show"src="http://localhost:8070/grafica?tipo=pantorrilla&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica10')">
+        <div class="card-header">Cuello</div>
+        <iframe id="grafica10" class="fade show"src="http://localhost:8070/grafica?tipo=cuello&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica11')">
+        <div class="card-header">Altura</div>
+        <iframe id="grafica11"class="fade show" src="http://localhost:8070/grafica?tipo=altura&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica12')">
+        <div class="card-header">Peso</div>
+        <iframe id="grafica12"class="fade show" src="http://localhost:8070/grafica?tipo=peso&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica13')">
+        <div class="card-header">Icc</div>
+        <iframe id="grafica13"class="fade show" src="http://localhost:8070/grafica?tipo=icc&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica14')">
+        <div class="card-header">Ice</div>
+        <iframe id="grafica14"class="fade show" src="http://localhost:8070/grafica?tipo=ice&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+      <div class="card grafica-card" onclick="expandirGrafica('grafica15')">
+        <div class="card-header">Imc</div>
+        <iframe id="grafica15" class="fade show"src="http://localhost:8070/grafica?tipo=imc&id_person=1" height="300" frameborder="0"></iframe>
+      </div>
+    </div>
+
+
+
+<!-- 🔽 Formulario de editar -->
+<!-- 🔽 Formulario de editar (debe estar oculto al cargar la página) -->
+<div id="formEdicion" style="display: none; margin-top: 1rem;">
+  <label for="medicion">Medición:</label>
+  <select id="medicion" onchange="cargarFechasYBuscar()" disabled></select>
+
+  <label for="fecha">Fecha:</label>
+  <input list="fechas" id="fecha" placeholder="Selecciona o busca una fecha" disabled>
+  <datalist id="fechas"></datalist>
+
+  <div style="margin-top: 0.5rem;">
+    <label>Buscar por:</label>
+    <input list="lista_dias" type="text" id="dia" placeholder="Día" style="width: 60px;">
+    <datalist id="lista_dias"></datalist>
+
+    <input list="lista_meses" type="text" id="mes" placeholder="Mes" style="width: 60px;">
+    <datalist id="lista_meses"></datalist>
+
+    <input list="lista_anios" type="text" id="anio" placeholder="Año" style="width: 80px;">
+    <datalist id="lista_anios"></datalist>
+
+    <button onclick="buscarPorFecha()">Buscar</button>
+  </div>
+  
+
+  <div id="bloquesMediciones" style="margin-top: 1rem;"></div>
+
+
+
+
+
+<script>
+
+
+  
+  async function activarAgregar() {
+  const id = document.getElementById("id_person").value;
+  if (!id) {
+    alert("Selecciona una persona primero");
+    return;
+  }
+
+  // Mostrar formulario de agregar
+  document.getElementById("formAgregar").style.display = "flex";
+  document.getElementById("formEdicion").style.display = "none";
+  document.getElementById("btnEditar").disabled = false;
+  document.getElementById("btnAgregar").disabled = true;
+
+  const contenedorSignos = document.getElementById("bloque_signos");
+  const contenedorMedidas = document.getElementById("bloque_medidas");
+  contenedorSignos.innerHTML = "";
+  contenedorMedidas.innerHTML = "";
+
+  const tipos = await fetch(`http://localhost:8070/mediciones/tipos`).then(r => r.json());
+
+  // Clasificación y alias
+  const signosVitales = [
+  "frecuencia cardiaca",
+  "frecuencia cardíaca",
+  "temperatura",
+  "infrarrojo",
+  "oxigenacion",
+  "oxigenación",
+  "presion arterial sistolica",
+  "presión arterial sistólica",
+  "sistolica",
+  "presion sistolica",
+  "presión sistólica",
+  "presion arterial diastolica",
+  "presión arterial diastólica",
+  "diastolica",
+  "presion diastolica",
+  "presión diastólica"
+];
+
+
+  const medidasCorporales = [
+    "cintura", "cadera", "brazo relajado", "muñeca", "pantorrilla", "cuello", "altura", "peso"
+  ];
+
+  tipos.forEach(tipo => {
+    const nombre = tipo.nombre.trim().toLowerCase();
+    const normalizado = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // Crear el input
+    const div = document.createElement("div");
+    div.className = "medicion-bloque mb-2";
+    div.innerHTML = `
+      <label class="form-label">${tipo.nombre}</label>
+      <input type="number" step="0.01" class="form-control" name="medicion_${tipo.id}" data-id="${tipo.id}" placeholder="Ingresa valor..." />
+    `;
+
+    if (signosVitales.includes(normalizado)) {
+      contenedorSignos.appendChild(div);
+    } else if (medidasCorporales.includes(normalizado)) {
+      contenedorMedidas.appendChild(div);
+    }
+  });
+}
+
+
+
+
+
+
+
+function activarEdicion() {
+
+  const id = document.getElementById("id_person").value;
+
+  if (!id) {
+    alert("Selecciona una persona primero");
+    return;
+  }
+  document.getElementById("formAgregar").style.display = "none";
+  document.getElementById("formEdicion").style.display = "block";
+  document.getElementById("btnEditar").disabled = true;
+  document.getElementById("btnAgregar").disabled = false;
+
+  fetch(`http://localhost:8070/mediciones/${id}/tipos`)
+    .then(res => res.json())
+    .then(data => {
+      const select = document.getElementById("medicion");
+      select.innerHTML = "<option value=''>Seleccione una</option>";
+      data.forEach(m => {
+        const option = document.createElement("option");
+        option.value = m.id;
+        option.textContent = m.nombre;
+        select.appendChild(option);
+      });
+    });
+
+  document.getElementById("medicion").disabled = false;
+  document.getElementById("fecha").disabled = false;
+}
+
+
+function enviarTodasLasMediciones() {
+    const id_person = parseInt(document.getElementById("id_person").value);
+    const mediciones = [];
+
+    // Cambiamos la clase al selector real
+    document.querySelectorAll(".medicion-bloque").forEach(bloque => {
+        const input = bloque.querySelector("input");
+        const id_tipo = parseInt(input.dataset.id);
+        const value = parseFloat(input.value);
+        const fecha = document.getElementById("fecha_agregar").value || new Date().toISOString();
+
+        if (!isNaN(value)) {
+            mediciones.push({
+                id_person,
+                id_measure_type: id_tipo,
+                value,
+                event_at: fecha
+            });
+        }
+    });
+
+    console.log("📤 Enviando mediciones:", mediciones);
+
+    fetch("http://localhost:8070/mediciones/agregar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(mediciones)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Error al enviar mediciones");
+        return response.json();
+    })
+    .then(data => {
+        alert("✅ Mediciones enviadas correctamente.");
+        console.log(data);
+        cargarGrafica(); // 🔄 Refrescar gráficas después de agregar
+
+    })
+    .catch(error => {
+        console.error("❌ Error:", error);
+        alert("Hubo un error al enviar las mediciones.");
+    });
+}
+
+
+
+    function enviarNuevaMedicion() {
+    const id_person = document.getElementById("id_person").value;
+    const id_tipo = document.getElementById("tipo_medicion_agregar").value;
+    const valor = document.getElementById("valor_medicion_agregar").value;
+
+    if (!id_person || !id_tipo || !valor) {
+        alert("Faltan datos para agregar la medición");
+        return;
+    }
+
+    fetch(`http://localhost:8070/mediciones/agregar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        id_person,
+        id_measure_type: id_tipo,
+        value: valor
+        })
+    })
+    .then(res => res.ok ? alert("✅ Medición añadida") : alert("❌ Error al guardar"))
+    .catch(err => {
+        console.error(err);
+        console.log("Mediciones a enviar:", mediciones);
+
+        alert("Error al conectar con el servidor");
+    });
+    }
+
+    let personas = [];
+
+    async function cargarPersonas() {
+      const response = await fetch('http://localhost:8070/personas/nombres');
+      personas = await response.json();
+
+      const datalist = document.getElementById("personas");
+      datalist.innerHTML = "";
+      personas.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.nombre_completo;
+        datalist.appendChild(option);
+      });
+    }
+
+    async function buscarPersonaYAsignarID() {
+    const nombre = document.getElementById("nombre_persona").value.trim();
+    
+    if (!nombre) return;
+
+    const res = await fetch(`http://localhost:8070/buscar-id-por-nombre?nombre=${encodeURIComponent(nombre)}`);
+    const datos = await res.json();
+    if (datos.length === 1) {
+        const persona = datos[0];
+        document.getElementById("id_person").value = persona.id;
+        document.getElementById("resultado_nombre").textContent = `Persona seleccionada: ${persona.nombre_completo}`;
+        document.getElementById("nombre_persona").value = "";
+        document.getElementById("btnEditar").disabled = false;
+        document.getElementById("btnAgregar").disabled = false;
+        document.getElementById("formAgregar").style.display = "none";
+        document.getElementById("formEdicion").style.display = "none";
+        document.getElementById("formAgregar").reset?.();
+        cargarGrafica();
+
+        // 🔒 Desactivar formulario de edición
+        document.getElementById("formEdicion").style.display = "none";
+        document.getElementById("medicion").disabled = true;
+        document.getElementById("fecha").disabled = true;
+        document.getElementById("lista_dias").innerHTML = "";
+        document.getElementById("lista_meses").innerHTML = "";
+        document.getElementById("lista_anios").innerHTML = "";
+        document.getElementById("dia").value = "";
+        document.getElementById("mes").value = "";
+        document.getElementById("anio").value = "";
+        document.getElementById("fecha").value = "";
+        document.getElementById("resultado_valor").textContent = "";
+        document.getElementById("nuevo_valor").value = "";
+
+    } else {
+        alert("Persona no encontrada o ambigua");
+        document.getElementById("btnEditar").disabled = true;
+        document.getElementById("btnAgregar").disabled = true;
+    }
+    }
+
+
+    async function cargarBloquesDeMedicion() {
+  const id = document.getElementById("id_person").value;
+  const fecha = document.getElementById("fecha").value;
+
+  if (!id || !fecha) {
+    alert("Selecciona una persona y una fecha");
+    return;
+  }
+
+  const contenedor = document.getElementById("bloquesMediciones");
+  contenedor.innerHTML = ""; // Limpia anteriores
+
+  try {
+    const res = await fetch(`http://localhost:8070/mediciones/${id}/${fecha}`);
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      contenedor.innerHTML = "<p>No hay mediciones para esa fecha.</p>";
+      return;
+    }
+
+    data.forEach(medicion => {
+      const div = document.createElement("div");
+      div.classList.add("bloque-medicion");
+      div.innerHTML = `
+        <p><strong>${medicion.nombre}</strong> (valor actual: ${medicion.value})</p>
+        <input type="number" step="0.01" placeholder="Nuevo valor..." data-id="${medicion.id_measure_type}" value="">
+        <button onclick="actualizarMedicion(this, ${medicion.id_measure_type})">Actualizar</button>
+      `;
+      contenedor.appendChild(div);
+    });
+  } catch (error) {
+    contenedor.innerHTML = "<p>Error al obtener las mediciones.</p>";
+    console.error(error);
+  }
+}
+
+
+function cargarGrafica() {
+  const id = document.getElementById("id_person").value;
+  const graficas = [
+    { id: "grafica1", url: `http://localhost:8070/graficas/presion?id_person=${id}` },
+    { id: "grafica2", url: `http://localhost:8070/graficas/temperatura?id_person=${id}` },
+    { id: "grafica3", url: `http://localhost:8070/graficas/frecuencia?id_person=${id}` },
+    { id: "grafica4", url: `http://localhost:8070/graficas/oxigenacion?id_person=${id}` },
+    { id: "grafica5", url: `http://localhost:8070/grafica?tipo=cintura&id_person=${id}` },
+    { id: "grafica6", url: `http://localhost:8070/grafica?tipo=cadera&id_person=${id}` },
+    { id: "grafica7", url: `http://localhost:8070/grafica?tipo=brazo relajado&id_person=${id}` },
+    { id: "grafica8", url: `http://localhost:8070/grafica?tipo=muñeca&id_person=${id}` },
+    { id: "grafica9", url: `http://localhost:8070/grafica?tipo=pantorrilla&id_person=${id}` },
+    { id: "grafica10", url: `http://localhost:8070/grafica?tipo=cuello&id_person=${id}` },
+    { id: "grafica11", url: `http://localhost:8070/grafica?tipo=altura&id_person=${id}` },
+    { id: "grafica12", url: `http://localhost:8070/grafica?tipo=peso&id_person=${id}` },
+    { id: "grafica13", url: `http://localhost:8070/grafica?tipo=icc&id_person=${id}` },
+    { id: "grafica14", url: `http://localhost:8070/grafica?tipo=ice&id_person=${id}` },
+    { id: "grafica15", url: `http://localhost:8070/grafica?tipo=imc&id_person=${id}` },
+  ];
+
+  graficas.forEach(({ id, url }) => {
+    const iframe = document.getElementById(id);
+    if (!iframe) return;
+
+    // Card padre
+    const card = iframe.closest(".card");
+    card.classList.remove("mostrar");
+    card.classList.add("card-animada");
+
+    // Spinner
+    const spinner = document.createElement("div");
+    spinner.className = "spinner-border text-primary position-absolute top-50 start-50 translate-middle";
+    spinner.style.zIndex = "10";
+    spinner.id = `spinner-${id}`;
+    iframe.parentElement.style.position = "relative";
+    iframe.parentElement.appendChild(spinner);
+
+    // Al cargar iframe
+    iframe.onload = () => {
+      card.classList.add("mostrar");
+      const s = document.getElementById(`spinner-${id}`);
+      if (s) s.remove();
+    };
+
+    iframe.src = url;
+  });
+}
+
+
+
+    function cargarFechasYBuscar() {
+      const id = document.getElementById("id_person").value;
+      const tipo = document.getElementById("medicion").value;
+      if (!id || !tipo) return;
+
+      // Fechas completas
+      fetch(`http://localhost:8070/mediciones/${id}/${tipo}/fechas`)
+        .then(res => res.json())
+        .then(fechas => {
+          const lista = document.getElementById("fechas");
+          lista.innerHTML = "";
+          fechas.forEach(f => {
+            const option = document.createElement("option");
+            option.value = f;
+            lista.appendChild(option);
+          });
+        });
+
+      // Días
+      fetch(`http://localhost:8070/mediciones/${id}/${tipo}/dias`)
+        .then(res => res.json())
+        .then(dias => {
+          const list = document.getElementById("lista_dias");
+          list.innerHTML = "";
+          dias.forEach(d => {
+            const option = document.createElement("option");
+            option.value = d;
+            list.appendChild(option);
+          });
+        });
+
+      // Al cambiar el día
+      document.getElementById("dia").addEventListener("change", () => {
+         cargarBloquesDeMedicion();
+        const dia = document.getElementById("dia").value;
+        fetch(`http://localhost:8070/mediciones/${id}/${tipo}/meses?dia=${dia}`)
+          .then(res => res.json())
+          .then(meses => {
+            const list = document.getElementById("lista_meses");
+            list.innerHTML = "";
+            meses.forEach(m => {
+              const option = document.createElement("option");
+              option.value = m;
+              list.appendChild(option);
+            });
+          });
+      });
+
+      // Al cambiar el mes
+      document.getElementById("mes").addEventListener("change", () => {
+         cargarBloquesDeMedicion();
+        const dia = document.getElementById("dia").value;
+        const mes = document.getElementById("mes").value;
+        fetch(`http://localhost:8070/mediciones/${id}/${tipo}/anios?dia=${dia}&mes=${mes}`)
+          .then(res => res.json())
+          .then(anios => {
+            const list = document.getElementById("lista_anios");
+            list.innerHTML = "";
+            anios.forEach(a => {
+              const option = document.createElement("option");
+              option.value = a;
+              list.appendChild(option);
+            });
+          });
+      });
+    }
+
+    function buscarPorFecha() {
+    const id = document.getElementById("id_person").value;
+    const tipo = document.getElementById("medicion").value;
+    const diaInput = document.getElementById("dia");
+    const mesInput = document.getElementById("mes");
+    const anioInput = document.getElementById("anio");
+
+    const dia = diaInput.value.padStart(2, '0');
+    const mes = mesInput.value.padStart(2, '0');
+    const anio = anioInput.value;
+
+    if (!id || !tipo || !dia || !mes || !anio) return;
+
+    const fecha = `${anio}-${mes}-${dia}`;
+    const contenedor = document.getElementById("resultado_valor");
+
+    // Mostrar la fecha seleccionada
+    contenedor.innerHTML = `<span style="color:#555;">Fecha seleccionada: <strong>${fecha}</strong></span><br>`;
+
+    // Obtener valor actual
+    fetch(`http://localhost:8070/mediciones/${id}/${tipo}/valor?fecha=${fecha}`)
+      .then(res => res.json())
+      .then(data => {
+        contenedor.innerHTML += `Valor actual: ${data.valor}`;
+        // Opcional: copiar valor actual al campo de edición
+        document.getElementById("nuevo_valor").value = data.valor;
+      })
+      .catch(() => {
+        contenedor.innerHTML += "Medición no encontrada";
+      });
+
+    // Limpiar campos
+    diaInput.value = "";
+    mesInput.value = "";
+    anioInput.value = "";
+  }
+
+    // ✅ RESTAURAR valor actual al seleccionar una fecha del listado
+    document.getElementById("fecha").addEventListener("change", () => {
+       cargarBloquesDeMedicion();
+    const id = document.getElementById("id_person").value;
+    const tipo = document.getElementById("medicion").value;
+    const inputFecha = document.getElementById("fecha");
+    const fecha = inputFecha.value;
+
+    if (!id || !tipo || !fecha) return;
+
+    // Mostrar la fecha seleccionada
+    const contenedor = document.getElementById("resultado_valor");
+    contenedor.innerHTML = `<span style="color:#555;">Fecha seleccionada: <strong>${fecha}</strong></span><br>`; // se sobreescribe
+
+    // Obtener valor actual de esa fecha
+    fetch(`http://localhost:8070/mediciones/${id}/${tipo}/valor?fecha=${fecha}`)
+        .then(res => res.json())
+        .then(data => {
+        contenedor.innerHTML += `Valor actual: ${data.valor}`;
+        })
+        .catch(() => {
+        contenedor.innerHTML += "Medición no encontrada";
+        });
+
+    // Limpiar campo de entrada de fecha
+    //inputFecha.value = "";
+    });
+
+
+  function enviarActualizacion() {
+  const id_person = parseInt(document.getElementById("id_person").value);
+  const id_measure_type = parseInt(document.getElementById("medicion").value);
+  const fecha = document.getElementById("fecha").value;
+  const nuevo_valor = parseFloat(document.getElementById("nuevo_valor").value);
+
+  console.log("🧪 Datos a enviar:", { id_person, id_measure_type, fecha, nuevo_valor });
+
+  if (!id_person || !id_measure_type || !fecha || isNaN(nuevo_valor)) {
+    alert("Faltan datos o el valor no es válido");
+    return;
+  }
+
+  fetch("http://localhost:8070/mediciones/editar", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id_person,
+      id_measure_type,
+      fecha,
+      nuevo_valor
+    })
+  })
+    .then(res => {
+      if (!res.ok) return res.text().then(texto => { throw new Error(texto); });
+      return res.json();
+    })
+    .then(data => {
+      alert("✅ Medición actualizada correctamente");
+      console.log("Respuesta:", data);
+      cargarGrafica();
+    })
+    .catch(err => {
+      console.error("❌ Error:", err.message);
+      alert("Error al actualizar: " + err.message);
+    });
+}
+
+
+function expandirGrafica(id) {
+  const iframe = document.getElementById(id);
+  const iframeClone = iframe.cloneNode(true);
+  iframeClone.className = 'grafica-expandida';
+  iframeClone.id = "expandida";
+  iframeClone.height = "100%";
+
+  const fondo = document.createElement("div");
+  fondo.style.position = "fixed";
+  fondo.style.top = "0";
+  fondo.style.left = "0";
+  fondo.style.width = "100%";
+  fondo.style.height = "100%";
+  fondo.style.backgroundColor = "rgba(0,0,0,0.7)";
+  fondo.style.zIndex = "9998";
+  fondo.id = "fondoExpandido";
+
+  const botonCerrar = document.createElement("button");
+  botonCerrar.className = "boton-cerrar";
+  botonCerrar.innerHTML = "&times;";
+  botonCerrar.onclick = () => {
+    document.body.removeChild(fondo);
+    document.body.removeChild(iframeClone);
+    document.body.removeChild(botonCerrar);
+  };
+
+  document.body.appendChild(fondo);
+  document.body.appendChild(iframeClone);
+  document.body.appendChild(botonCerrar);
+}
+
+   
+   async function cargarGraficaSiHayDatos(tipo, id, iframeId, esCalculado = false) {
+  const url = esCalculado
+    ? `http://localhost:8070/grafica?tipo=${encodeURIComponent(tipo)}&id_person=${id}`
+    : `http://localhost:8070/graficas/${tipo}?id_person=${id}`;
+
+  try {
+    const res = await fetch(url);
+    const texto = await res.text();
+    if (!texto.includes("No hay datos suficientes")) {
+      document.getElementById(iframeId).src = url;
+      document.getElementById(iframeId).style.display = "block";
+    } else {
+      document.getElementById(iframeId).parentElement.style.display = "none"; // Oculta la card entera
+    }
+  } catch (err) {
+    console.error(`❌ Error al cargar gráfica: ${tipo}`, err);
+    document.getElementById(iframeId).parentElement.style.display = "none";
+  }
+}
+
+function asignarFechaHoy() {
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+  const dd = String(hoy.getDate()).padStart(2, '0');
+  document.getElementById("fecha_agregar").value = `${yyyy}-${mm}-${dd}`;
+}
+
+
+window.onload = function () {
+  cargarPersonas(); // tu función actual
+
+  // Coloca la fecha actual automáticamente
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+  const dd = String(hoy.getDate()).padStart(2, '0');
+  document.getElementById("fecha_agregar").value = `${yyyy}-${mm}-${dd}`;
+};
+
+
+    document.getElementById("nombre_persona").addEventListener("change", buscarPersonaYAsignarID);
+
+
+    
+
+  </script>
+</body>
+</html>
