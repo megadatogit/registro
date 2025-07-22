@@ -29,11 +29,12 @@
     height: 2rem;
     border-radius: 6px;
     padding-left: 0.5rem;
-    transition: 0.15s ease;
+    transition: 0.1s ease;
   }
 
   .input:focus {
-    border: 3px solid #5981c6;
+    outline: 1px solid #5981c6;
+    border-color: #5981c6;
   }
 
   .select {
@@ -46,8 +47,8 @@
   }
 
   .select:focus {
-    outline: none;
-    border: 3px solid #5981c6;
+    border-color: #5981c6;
+    border: 2px solid #5981c6;
   }
 
   .input::placeholder,
@@ -102,6 +103,15 @@
     width: 100%;
     text-align: center;
     color: #5981c6;
+  }
+
+  .errors {
+    color: red;
+    font-size: 0.65rem;
+  }
+
+  .btnLimpiar {
+    display: none;
   }
 
 @media (max-width: 950px) {
@@ -136,11 +146,12 @@
     height: 2rem;
     border-radius: 6px;
     padding-left: 0.5rem;
-    transition: 0.15s ease;
+    transition: 0.1s ease;
   }
 
   .input:focus {
-    border: 3px solid #5981c6;
+    outline: 1px solid #5981c6;
+    border-color: #5981c6;
   }
 
   .select {
@@ -210,6 +221,9 @@
     color: #5981c6;
   }
 
-
+.errors {
+  color: red;
+  font-size: 0.65rem;
+}
 }
 

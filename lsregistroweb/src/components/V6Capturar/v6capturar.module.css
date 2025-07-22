@@ -1,0 +1,115 @@
+.cntV6Capturar {
+    background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%);
+  color: rgb(70, 69, 69);
+  width: 100%;
+  
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.cntLogo {
+    margin-top: 1rem;
+}
+
+.cntLado {
+    margin-top: 1rem;
+}
+
+.cntImg{
+    display: flex;
+    flex-direction: row-re;
+    justify-content: space-around;
+}
+
+.cntCaptura {
+    /* border: 2px dashed; */
+    width: 90%;
+    height: 70%;
+    display: flex;
+    place-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cntTip {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 1rem;
+    text-align: end;
+    margin: 1rem;
+}
+
+.captura {
+    width: 60%;
+    min-width: 350px;
+    height: 70%;
+    aspect-ratio: 1.58;
+    border: 2px dashed;
+    border-radius: 14px;
+    background-color: #8b9095;
+    position: relative;
+    overflow: hidden;
+}
+
+.guia {
+    
+    position: absolute;
+    width: 20rem;
+    background-color: transparent;
+    height: auto;
+    aspect-ratio: 1.58;
+    border: 3px solid red;
+    border-radius: 8px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & .icon {
+        width: 20%;
+    }    
+    
+}
+
+.cntBoton {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.error {
+  color: #e63946;
+  margin-top: 1rem;
+}
+
+
+@media(max-width: 950px) {
+    .cntCaptura {
+        flex-direction: column;
+        margin: 1rem 0.5rem;
+        
+    }
+}

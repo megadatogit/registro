@@ -4,6 +4,7 @@ import Logo from '../ElementosVista/Logo/Logo'
 import TextoPrincipal from '../ElementosVista/TextoPrincipal/TextoPrincipal'
 import TextoSecundario from '../ElementosVista/TextoSecundario/TextoSecundario'
 import FormularioINE from '../Formulario/FormularioINE'
+import FormularioDom from '../Formulario/FormularioDom'
 
 const V5ACompletarIne = () => {
   return (
@@ -18,12 +19,12 @@ const V5ACompletarIne = () => {
         textoPrincipal="Completa tus datos"
         />
         <TextoSecundario
-        textoSecundario="Datos de tu identificaión oficial"
+        textoSecundario="Datos de tu domicilio"
         />
     </div>
 
     <div className={styles.cntFormulario}>
-        <FormularioINE/>
+        <FormularioDom/>
     </div>
 
       

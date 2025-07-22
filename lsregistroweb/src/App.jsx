@@ -13,13 +13,16 @@ import V5ComprIdentidad from './components/V5ComprIdentidad/V5ComprIdentidad'
 import V6Adjuntar from './components/V6Adjuntar/V6Adjuntar'
 import V7Recibidos from './components/V7Recibidos/V7Recibidos'
 import V5ACompletarIne from './components/V5ACompletarIne/V5ACompletarIne'
+import V5BCompletarDom from './components/V5ACompletarIne/V5BCompletarDom'
+import V6Capturar from './components/V6Capturar/V6Capturar'
+import V7RevisarDoc from './components/V7Revisar/V7RevisarDoc'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <V5ACompletarIne
+      <V7RevisarDoc
       />
     </>
   )
