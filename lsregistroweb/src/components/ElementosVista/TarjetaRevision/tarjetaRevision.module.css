@@ -1,0 +1,25 @@
+.cntTarjetaAdjuntar {
+    border: 1px solid lightgray;
+    padding: 0 1rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.cntTexto {
+    flex: 1 1 auto;
+}
+
+.cntTexto :nth-child(1) {
+    font-weight: 800;
+}
+
+.cntTexto :nth-child(2){
+    font-size: 0.75rem;
+}
+
+.accion {
+    font-size: 0.85rem;
+    color: #2566d6;
+}

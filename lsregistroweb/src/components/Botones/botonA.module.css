@@ -12,16 +12,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 400;
   border: none;
-  border-radius: .5rem;
+  border-radius: 0.4rem;
   padding: .5rem 1.25rem;
   cursor: pointer;
-  transition: background-color .15s ease, transform .1s ease;
+  transition: background-color .3s ease, transform .3s ease;
 }
 
 /* Variantes */
-.primary   { background: #4b82fc; color: #fff; }
+.primary   { background: #5981c6; color: #fff; }
 .secondary { background: #e2e8f0; color: #1a202c; }
 .danger    { background: #e53e3e; color: #fff; }
 .primary:hover   { background: #3666d6; }
@@ -38,4 +38,8 @@
 .boton:focus-visible {
   outline: 3px solid #93c5fd;     /* focus-ring accesible */
   outline-offset: 2px;
+}
+
+.primary:hover {
+  background-color: #2566d6 ;
 }

@@ -201,10 +201,9 @@ const Inicio = () => {
 
             <div>
               <p>
-                <BotonA
-                  textoBoton="Crear cuenta"
-                  // Puedes pasarle una prop disabled si RHF detecta errores: disabled={Object.keys(errors).length > 0}
-                />
+                <BotonA>
+                  Crear cuenta
+                </BotonA>
               </p>
             </div>
           </form>
