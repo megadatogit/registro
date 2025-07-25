@@ -138,13 +138,10 @@
 
 .logoForm {
     margin: 1rem auto 2rem;
-    width: 50%;
+    width: 100%;
 }
 
-.imgLogo {
-    width: 23%;
-    margin-bottom: 1rem;
-}
+/*  */
 
 .formulario {
     width: 50%;
