@@ -1,0 +1,64 @@
+
+.cntPrincipal {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.cuerpo {
+    
+    display: flex;
+}
+
+.cntRedes {
+    display: flex;
+    width: 35%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 10%;
+}
+
+.enlaces {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.cntInfo {
+    padding-right: 5%;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.cntLogo {
+    /* border: 2px dashed; */
+    min-width: 150px;
+    width: 30%;
+
+    & .logo {
+        width: 100%;
+    }
+}
+
+.cntTexto {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    text-align: end;
+    gap: 1.5rem;
+    
+    & button {
+        flex: 0 0 auto;
+        align-self: flex-end;
+        padding: 0.5rem 1.5rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        
+    }
+}
