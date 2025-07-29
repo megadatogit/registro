@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import V1Registro from './components/V1Registro/V1Registro'
 import V2Confirmacion from './components/V2Confirmacion/V2Confirmacion'
 import V3Verificacion from './components/V3Verificación/V3Verificacion'
@@ -14,15 +15,24 @@ import V7RevisarDoc from './components/V7Revisar/V7RevisarDoc'
 import TextoPrincipal from './components/ElementosVista/TextoPrincipal/TextoPrincipal'
 import TextoSecundario from './components/ElementosVista/TextoSecundario/TextoSecundario'
 import V8Opciones from './components/V8Opciones/V8Opciones'
-import { AppRoutes } from './routes/AppRouter'
 
-function App() {
 
-  return (
-    <>
-      <AppRoutes/>
-    </>
-  )
-}
+export const ROUTES = {
+  LOGIN: '/login',
+  ENVIAR_CODIGO: '/enviarCodigo',
+};
 
-export default App
+export const AppRoutes = () => (
+  <BrowserRouter>
+    <Routes>
+      {/* Redirección raíz */}
+      <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
+
+      <Route path={ROUTES.LOGIN}         element={<V1Registro />} />
+      <Route path={ROUTES.ENVIAR_CODIGO} element={<V2Confirmacion />} />
+
+      {/* Ruta comodín 404 */}
+      <Route path="*" element={<p>404 – No encontrado</p>} />
+    </Routes>
+  </BrowserRouter>
+);

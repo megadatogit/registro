@@ -1,42 +1,83 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';          
+import * as z from 'zod';
+import api from '../../services/api.js'
+
+/*   TUS IMPORTS EXISTENTES   */
 import styles from './v1registro.module.css';
-import srcLogo from './LS-imagotipo-horizontal.svg';
-import srcAbierto from './eye-password-see-view-svgrepo-com.svg'
-import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg'
-import Logo from '../ElementosVista/Logo/Logo';
-import BotonA from '../Botones/BotonA';
-import { useForm } from 'react-hook-form'
-import Switch from '../Seleccion/Switch';
-import Derechos from './Derechos';
+import srcLogo     from './LS-imagotipo-horizontal.svg';
+import srcAbierto  from './eye-password-see-view-svgrepo-com.svg';
+import srcCerrado  from './eye-key-look-password-security-see-svgrepo-com.svg';
+import Logo        from '../ElementosVista/Logo/Logo';
+import BotonA      from '../Botones/BotonA';
+import Switch      from '../Seleccion/Switch';
+import Derechos    from './Derechos';
+
+/* ---------- 1. ESQUEMA ZOD (mantiene tus regex) ---------- */ 
+const schema = z.object({
+  correo: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Correo no válido'),
+  telefono: z.string().regex(/^\d{10}$/, 'Debe tener 10 dígitos'),
+  contrasena: z.string().regex(
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])[\s\S]{8,}$/,
+    '8+, 1 mayúsc., 1 minúsc., 1 número, 1 símbolo'
+  ),
+  confirmContra: z.string(),
+  politicas: z.literal(true, { errorMap: () => ({ message: 'Acepta los términos' }) }),
+  /* code_telefono no viene del usuario: lo pondremos fijo más adelante  */
+}).refine((d) => d.contrasena === d.confirmContra, {
+  path: ['confirmContra'],
+  message: 'Las contraseñas no coinciden',
+});
+
 
 const Inicio = () => {
-  // Estados para mostrar/ocultar contraseña
-  const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [mostrarPassword,        setMostrarPassword]        = useState(false);
   const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
 
-  // RHF setup
+  /* ---------- RHF CON RESOLVER ZOD ---------- */                       
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm({ mode: "onChange" });
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),   
+    mode: 'onChange',
+  });
 
-  // Watchers
-  const passwordValue = watch("contrasena", "");
-  const terminos = watch("politicas", false);
+  /* ---------- SUBMIT ---------- */
+  
+const onSubmit = async (formData) => {
+  try {
+    /* Payload exactamente como lo pide el backend */
+    const payload = {
+      rol: 1,
+      correo: formData.correo,
+      telefono: formData.telefono,
+      code_telefono: '52',          // ← México; cámbialo si usas otro prefijo
+      contrasena: formData.contrasena,
+    };
 
-  // Submit handler
-  const onSubmit = (data) => {
-    console.log("Datos validados", data)
-    // Aquí va el envío a backend...
+    const res = await api.post('preregistro/preregistro/registro/', payload);
+
+    console.log('Respuesta backend', res.data);
+    alert('¡Cuenta creada exitosamente! 🎉');
+
+    /* Si después recibes token o id → guárdalo aquí */
+    // localStorage.setItem('token', res.data.token);
+
+  } catch (err) {
+    if (err.response) {
+      // El backend devolvió error de validación (422) u otro código
+      alert(err.response.data.detail?.[0]?.msg || 'Error del servidor');
+    } else {
+      alert('No se pudo conectar al servidor');
+    }
   }
+};
 
-  // Alternar visibilidad de contraseñas
-  const alternarPassword = () => setMostrarPassword(prev => !prev);
-  const alternarConfirmPassword = () => setMostrarConfirmPassword(prev => !prev);
 
+  /* ---------- RENDER ---------- */
   return (
     <div className={styles.contenedorRegistro}>
       <div className={styles.cntBienvenida}>
@@ -71,152 +112,121 @@ const Inicio = () => {
           <Derechos/>
         </div>
       </div>
-      
+
+
       <div className={styles.cntFormulario}>
         <div className={styles.formulario}>
-          <div className={styles.logoForm}>
-            <Logo/>
-          </div>
-          <form name="registro" onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.logoForm}><Logo /></div>
+
+          {/* -------- FORMULARIO -------- */}
+          <form name="registro" onSubmit={handleSubmit(onSubmit)} noValidate>
             <Switch />
 
-            {/* Correo */}
+            {/* ------- CORREO ------- */}
             <div className={styles.cntImput}>
               <input
                 type="email"
                 id="correo"
                 placeholder="Correo electrónico"
-                {...register("correo", {
-                  required: "Este campo es obligatorio",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Correo no válido"
-                  }
-                })}
+                {...register("correo")}
                 className={errors.correo ? styles.errorInput : ""}
               />
               {errors.correo && <span className={styles.error}>{errors.correo.message}</span>}
             </div>
 
-            {/* Teléfono */}
+            {/* ------- TELÉFONO ------- */}
             <div className={styles.cntImput}>
               <input
                 type="text"
                 id="telefono"
                 placeholder="Teléfono celular"
                 maxLength="10"
-                {...register("telefono", {
-                  required: "Teléfono requerido",
-                  minLength: { 
-                    value: 10, 
-                    message: "Debe tener 10 dígitos" },
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "Solo números"
-                  }
-                })}
+                {...register("telefono")}
                 className={errors.telefono ? styles.errorInput : ""}
               />
               {errors.telefono && <span className={styles.error}>{errors.telefono.message}</span>}
             </div>
 
-            {/* Contraseña */}
+            {/* ------- CONTRASEÑA ------- */}
             <div className={styles.cntImput}>
               <input
                 type={mostrarPassword ? "text" : "password"}
                 id="contrasena"
                 placeholder="Contraseña"
-                {...register("contrasena", {
-                  required: "Contraseña requerida",
-                  pattern: {
-                    value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])[\s\S]{8,}$/,
-                    message: "Debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo."
-                  }
-                })}
-                className={errors.contrasena ? `${styles.errorInput}` : ""}
+                {...register("contrasena")}
+                className={errors.contrasena ? styles.errorInput : ""}
               />
+              {/* toggle */}
               <span
                 className={styles.passwordToggle}
-                onClick={alternarPassword}
+                onClick={() => setMostrarPassword(p => !p)}
                 tabIndex={0}
-                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && alternarPassword()}
-                aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 role="button"
+                aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
               >
-                {mostrarPassword
-                  ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" />
-                  : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />}
+                <img className={styles.ojos} src={mostrarPassword ? srcCerrado : srcAbierto} alt="" />
               </span>
               {errors.contrasena && <span className={styles.error}>{errors.contrasena.message}</span>}
             </div>
 
-            {/* Confirmar contraseña */}
+            {/* ------- CONFIRMAR ------- */}
             <div className={styles.cntImput}>
               <input
                 type={mostrarConfirmPassword ? "text" : "password"}
                 id="confirmContra"
                 placeholder="Confirmar contraseña"
-                {...register("confirmContra", {
-                  required: "Confirma tu contraseña",
-                  validate: value =>
-                    value === passwordValue || "Las contraseñas no coinciden"
-                })}
+                {...register("confirmContra")}
                 className={errors.confirmContra ? styles.errorInput : ""}
               />
+              {/* toggle */}
               <span
                 className={styles.passwordToggle}
-                onClick={alternarConfirmPassword}
+                onClick={() => setMostrarConfirmPassword(p => !p)}
                 tabIndex={0}
-                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && alternarConfirmPassword()}
-                aria-label={mostrarConfirmPassword ? "Ocultar confirmación" : "Mostrar confirmación"}
                 role="button"
+                aria-label={mostrarConfirmPassword ? "Ocultar confirmación" : "Mostrar confirmación"}
               >
-                {mostrarConfirmPassword
-                  ? <img className={styles.ojos} src={srcCerrado} alt="ojo cerrado" />
-                  : <img className={styles.ojos} src={srcAbierto} alt="ojo abierto" />}
+                <img className={styles.ojos} src={mostrarConfirmPassword ? srcCerrado : srcAbierto} alt="" />
               </span>
               {errors.confirmContra && <span className={styles.error}>{errors.confirmContra.message}</span>}
             </div>
 
-            {/* Políticas */}
+            {/* ------- POLÍTICAS ------- */}
             <div className={styles.cntPoliticas}>
               <div className={styles.cntChk}>
                 <input
-                type="checkbox"
-                id="politicas"
-                {...register("politicas", {
-                  required: {
-                    value: true,
-                    message: "Acepta los términos y condiciones"
-                  }
-                })}
-                className={errors.politicas ? styles.errorInput : ""}
-              />
-              <label className={styles.terminos} htmlFor="politicas">
-                <p>He leído y acepto <span><a href="#">Términos y Condiciones</a></span> y nuestras <span><a href="#">Políticas de privacidad</a></span></p>
-              </label>
+                  type="checkbox"
+                  id="politicas"
+                  {...register("politicas")}
+                  className={errors.politicas ? styles.errorInput : ""}
+                />
+                <label htmlFor="politicas" className={styles.terminos}>
+                  <p>He leído y acepto <span><a href="#">Términos y Condiciones</a></span> y nuestras <span><a href="#">Políticas de privacidad</a></span></p>
+                </label>
               </div>
               {errors.politicas && <span className={styles.error}>{errors.politicas.message}</span>}
             </div>
 
+            {/* ------- BOTÓN ------- */}
             <div>
               <p>
-                <BotonA>
-                  Crear cuenta
+                <BotonA
+                  type="submit"
+                  disabled={!isValid || isSubmitting}      // ⟵ NUEVO
+                >
+                  {isSubmitting ? 'Creando...' : 'Crear cuenta'}   {/* ⟵ NUEVO */}
                 </BotonA>
               </p>
             </div>
           </form>
-          <div className={styles.iniciarSesion}><p>¿Ya tienes una cuenta?</p>
-            <p><span className={styles.liga}>Inicia sesión aquí</span> para continuar donde te quedaste</p>
-          </div>
+
+          {/* …tu bloque “¿Ya tienes cuenta?” permanece … */}
         </div>
-        <div className={styles.cntDerechosForm}>
-          <Derechos/>
-        </div>
+
+        <div className={styles.cntDerechosForm}><Derechos/></div>
       </div>
     </div>
   );
-}
+};
 
 export default Inicio;
