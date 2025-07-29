@@ -59,7 +59,7 @@ const Confirmacion = () => {
     </div>
 
     <div>
-      <BotonA textoBoton="Enviar código" />
+      <BotonA>Enviar Código</BotonA>
     </div>
   </fieldset>
 

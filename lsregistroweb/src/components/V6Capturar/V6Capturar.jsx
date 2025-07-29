@@ -9,6 +9,7 @@ import reflejo  from './reflejo.svg';
 import BotonA   from '../Botones/BotonA';
 import Logo     from '../ElementosVista/Logo/Logo'
 
+
 const V6Capturar = () => {
   /* ---------- REFERENCIAS ---------- */
   const videoRef   = useRef(null);   // <video> 
@@ -20,6 +21,38 @@ const V6Capturar = () => {
   const [cameraOn, setCameraOn] = useState(false);
   const [captured, setCaptured] = useState(null); // dataURL
   const [errorMsg, setErrorMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [datosINE, setDatosINE] = useState(null); // {curp, nombre, domicilio}
+
+  /* ---------- ENVIAR AL BACKEND ---------- */
+const handleSend = async () => {
+  if (!captured) return;                 // asegúrate de tener foto
+  setLoading(true);
+
+  try {
+    // 1. Convierte dataURL → Blob (JPEG)
+    const blob = await (await fetch(captured)).blob();
+
+    // 2. Empaqueta como multipart/form-data
+    const form = new FormData();
+    form.append('foto', blob, 'credencial.jpg');
+
+    // 3. POST al endpoint (ajusta la ruta con tu API)
+    const res  = await fetch('/api/ocr', { method: 'POST', body: form });
+
+    if (!res.ok) throw new Error('Error OCR');
+
+    // 4. JSON esperado: { curp, nombre, domicilio }
+    const data = await res.json();
+    setDatosINE(data);
+    console.log('Datos recibidos:', data);
+  } catch (err) {
+    console.error(err);
+    alert('Hubo un problema al extraer los datos');
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* ---------- ENCENDER / APAGAR ---------- */
   const handleToggleCamera = async () => {
@@ -150,6 +183,14 @@ const V6Capturar = () => {
         >
           Capturar
         </BotonA>
+
+        <BotonA
+          onClick={handleSend}
+          disabled={!captured || loading}
+          estilo="primario"
+>
+  {loading ? 'Procesando…' : 'Enviar al backend'}
+</BotonA>
 
         <a href="#" onClick={e => e.preventDefault()}>Volver</a>
       </div>

@@ -1,0 +1,29 @@
+.cntV8Opciones {
+    background-image: linear-gradient(166deg, rgb(11, 50, 182, 0.01) 0%, rgb(11, 164, 182, 0.3) 100%);
+    color: rgb(70, 69, 69);
+    width: 100%;
+    height: 100dvh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.cntLogo{
+    margin-top: 3rem;
+}
+
+.cntTextoPrincipal {
+
+    width: 80%;
+}
+
+.cntTarjetas {
+    margin: 1rem auto 3rem;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}

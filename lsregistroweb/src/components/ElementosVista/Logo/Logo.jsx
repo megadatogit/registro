@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './logo.module.css'
-import srcLogo from './LS-imagotipo-horizontal.svg'
+import srcLogo from './Isólogo LS.svg'
 
 
 const Logo = () => {
