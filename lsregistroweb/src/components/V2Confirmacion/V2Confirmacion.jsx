@@ -1,16 +1,53 @@
-import React from 'react'
-import styles from './v2confirmacion.module.css'
-import srclogo from './LS-imagotipo-horizontal.svg'
-import Logo from '../ElementosVista/Logo/Logo'
-import BotonA from '../Botones/BotonA'
-import TextoPrincipal from '../ElementosVista/TextoPrincipal/TextoPrincipal'
-import TextoSecundario from '../ElementosVista/TextoSecundario/TextoSecundario'
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import api from '@/services/api';
+import { ROUTES } from '../../routes/AppRouter';
+
+import styles          from './v2confirmacion.module.css';
+import Logo            from '@/components/ElementosVista/Logo/Logo';
+import BotonA          from '@/components/Botones/BotonA';
+import TextoPrincipal  from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
+import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
 
 
 const Confirmacion = () => {
+  
+  const {state } = useLocation();
+  const navigate = useNavigate();
+  const [metodo, setMetodo] = useState('');  //'email' _ 'phone' 
+  const [loading, setLoading] = useState(false);
+
+  const maskPhone = (tel) => `•••• ••• • ${tel.slice(-4)}`
+  const maskMail  = (mail) =>{
+    const [u,d] = mail.split('@');
+     return `${u[0]}••••@${d}`
+  };
+
+  /* Envio de código */
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(!metodo) return;
+
+    try {
+      setLoading(true);
+      await api.post('/preregistro/preregistro/enviar_codigo', {
+        id: state.id,
+        destino: metodo,
+      });
+
+      navigate(ROUTES.VERIFICACION, {state});
+
+    } catch (err) {
+      alert('No se pudo enviar el código');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
     return (
         <div className={styles.cntConfirmacion}>
-
             <div className={styles.cntLogo}>
                 <Logo />
             </div>
@@ -21,14 +58,16 @@ const Confirmacion = () => {
 
                 <TextoSecundario
                     textoSecundario={[
-    "Antes de continuar, elige a dónde deseas que te enviemos tu código de verificación.",
-    <br key="1" />,
-    "Esto nos permite asegurar que tus datos sean correctos y proteger tu cuenta."
-  ]}
+                      "Antes de continuar, elige a dónde deseas que te enviemos tu código de verificación.",
+                      <br key="1" />,
+                      "Esto nos permite asegurar que tus datos sean correctos y proteger tu cuenta."
+                    ]}
                 />
             </div>
 
-            <form className={styles.form}>
+            {/* formulario */}
+
+            <form className={styles.form} onSubmit={handleSubmit}>
   <fieldset className={styles.fieldset}>
     {/* <legend>Selecciona cómo quieres recibir tu código</legend> */}
 
@@ -38,10 +77,12 @@ const Confirmacion = () => {
         id="correo"
         name="metodo"           // <-- nombre IGUAL para ambos radios
         value="email"
+        checked={metodo === 'email'}
+        onChange={()=>setMetodo('email')}
       />
       <label htmlFor="correo"> {/* <-- htmlFor en React */}
         Enviar código a e-mail:<br />
-        <span className={styles.datos}>correo@mail.com</span>
+        <span className={styles.datos}>{maskMail(state?.correo)}</span>
       </label>
     </div>
 
@@ -51,20 +92,22 @@ const Confirmacion = () => {
         id="telefono"
         name="metodo"          // <-- igual aquí
         value="phone"
+        checked={metodo==='phone'}
+        onChange={()=>setMetodo('phone')}
       />
       <label htmlFor="telefono">
         Enviar código por SMS:<br />
-        <span className={styles.datos}>•••• ••• •4567</span>
+        <span className={styles.datos}>{maskPhone(state?.telefono)}</span>
       </label>
     </div>
 
     <div>
-      <BotonA>Enviar Código</BotonA>
+      <BotonA type="submit" disabled={!metodo || loading}>{loading ? 'Enviando' : "Enviar código"}</BotonA>
     </div>
   </fieldset>
 
   <p>¿Tu información no es correcta? </p>
-  <a>Volver a registro</a>
+  <a onClick={()=> navigate(-1)}>Volver a registro</a>
 </form>
 
         </div>

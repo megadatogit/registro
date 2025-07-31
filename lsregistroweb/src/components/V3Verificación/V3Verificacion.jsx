@@ -1,97 +1,97 @@
-import React from 'react'
-import styles from './v3verificacion.module.css'
-import Logo from '../ElementosVista/Logo/Logo'
-import BotonA from '../Botones/BotonA'
+// src/components/V3Verificacion/V3Verificacion.jsx
+import React, { useState, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import api from '@/services/api';
+import { ROUTES } from '@/routes/AppRoutes';
 
-import TextoPrincipal from '../ElementosVista/TextoPrincipal/TextoPrincipal'
-import TextoSecundario from '../ElementosVista/TextoSecundario/TextoSecundario'
+import styles from './v3verificacion.module.css';
+import Logo from '@/components/ElementosVista/Logo/Logo';
+import BotonA from '@/components/Botones/BotonA';
+import TextoPrincipal from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
+import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
 
 const Verificacion = () => {
+  const { state } = useLocation();          // { id, correo, telefono }
+  const navigate  = useNavigate();
+
+  const [digits, setDigits] = useState(['', '', '', '', '', '']);
+  const [loading, setLoading] = useState(false);
+  const inputsRef = useRef([]);
+
+  /* Manejo de inputs */
+  const handleChange = (idx, val) => {
+    if (!/^\d?$/.test(val)) return;         // solo dígito o vacío
+    const copy = [...digits];
+    copy[idx] = val;
+    setDigits(copy);
+    if (val && idx < 5) inputsRef.current[idx + 1].focus();
+  };
+
+  const handleKeyDown = (idx, e) => {
+    if (e.key === 'Backspace' && !digits[idx] && idx > 0) {
+      inputsRef.current[idx - 1].focus();
+    }
+  };
+
+  /* Enviar código al backend */
+  const verificar = async () => {
+    const codigo = digits.join('');
+    if (codigo.length !== 6) return alert('Ingresa los 6 dígitos.');
+
+    try {
+      setLoading(true);
+      await api.post('/preregistro/preregistro/validar_codigo/', {
+        id: state.id,
+        codigo,
+      });
+      navigate(ROUTES.CONFIRMACION_EXITO);
+    } catch (err) {
+      alert('Código incorrecto o expirado');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* Reenviar código */
+  const reenviar = () =>
+    api.post('/preregistro/preregistro/reenviar_codigo/', { id: state.id });
+
   return (
     <div className={styles.cntVerificacion}>
-        <div className={styles.cntLogo}>
-          <Logo/>
-        </div>
-        
-        <TextoPrincipal
-        textoPrincipal="Ingresar el código de verificación"
-        />
-        <TextoSecundario
-        textoSecundario="Ingresa el código de verficación de 6 dígitos que te hemos enviado."
-        />
+      <div className={styles.cntLogo}><Logo /></div>
 
+      <TextoPrincipal textoPrincipal="Ingresar el código de verificación" />
+      <TextoSecundario textoSecundario="Ingresa el código de verificación de 6 dígitos que te hemos enviado." />
 
-        <form className={styles.form} id="confirmationForm">
-        <label for="digit1"></label><br />
-        
+      <form className={styles.form} onSubmit={(e) => { e.preventDefault(); verificar(); }}>
         <div className={styles.cntInputs}>
-            <input className={styles.inputs}
-          type="text"
-          id="digit1"
-          maxlength="1"
-          required
-          pattern="\d"
-          oninput="moveToNext(this, 'digit2');"
-        />
-        <input className={styles.inputs}
-          type="text"
-          id="digit2"
-          maxlength="1"
-          required
-          pattern="\d"
-          oninput="moveToNext(this, 'digit3');"
-          onkeydown="moveToPrev(event, this, 'digit1');"
-        />
-        <input className={styles.inputs}
-          type="text"
-          id="digit3"
-          maxlength="1"
-          required
-          pattern="\d"
-          oninput="moveToNext(this, 'digit4');"
-          onkeydown="moveToPrev(event, this, 'digit2');"
-        />
-        <span>-</span>
-        <input className={styles.inputs}
-          type="text"
-          id="digit4"
-          maxlength="1"
-          required
-          pattern="\d"
-          oninput="moveToNext(this, 'digit5');"
-          onkeydown="moveToPrev(event, this, 'digit3');"
-        />
-        <input className={styles.inputs}
-          type="text"
-          id="digit5"
-          maxlength="1"
-          required
-          pattern="\d"
-          oninput="moveToNext(this, 'digit6');"
-          onkeydown="moveToPrev(event, this, 'digit4');"
-        />
-        <input className={styles.inputs}
-          type="text"
-          id="digit6"
-          maxlength="1"
-          required
-          pattern="\d"
-          onkeydown="moveToPrev(event, this, 'digit5');"
-        />
+          {digits.map((d, idx) => (
+            <input
+              key={idx}
+              ref={(el) => (inputsRef.current[idx] = el)}
+              className={styles.inputs}
+              type="text"
+              maxLength={1}
+              value={d}
+              onChange={(e) => handleChange(idx, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(idx, e)}
+            />
+          ))}
         </div>
 
         <div className={styles.cntBoton}>
-            <p><BotonA
-            textoBoton="Verficiar y continuar"/></p>
+          <BotonA type="submit" disabled={loading}>
+            {loading ? 'Verificando…' : 'Verificar y continuar'}
+          </BotonA>
         </div>
       </form>
-      <p id="message" ></p>
 
-      <p>¿No ewciviste el código? <a className={styles.reenviar}>Reenviar</a></p>
-    
-        
-
+      <p className={styles.reenviarWrap}>
+        ¿No recibiste el código?{' '}
+        <a className={styles.reenviar} onClick={reenviar}>Reenviar</a>
+      </p>
     </div>
-  )
-}
-export default Verificacion
+  );
+};
+
+export default Verificacion;

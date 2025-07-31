@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';          
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import api from '../../services/api.js'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../routes/AppRouter.jsx';
 
-/*   TUS IMPORTS EXISTENTES   */
 import styles from './v1registro.module.css';
-import srcLogo     from './LS-imagotipo-horizontal.svg';
-import srcAbierto  from './eye-password-see-view-svgrepo-com.svg';
-import srcCerrado  from './eye-key-look-password-security-see-svgrepo-com.svg';
-import Logo        from '../ElementosVista/Logo/Logo';
-import BotonA      from '../Botones/BotonA';
-import Switch      from '../Seleccion/Switch';
-import Derechos    from './Derechos';
 
-/* ---------- 1. ESQUEMA ZOD (mantiene tus regex) ---------- */ 
+import srcAbierto from './eye-password-see-view-svgrepo-com.svg';
+import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg';
+import Logo from '../ElementosVista/Logo/Logo.jsx';
+import BotonA from '../Botones/BotonA';
+import Switch from '../Seleccion/Switch';
+import Derechos from './Derechos';
+
+/* ---------- 1. ESQUEMA ZOD (mantiene tus regex) ---------- */
+
 const schema = z.object({
   correo: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Correo no válido'),
   telefono: z.string().regex(/^\d{10}$/, 'Debe tener 10 dígitos'),
@@ -32,49 +34,53 @@ const schema = z.object({
 
 
 const Inicio = () => {
-  const [mostrarPassword,        setMostrarPassword]        = useState(false);
+  const navigate = useNavigate()
+  const [mostrarPassword, setMostrarPassword] = useState(false);
   const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
 
-  /* ---------- RHF CON RESOLVER ZOD ---------- */                       
+  /* ---------- RHF CON RESOLVER ZOD ---------- */
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
-    resolver: zodResolver(schema),   
+    resolver: zodResolver(schema),
     mode: 'onChange',
   });
 
   /* ---------- SUBMIT ---------- */
-  
-const onSubmit = async (formData) => {
-  try {
-    /* Payload exactamente como lo pide el backend */
-    const payload = {
-      rol: 1,
-      correo: formData.correo,
-      telefono: formData.telefono,
-      code_telefono: '52',          // ← México; cámbialo si usas otro prefijo
-      contrasena: formData.contrasena,
-    };
 
-    const res = await api.post('preregistro/preregistro/registro/', payload);
+  const onSubmit = async (formData) => {
+    try {
+      /* Payload exactamente como lo pide el backend */
+      const payload = {
+        rol: 1,
+        correo: formData.correo,
+        telefono: formData.telefono,
+        code_telefono: '52',          // ← México; cámbialo si usas otro prefijo
+        contrasena: formData.contrasena,
+      };
 
-    console.log('Respuesta backend', res.data);
-    alert('¡Cuenta creada exitosamente! 🎉');
+      const res = await api.post('/preregistro/preregistro/registro/', payload);
 
-    /* Si después recibes token o id → guárdalo aquí */
-    // localStorage.setItem('token', res.data.token);
+      const { id, correo, telefono } = res.data;
+      navigate(ROUTES.CONFIRMACION, { state: { id, correo, telefono } })
 
-  } catch (err) {
-    if (err.response) {
-      // El backend devolvió error de validación (422) u otro código
-      alert(err.response.data.detail?.[0]?.msg || 'Error del servidor');
-    } else {
-      alert('No se pudo conectar al servidor');
+      console.log('Respuesta backend', res.data);
+      alert('¡Cuenta creada exitosamente! 🎉');
+
+      /* Si después recibes token o id → guárdalo aquí */
+      // localStorage.setItem('token', res.data.token);
+
+    } catch (err) {
+      if (err.response) {
+        // El backend devolvió error de validación (422) u otro código
+        alert(err.response.data.detail?.[0]?.msg || 'Error del servidor');
+      } else {
+        alert('No se pudo conectar al servidor');
+      }
     }
-  }
-};
+  };
 
 
   /* ---------- RENDER ---------- */
@@ -109,7 +115,7 @@ const onSubmit = async (formData) => {
         </div>
 
         <div className={styles.cntDerechosInfo}>
-          <Derechos/>
+          <Derechos />
         </div>
       </div>
 
@@ -223,7 +229,7 @@ const onSubmit = async (formData) => {
           {/* …tu bloque “¿Ya tienes cuenta?” permanece … */}
         </div>
 
-        <div className={styles.cntDerechosForm}><Derechos/></div>
+        <div className={styles.cntDerechosForm}><Derechos /></div>
       </div>
     </div>
   );

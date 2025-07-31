@@ -26,8 +26,23 @@ const V8Opciones = () => {
             tituloTarjeta="Cabina médica FRANKY" 
             descripcionTarjeta="Acude a una de nuestras cabinas móviles para recibir atención médica en tiempo real con uno de nuestros médicos, así como tomar tus mediciones principales"
             />
-            
             <TarjetaOpcion
+            srcIcono={interrogacion} 
+            tituloTarjeta="Cabina médica FRANKY" 
+            descripcionTarjeta="Acude a una de nuestras cabinas móviles para recibir atención médica en tiempo real con uno de nuestros médicos, así como tomar tus mediciones principales"
+            />
+            <TarjetaOpcion
+            srcIcono={interrogacion} 
+            tituloTarjeta="Cabina médica FRANKY" 
+            descripcionTarjeta="Acude a una de nuestras cabinas móviles para recibir atención médica en tiempo real con uno de nuestros médicos, así como tomar tus mediciones principales"
+            />
+            <TarjetaOpcion
+            srcIcono={interrogacion} 
+            tituloTarjeta="Cabina médica FRANKY" 
+            descripcionTarjeta="Acude a una de nuestras cabinas móviles para recibir atención médica en tiempo real con uno de nuestros médicos, así como tomar tus mediciones principales"
+            />
+            
+            {/* <TarjetaOpcion
             srcIcono={interrogacion} 
             tituloTarjeta="Asistente virtual AVI" 
             descripcionTarjeta="Consulta a uno de nuestros especialistas sin salir de casa a través de las consultas por streaming."
@@ -55,7 +70,7 @@ const V8Opciones = () => {
             srcIcono={interrogacion} 
             tituloTarjeta="Dudas frecuentes" 
             descripcionTarjeta="Seguramente tendrás dudas sobre cómo funciona el sistema, la afiliación o cualquier otro apartado. Consulta otras preguntsa que han realizado los usuarios."
-            />
+            /> */}
         
         </div>
         <BotonA>Comcenzar</BotonA>

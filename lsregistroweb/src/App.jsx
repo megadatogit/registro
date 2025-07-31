@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <AppRoutes/>
+      <V2Confirmacion/>
     </>
   )
 }
