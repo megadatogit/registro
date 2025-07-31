@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '@/services/api';
-import { ROUTES } from '@/routes/AppRoutes';
+import { ROUTES } from '@/routes/AppRouter';
 
 import styles from './v3verificacion.module.css';
 import Logo from '@/components/ElementosVista/Logo/Logo';
