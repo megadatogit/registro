@@ -40,13 +40,12 @@ const Verificacion = () => {
 
     try {
       setLoading(true);
-      await api.post('/preregistro/preregistro/validar_codigo/', {
-        id: state.id,
-        codigo,
+      await api.post(`/preregistro/preregistro/validar-${state.metodo}/`, {
+        codigo, identificador:state[state.metodo]
       });
       navigate(ROUTES.CONFIRMACION_EXITO);
     } catch (err) {
-      alert('Código incorrecto o expirado');
+      alert(err);
     } finally {
       setLoading(false);
     }

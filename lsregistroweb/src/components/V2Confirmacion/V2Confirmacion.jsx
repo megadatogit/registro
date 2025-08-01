@@ -31,15 +31,16 @@ const Confirmacion = () => {
 
     try {
       setLoading(true);
-      await api.post('/preregistro/preregistro/enviar_codigo', {
-        id: state.id,
-        destino: metodo,
+
+      await api.post(`/preregistro/preregistro/enviar-codigo-${metodo}`, { 
+        identificador: state[metodo]
       });
 
-      navigate(ROUTES.VERIFICACION, {state});
+      navigate(ROUTES.VERIFICACION, {state:{...state, metodo}});
 
     } catch (err) {
-      alert('No se pudo enviar el código');
+      console.log(err)
+      alert(err.response.data.detail);
     } finally {
       setLoading(false);
     }
@@ -76,9 +77,9 @@ const Confirmacion = () => {
         type="radio"
         id="correo"
         name="metodo"           // <-- nombre IGUAL para ambos radios
-        value="email"
-        checked={metodo === 'email'}
-        onChange={()=>setMetodo('email')}
+        value="correo"
+        checked={metodo === 'correo'}
+        onChange={()=>setMetodo('correo')}
       />
       <label htmlFor="correo"> {/* <-- htmlFor en React */}
         Enviar código a e-mail:<br />
@@ -91,9 +92,9 @@ const Confirmacion = () => {
         type="radio"
         id="telefono"
         name="metodo"          // <-- igual aquí
-        value="phone"
-        checked={metodo==='phone'}
-        onChange={()=>setMetodo('phone')}
+        value="telefono"
+        checked={metodo==='telefono'}
+        onChange={()=>setMetodo('telefono')}
       />
       <label htmlFor="telefono">
         Enviar código por SMS:<br />

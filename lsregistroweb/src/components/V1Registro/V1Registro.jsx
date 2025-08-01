@@ -51,9 +51,7 @@ const Inicio = () => {
   /* ---------- SUBMIT ---------- */
 
   const onSubmit = async (formData) => {
-    try {
-      /* Payload exactamente como lo pide el backend */
-      const payload = {
+    const payload = {
         rol: 1,
         correo: formData.correo,
         telefono: formData.telefono,
@@ -61,25 +59,38 @@ const Inicio = () => {
         contrasena: formData.contrasena,
       };
 
-      const res = await api.post('/preregistro/preregistro/registro/', payload);
+    console.log("data:",payload)
 
-      const { id, correo, telefono } = res.data;
-      navigate(ROUTES.CONFIRMACION, { state: { id, correo, telefono } })
+    navigate(ROUTES.CONFIRMACION, { state: { ...payload }})
+    // try {
+    //   /* Payload exactamente como lo pide el backend */
+    //   const payload = {
+    //     rol: 1,
+    //     correo: formData.correo,
+    //     telefono: formData.telefono,
+    //     code_telefono: '52',          // ← México; cámbialo si usas otro prefijo
+    //     contrasena: formData.contrasena,
+    //   };
 
-      console.log('Respuesta backend', res.data);
-      alert('¡Cuenta creada exitosamente! 🎉');
+    //   const res = await api.post('/preregistro/preregistro/registro/', payload);
 
-      /* Si después recibes token o id → guárdalo aquí */
-      // localStorage.setItem('token', res.data.token);
+    //   const { id, correo, telefono } = res.data;
+    //   navigate(ROUTES.CONFIRMACION, { state: { id, correo, telefono } })
 
-    } catch (err) {
-      if (err.response) {
-        // El backend devolvió error de validación (422) u otro código
-        alert(err.response.data.detail?.[0]?.msg || 'Error del servidor');
-      } else {
-        alert('No se pudo conectar al servidor');
-      }
-    }
+    //   console.log('Respuesta backend', res.data);
+    //   alert('¡Cuenta creada exitosamente! 🎉');
+
+    //   /* Si después recibes token o id → guárdalo aquí */
+    //   // localStorage.setItem('token', res.data.token);
+
+    // } catch (err) {
+    //   if (err.response) {
+    //     // El backend devolvió error de validación (422) u otro código
+    //     alert(err.response.data.detail?.[0]?.msg || 'Error del servidor');
+    //   } else {
+    //     alert('No se pudo conectar al servidor');
+    //   }
+    // }
   };
 
 
