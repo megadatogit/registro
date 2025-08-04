@@ -43,3 +43,14 @@
 .primary:hover {
   background-color: #2566d6 ;
 }
+
+
+.boton {
+  transition: opacity 0.2s;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

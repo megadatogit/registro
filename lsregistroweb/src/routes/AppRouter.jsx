@@ -13,6 +13,7 @@ import V6Adjuntar       from '@/components/V6Adjuntar/V6Adjuntar';
 import V6Capturar       from '@/components/V6Capturar/V6Capturar';
 import V7Recibidos      from '@/components/V7Recibidos/V7Recibidos';
 import V7RevisarDoc     from '@/components/V7Revisar/V7RevisarDoc';
+import V7InvitacionDoc  from '@/components/V7InvitacionDoc/V7InvitacionDoc';
 import V8Opciones       from '@/components/V8Opciones/V8Opciones';
 
 /* --- Rutas --- */
@@ -28,6 +29,7 @@ export const ROUTES = {
   CAPTURAR_DOCUMENTOS: '/capturar-documentos',
   RECIBIDOS:           '/recibidos',
   REVISAR_DOCUMENTOS:  '/revisar-documentos',
+  INVITACION_DOC:      '/invitacion-documentos',
   OPCIONES:            '/opciones',
 };
 
@@ -48,6 +50,7 @@ export const AppRoutes = () => (
       <Route path={ROUTES.CAPTURAR_DOCUMENTOS}    element={<V6Capturar />} />
       <Route path={ROUTES.RECIBIDOS}              element={<V7Recibidos />} />
       <Route path={ROUTES.REVISAR_DOCUMENTOS}     element={<V7RevisarDoc />} />
+      <Route path={ROUTES.INVITACION_DOC}         element={<V7RevisarDoc />} />
       <Route path={ROUTES.OPCIONES}               element={<V8Opciones />} />
 
       {/* 404 – cualquier otra ruta */}

@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <V2Confirmacion/>
+      <V4ConfExito/>
     </>
   )
 }

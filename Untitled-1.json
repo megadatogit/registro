@@ -1,0 +1,30 @@
+{
+    "correo": "deyaniralibersalus@gmail.com",
+    "telefono celular": "999999999",
+    "contraseña": "peluchesmil",
+    "direccion": {
+        "estado":"ebriedad",
+        "colonia": "Barrientos",
+        "numero exterior": 233
+    },
+    "datos personales": {
+        "nombre":"deyanira",
+        "edad": 25
+    },
+    "peliculas favoritas":[
+        "ratatouille",
+        "interestellar",
+        300
+    ],
+    "telefonos":[
+        {
+            "codigo": "+52",
+            "valor": 556569415
+
+        }, 
+        {"codigo":"+52",
+        "valor": 554822155
+
+        }
+    ]
+} 

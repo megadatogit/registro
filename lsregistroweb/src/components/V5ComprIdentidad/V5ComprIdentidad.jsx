@@ -1,52 +1,66 @@
-import React from 'react'
-import styles from './v5comprIdentidad.module.css'
-import Logo from '../ElementosVista/Logo/Logo'
-import TextoPrincipal from '../ElementosVista/TextoPrincipal/TextoPrincipal'
-import TextoSecundario from '../ElementosVista/TextoSecundario/TextoSecundario'
-import TarjetaBase from '../ElementosVista/TarjetaBase/TarjetaBase'
+// src/components/V5ComprIdentidad/V5ComprIdentidad.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/routes/AppRouter';
 
+import styles from './v5comprIdentidad.module.css';
+import Logo            from '@/components/ElementosVista/Logo/Logo';
+import TextoPrincipal  from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
+import TextoSecundario from '@/components/ElementosVista/TextoSecundario/TextoSecundario';
+import TarjetaBase     from '@/components/ElementosVista/TarjetaBase/TarjetaBase';
 
 const V5ComprIdentidad = () => {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.cntComprIdentidad}>
-        <div className={styles.cntLogo}>
-          <Logo/>
-        </div>
+      {/* Logo */}
+      <div className={styles.cntLogo}>
+        <Logo />
+      </div>
 
-        <div className={styles.cntTexto}>
-        <TextoPrincipal
-        textoPrincipal="Comprueba tu identidad"
-        />
+      {/* Título y descripción */}
+      <div className={styles.cntTexto}>
+        <TextoPrincipal textoPrincipal="Comprueba tu identidad" />
         <TextoSecundario
-        textoSecundario={["Sube los documentos que te identifican: INE y Comprobante de domicilio (con antiguedad menor a tres meses).",<br key="1" />, "Este paso nos permite darte acceso completo de forma segura y personalizada."]}
+          textoSecundario={[
+            'Sube los documentos que te identifican: INE y Comprobante de domicilio (con antigüedad menor a tres meses).',
+            <br key="1" />,
+            'Este paso nos permite darte acceso completo de forma segura y personalizada.',
+          ]}
         />
-        </div>
+      </div>
 
-        <div className={styles.cntTarjeta}>
-            <TarjetaBase
-            accion="Escanear documentos"
-            descripcion="Toma una foto de tu documento directamente desde la cámara.
-Ideal si no tienes el archivo guardado aún"
-            textoBoton="Escanear documentos"
-            />
-            <TarjetaBase
-            accion="Subir archivos"
-            descripcion="Carga una imagen o PDF que ya tengas guardado.
-              Asegúrate de que sea legible y esté completo"
-            textoBoton="Subir archivos"
-            />
-            
-        </div>
+      {/* Tarjetas de acción */}
+      <div className={styles.cntTarjeta}>
+        <TarjetaBase
+          accion="Escanear documentos"
+          descripcion="Toma una foto de tu documento directamente desde la cámara. Ideal si no tienes el archivo guardado aún."
+          textoBoton="Escanear documentos"
+          onClick={() => navigate(ROUTES.CAPTURAR_DOCUMENTOS)}
+        />
 
+        <TarjetaBase
+          accion="Subir archivos"
+          descripcion="Carga una imagen o PDF que ya tengas guardado. Asegúrate de que sea legible y esté completo."
+          textoBoton="Subir archivos"
+          onClick={() => navigate(ROUTES.ADJUNTAR_DOCUMENTOS)}
+        />
+      </div>
 
-        <div className={styles.opciones}>
-            <a>Llenar datos manualmente</a>
-            <a>Subir más tarde desde tu perfil</a>
-        
-        </div>
-      
+      {/* Enlaces adicionales */}
+      <div className={styles.opciones}>
+        <a onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
+          Llenar datos manualmente
+        </a>
+
+        <a onClick={() => navigate(ROUTES.INVITACION_DOC)}>
+          Subir más tarde desde tu perfil
+        </a>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default V5ComprIdentidad
+export default V5ComprIdentidad;
+

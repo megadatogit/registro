@@ -1,27 +1,18 @@
-import React from 'react'
-import styles from  './switch.module.css'
+import React from 'react';
+import styles from './switch.module.css';
 
-const Switch = () => {
-  
-  return (
-    <div className={styles.cntSwitch}>
-      <input
-      className={styles.input}
-      id="switch"
-      type="checkbox"
-      aria-label="Cambiar tipo de perfil"
-      role="switch"
-      />
-      <label 
-      className={styles.switch}
-      htmlFor="switch">
-        {/* <span className={styles.spanPaciente}>Paciente</span>
-        <span className={styles.spanProfecional}>Personal de salud</span> */}
-      </label>
-      
-    </div>
-  )
-} 
+const Switch = () => (
+  <div className={styles.cntSwitch}>
+    {/* 1️⃣  checkbox oculto */}
+    <input id="rolSwitch" type="checkbox" className={styles.input} />
 
-export default Switch
+    {/* 2️⃣  deslizador */}
+    <label htmlFor="rolSwitch" className={styles.slider} />
 
+    {/* 3️⃣  etiquetas */}
+    <span className={`${styles.lbl} ${styles.lblPaciente}`}>Paciente</span>
+    <span className={`${styles.lbl} ${styles.lblSalud}`}>Personal&nbsp;de&nbsp;salud</span>
+  </div>
+);
+
+export default Switch;

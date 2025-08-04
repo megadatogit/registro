@@ -7,6 +7,6 @@ import { AppRoutes } from '@/routes/AppRouter';   // ajusta alias/ruta
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AppRoutes />      {/* ① ya trae <BrowserRouter> */}
+    <AppRoutes />      
   </React.StrictMode>
 );

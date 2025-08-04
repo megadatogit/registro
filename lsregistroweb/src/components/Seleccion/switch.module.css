@@ -1,69 +1,56 @@
 .cntSwitch {
-    position: relative;
-    width: 60%;
-    margin: 0 auto;
-    
-    height: 30px;
-    /* border: 2px dashed; */
-    background-color: #d7eafb;
-    border-radius: 8px;
-    height: 32px;
-    display: flex;
-    
-    align-items: center;
+  position: relative;
+  width: 60%;
+  height: 32px;
+  margin: 0 auto;
+  background: #d7eafb;        /* pista */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
+/* -------- checkbox oculto -------- */
 .input {
-    position: absolute;
-    z-index: 1;
-    visibility: hidden;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;                 /* por encima del slider */
 }
 
-.switch {
-    position: relative;
-    background-color: #5981c6 ;
-    display: flex;
-    width: 50%;
-    height: 100%;
-    border-radius: 8px;
-    appearance: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    
+/* -------- deslizador -------- */
+.slider {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #5981c6;        /* color activo */
+  border-radius: 8px;
+  transition: left 0.25s;
+  z-index: 1;
 }
 
-.cntSwitch::before {
-    position: absolute;
-    content: 'Personal de Salud';
-    z-index: 1;
-    font-size: 0.75rem;
-    color: white;
-    display: flex;
-    left: calc(75% );
-    transform: translateX(-50%);
-    width: fit-content;
-    text-align: center;
-    display: block;
-    
+/* Mueve a la derecha cuando está check */
+.input:checked + .slider {
+  left: 50%;
 }
 
-.cntSwitch::after {
-    position: absolute;
-    font-size: 0.75rem;
-    color: white;
-    content: 'Paciente';
-    left: 25%;
-    transform: translateX(-50%);
+/* -------- etiquetas -------- */
+.lbl {
+  flex: 1;
+  text-align: center;
+  transition: color 0.25s;
+  z-index: 3;                 /* encima del slider */
 }
 
+/* Colores por defecto (Paciente activo) */
+.lblPaciente { color: #fff; }
+.lblSalud    { color: #cecece; }
 
-.cntSwitch > input[type="checkbox"]:checked + label {
-    transform: translateX(100%);
-}
-
-
-
-
-
-
+/* Cambia colores cuando check → Personal activo */
+.input:checked ~ .lblPaciente { color: #cecece; }
+.input:checked ~ .lblSalud    { color: #fff; }
 

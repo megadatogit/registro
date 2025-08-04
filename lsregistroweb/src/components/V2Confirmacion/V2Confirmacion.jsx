@@ -28,7 +28,7 @@ const Confirmacion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(!metodo) return;
-
+6
     try {
       setLoading(true);
 
