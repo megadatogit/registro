@@ -108,7 +108,10 @@ const Confirmacion = () => {
   </fieldset>
 
   <p>¿Tu información no es correcta? </p>
-  <a onClick={()=> navigate(-1)}>Volver a registro</a>
+  <a 
+    onClick={()=> navigate(-1)}
+    className={styles.volver}
+  >Volver a registro</a>
 </form>
 
         </div>

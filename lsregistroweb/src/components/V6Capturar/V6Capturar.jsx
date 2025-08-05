@@ -126,6 +126,8 @@ const handleSend = async () => {
             <Logo/>
         </div>
       {/* ---------- Columna izquierda (frente / reverso) ---------- */}
+      
+      
       <div className={styles.cntLado}>
         <p className={styles.ladoTxt}>Escanea el frente de tu credencial</p>
         <div className={styles.cntImg}>
@@ -139,6 +141,7 @@ const handleSend = async () => {
       {/* ---------- Columna derecha (captura) ---------- */}
       <div className={styles.cntCaptura}>
         {/* Tips */}
+
         <div className={styles.cntInstruccion}>
           <div className={styles.cntTip}>
             <img src={warning} className={styles.icon} alt="" />
@@ -156,6 +159,7 @@ const handleSend = async () => {
 
         {/* Área de captura */}
         <div className={styles.captura}>
+          <div className={styles.mascara}></div>
           <video
             ref={videoRef}
             className={styles.video}

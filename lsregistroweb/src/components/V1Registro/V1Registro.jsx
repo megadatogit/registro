@@ -20,7 +20,7 @@ const schema = z.object({
   telefono:  z.string().regex(/^\d{10}$/, 'Debe tener 10 dígitos'),
   contrasena:z.string().regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,'8+, 1 mayús., 1 minús., 1 número, 1 símbolo'),
   confirmContra: z.string(),
-  politicas: z.literal(true, { errorMap: () => ({ message: 'Acepta los términos' }) }),
+  politicas: z.literal(true, 'Lee los terminos y condiciones y activa la casilla' ),
 }).refine((d) => d.contrasena === d.confirmContra, {
   path: ['confirmContra'],
   message: 'Las contraseñas no coinciden',
@@ -63,7 +63,7 @@ const Registro = () => {
   console.log(errors)
   /* ---------- UI ---------- */
   return (
-    <div className={styles.contenedorRegistro}>
+    <div className={styles.cntV1Registro}>
       <div className={styles.cntBienvenida}>
 
         <div className={styles.cntSaludo}>
@@ -139,6 +139,13 @@ const Registro = () => {
                 onClick={() => setShowPass(!showPass)}
                 role="button"
                 tabIndex={0}
+                aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();          // evita que el espacio haga scroll
+                    setShowPass((p) => !p);
+                  }
+                }}
               >
                 <img src={showPass ? srcCerrado : srcAbierto} className={styles.ojos} alt="" />
               </span>
@@ -158,9 +165,16 @@ const Registro = () => {
                 onClick={() => setShowConf(!showConf)}
                 role="button"
                 tabIndex={0}
+                aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();          // evita que el espacio haga scroll
+                    setShowConf((p) => !p);
+                  }
+                }}
               >
                 <img src={showConf ? srcCerrado : srcAbierto} className={styles.ojos} alt="" />
-              </span>
+              </span> 
               {errors.confirmContra && <span className={styles.error}>{errors.confirmContra.message}</span>}
             </div>
 

@@ -27,8 +27,16 @@
     width: 100%;
     margin: 2rem auto;
     justify-content: center;
+    
 }
-
+.error {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #ec3e3e;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    display: block;   
+}
 .inputs {
     appearance: none;
     border: 1px solid #5981c6;

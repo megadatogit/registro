@@ -108,9 +108,46 @@
 
 
 @media(max-width: 950px) {
-	.cntCaptura {
-		flex-direction: column;
-		margin: 1rem 0.5rem;
 
+	.cntV6Capturar {
+		position: relative;
+		background: none;
+		color: aliceblue;
+		height: 105vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
 	}
+	.cntLogo {
+		display: none;
+	}
+	.cntCaptura {	
+		flex-direction: column-reverse;
+		border: 2px dashed greenyellow;
+		
+	}
+	.captura {
+		position: absolute;
+		width: 100vw;
+		height: 100dvh;
+		z-index: -1;
+		
+		& .mascara {
+			width: 100%;
+			height: 100%;
+		}
+		& .video {
+			height: 100vh;
+		}
+	}
+	.cntInstruccion {
+		position: absolute;
+		bottom: 0;
+		gap: 0;
+	}
+
+
+
+	
+
 }

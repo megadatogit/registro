@@ -2,11 +2,11 @@ import React from "react";
 import styles from "./tarjetaBase.module.css";
 import BotonA from "../../Botones/BotonA";
 
-const TarjetaBase = ({ accion, descripcion, textoBoton, onClick }) => {
+const TarjetaBase = ({ accion, descripcion, srcIcon, textoBoton, onClick }) => {
   return (
     <div className={styles.cntTarjetaBase}>
       <div className={styles.cntImg}>
-        <img></img>
+        <img src={srcIcon} className={styles.icon}></img>
       </div>
       <div className={styles.cntTxt}>
         <p>{accion}</p>

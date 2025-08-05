@@ -1,4 +1,4 @@
-.contenedorRegistro {
+.cntV1Registro {
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -220,6 +220,7 @@
     align-items: center;
     text-align: center;
     width: 60%;
+    gap: 1rem;
     
 }
 .cntChk {
@@ -322,9 +323,10 @@
         display: none;
         filter: opacity(0.6);
     }
-    .contenedorRegistro {
+    .cntV1Registro {
         flex-direction: column;
         width: 100%;
+        
         margin: 0;
         padding: 0;
         background-image: url(./Mask.png);
@@ -338,7 +340,7 @@
         
     }
 
-    .contenedorRegistro::before {
+    .cntV1Registro::before {
         position: absolute;
         content: '';
         top: 0;

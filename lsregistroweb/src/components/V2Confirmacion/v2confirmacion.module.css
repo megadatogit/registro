@@ -70,6 +70,13 @@ form>fieldset:nth-child(3) {
   width: 100%;
 }
 
+.volver {
+  color: blue;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
 @media (max-width: 950px) {
 

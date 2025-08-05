@@ -3,6 +3,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/AppRouter';
 
+import escanear from '../V5ComprIdentidad/Escanear.svg'
+import anadir   from '../V5ComprIdentidad/Añadir.svg'
+
 import styles from './v5comprIdentidad.module.css';
 import Logo            from '@/components/ElementosVista/Logo/Logo';
 import TextoPrincipal  from '@/components/ElementosVista/TextoPrincipal/TextoPrincipal';
@@ -34,6 +37,7 @@ const V5ComprIdentidad = () => {
       {/* Tarjetas de acción */}
       <div className={styles.cntTarjeta}>
         <TarjetaBase
+          srcIcon={escanear}
           accion="Escanear documentos"
           descripcion="Toma una foto de tu documento directamente desde la cámara. Ideal si no tienes el archivo guardado aún."
           textoBoton="Escanear documentos"
@@ -41,6 +45,7 @@ const V5ComprIdentidad = () => {
         />
 
         <TarjetaBase
+        srcIcon={anadir}
           accion="Subir archivos"
           descripcion="Carga una imagen o PDF que ya tengas guardado. Asegúrate de que sea legible y esté completo."
           textoBoton="Subir archivos"
