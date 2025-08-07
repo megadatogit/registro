@@ -16,7 +16,7 @@ const V5ComprIdentidad = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={styles.cntComprIdentidad}>
+    <div className={styles.cntV5ComprIdentidad}>
       {/* Logo */}
       <div className={styles.cntLogo}>
         <Logo />

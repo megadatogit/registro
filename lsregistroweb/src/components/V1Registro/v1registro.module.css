@@ -268,13 +268,13 @@ input::placeholder {
     right: 23%;
     cursor: pointer;
     display: flex;
-    top: 30%;
+    top:1.85rem
     
 }
 .ojos {
     width: 13px;
     filter: opacity(0.6);
-}
+}6
 .label {
     display: inline-block;
     width: 55%;
