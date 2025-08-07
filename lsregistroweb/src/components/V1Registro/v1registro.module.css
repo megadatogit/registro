@@ -166,15 +166,16 @@
     margin-top: 1rem;
     flex-direction: column;
     
-    
     & input {
+        margin-bottom: 0.25rem;
         appearance: none;
         border: 1px solid #8f8f8f;
-        padding: 0.5rem;
+        padding: 0.65rem;
         width: 55%;
         border-radius: 6px;
         outline: none;
         outline-color: #5981c6;
+        /* border: 2px dashed; */
         
     }
     
@@ -188,8 +189,14 @@
         border: 2.5px solid #e95757 !important;
         outline: none;
     }
+
+    
 }
 
+input::placeholder {
+    color: lightgray;
+    margin: 0.5rem;
+}
 
 .error {
     color: #ec3b3b;
@@ -268,7 +275,15 @@
     width: 13px;
     filter: opacity(0.6);
 }
-
+.label {
+    display: inline-block;
+    width: 55%;
+    /* border: 2px dashed; */
+    text-align: start;
+    transform: translateX(-0.5rem);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
 
 @media (max-width: 950px) {
 

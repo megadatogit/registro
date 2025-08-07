@@ -105,6 +105,7 @@ const Registro = () => {
 
             {/* Correo */}
             <div className={styles.cntImput}>
+              <label className={styles.label}>Correo electrónico</label>
               <input
                 type="email"
                 placeholder="Correo electrónico"
@@ -116,6 +117,7 @@ const Registro = () => {
 
             {/* Teléfono */}
             <div className={styles.cntImput}>
+              <label className={styles.label}>Correo electrónico</label>
               <input
                 type="text"
                 placeholder="Teléfono celular"
@@ -128,6 +130,7 @@ const Registro = () => {
 
             {/* Contraseña */}
             <div className={styles.cntImput}>
+              <label className={styles.label}>Correo electrónico</label>
               <input
                 type={showPass ? 'text' : 'password'}
                 placeholder="Contraseña"
@@ -154,6 +157,7 @@ const Registro = () => {
 
             {/* Confirmar */}
             <div className={styles.cntImput}>
+              <label className={styles.label}>Correo electrónico</label>
               <input
                 type={showConf ? 'text' : 'password'}
                 placeholder="Confirmar contraseña"
