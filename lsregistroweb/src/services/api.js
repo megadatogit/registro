@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,   // ← usa la variable
-  timeout: 10000,
+  timeout: 30000,
   
 });
 console.log(import.meta.env.VITE_API_URL);

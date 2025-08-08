@@ -1,11 +1,14 @@
-import React from "react";
+// src/components/Formulario/FormularioINE.jsx
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom"
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import api from "@/services/api"; // ← ya lo tienes creado
 import styles from "./formulario.module.css";
 import BotonA from "../Botones/BotonA";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
+/* --- esquema --- */
 const schema = z.object({
   curp: z
     .string()
@@ -17,15 +20,15 @@ const schema = z.object({
   sexo: z.enum(["H", "M", "X"], { message: "Selecciona un sexo" }),
 });
 
-const FormularioINE = () => {
-
-  const onSubmit = (data) => console.table(data);
-
+const FormularioINE = ({ onSuccess }) => {
+  /* RHF */
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    setError,
+    formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -38,81 +41,134 @@ const FormularioINE = () => {
     },
   });
 
+  /* estado local */
+  const [loadingCurp, setLoadingCurp] = useState(false);
+  const [curpOk, setCurpOk] = useState(false);
+
+  /* --- VALIDAR CURP --- */
+  const validarCurp = async () => {
+    const curp = watch("curp").toUpperCase();
+
+    // si no cumple regex, deja que RHF muestre su error
+    if (!schema.shape.curp.safeParse(curp).success) return;
+
+    try {
+      setLoadingCurp(true);
+      /* Llama al endpoint */
+      const { data } = await api.get(
+        `http://192.168.100.100:8007/consultar-curp/${curp}`
+      );
+
+      // helper para fecha dd/mm/aaaa → yyyy-mm-dd
+      const toInputDate = (s) => {
+        const [d, m, y] = s.split("/");
+        return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+      };
+
+      /* Autocompleta */
+      reset({
+        curp,
+        nombre: data.nombre ?? "",
+        apellido1: data.primer_apellido ?? "",
+        apellido2: data.segundo_apellido ?? "",
+        fechaNac: data.fecha_nacimiento
+          ? toInputDate(data.fecha_nacimiento)
+          : "",
+        sexo: data.sexo ?? "",
+      });
+      setCurpOk(true);
+    } catch (err) {
+      setCurpOk(false);
+      const msg =
+        err?.response?.data?.detail ??
+        "No se encontró la CURP o el servicio no respondió.";
+      setError("curp", { message: msg });
+    } finally {
+      setLoadingCurp(false);
+    }
+  };
+
+  /* --- SUBMIT FINAL --- */
+  const onSubmit = async (formData) => {
+    /* aquí puedes POSTear al backend o simplemente avisar al padre */
+    console.table(formData);
+    onSuccess?.(); // avisa a V5ACompletarIne para pasar al domicilio
+  };
+
+  const navigate  = useNavigate();
+  /* --- UI --- */
   return (
     <div className={styles.cntFormulario}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.formulario}>
-        {/* CURP A 18 CARACTERES */}
-        <label className={styles.label}>
-          CURP:
-          <input
-            className={styles.input}
-            {...register("curp")}
-            placeholder="Ingresa tu CURP"
-            maxLength={18}
-            onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
-          />
-          {errors.curp && (
-            <span className={styles.errors}>{errors.curp.message}</span>
-          )}
-        </label>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles.formulario}
+        noValidate
+      >
+        {/* CURP */}
+        <div className={styles.cntValCurp}>
+          <label className={styles.label}>
+            CURP:
+            <input
+              {...register("curp")}
+              className={styles.input}
+              placeholder="Ingresa tu CURP"
+              maxLength={18}
+              onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
+            />
+          </label>
 
-        {/* NOMBRE,(UN CAMPO PARA TODOS) */}
+          <BotonA
+            className={styles.BotonA}
+            type="button"
+            loadig={loadingCurp}
+            variant="secondary"
+            onClick={validarCurp}
+            disabled={loadingCurp}
+          >
+            {loadingCurp ? "Validando…" : curpOk ? "Validada" : "Validar"}
+          </BotonA>
+        </div>
+        {errors.curp && (
+          <span className={styles.errors}>{errors.curp.message}</span>
+        )}
+
+        {/* NOMBRE Y DEMÁS CAMPOS – sin cambios visuales, solo quité comentarios */}
         <label className={styles.label}>
           Nombre(s):
-          <input
-            className={styles.input}
-            {...register("nombre")}
-            placeholder="Ingresa tu nombre(s)"
-          />
+          <input {...register("nombre")} className={styles.input} />
           {errors.nombre && (
             <span className={styles.errors}>{errors.nombre.message}</span>
           )}
         </label>
 
-        {/* PRIMER APELLIDO */}
         <label className={styles.label}>
           Primer Apellido:
-          <input
-            className={styles.input}
-            {...register("apellido1")}
-            placeholder="Ingresa tu primer apellido"
-          />
+          <input {...register("apellido1")} className={styles.input} />
           {errors.apellido1 && (
             <span className={styles.errors}>{errors.apellido1.message}</span>
           )}
         </label>
 
-        {/* SEGUNDO APELLIDO */}
         <label className={styles.label}>
           Segundo Apellido:
-          <input
-            className={styles.input}
-            {...register("apellido2")}
-            placeholder="Ingresa tu segundo apellido"
-          />
-          {errors.apellido2 && (
-            <span className={styles.errors}>{errors.apellido2.message}</span>
-          )}
+          <input {...register("apellido2")} className={styles.input} />
         </label>
 
-        {/* FECHA DE NACIMIENTO */}
         <label className={styles.label}>
-          Fecha de nacimiento
+          Fecha de nacimiento:
           <input
-            className={styles.input}
             type="date"
             {...register("fechaNac")}
-            placeholder="Ingresa tu fecha de nacimiento"
+            className={styles.input}
           />
           {errors.fechaNac && (
             <span className={styles.errors}>{errors.fechaNac.message}</span>
           )}
         </label>
 
-        {/* SEXO H=HOMBRE M=MUJER X=NO BINARIO */}
         <label className={styles.label}>
           Sexo:
-          <select className={styles.select} {...register("sexo")}>
+          <select {...register("sexo")} className={styles.select}>
             <option value="" disabled>
               Selecciona tu sexo
             </option>
@@ -125,21 +181,21 @@ const FormularioINE = () => {
           )}
         </label>
 
-        {/* BOTON */}
-
+        {/* BOTONES */}
         <div className={styles.cntBoton}>
-          <BotonA className={styles.btnLimpiar} variant="secondary" onClick={() => reset()}>
+          <a 
+            className={styles.volver} 
+            onClick={() => navigate(-1)}>
+            Volver
+          </a>
+          <BotonA variant="secondary" onClick={() => reset()}>
             Limpiar
           </BotonA>
-          <BotonA
-          
-          type="submit">
-            Enviar
+          <BotonA type="submit" disabled={!isValid || isSubmitting}>
+            Continuar
           </BotonA>
         </div>
       </form>
-
-      <a className={styles.volver}>Volver</a>
     </div>
   );
 };

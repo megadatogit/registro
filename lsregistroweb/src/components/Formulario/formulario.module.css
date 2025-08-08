@@ -20,8 +20,9 @@
     gap: 0.5rem;
     font-weight: 700;
     font-size: 0.75rem;
+    
   }
-
+  
   .input {
     outline: none;
     border: 1px solid #8f8f8f;
@@ -62,6 +63,7 @@
   .formulario .input[type="date"] {
     max-width: 15rem;
   }
+  
 
   .formulario .select {
     appearance: none;
@@ -92,17 +94,22 @@
   }
 
   .cntBoton {
-    text-align: center;
     margin-top: 2rem;
     display: flex;
     gap: 1rem;
+    justify-content: start;
+    align-items: center;
   }
   
   .volver {
-    margin-top: 2rem;
-    width: 100%;
+    display: block;
+    width: fit-content;
     text-align: center;
     color: #5981c6;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .errors {
@@ -112,6 +119,10 @@
 
   .btnLimpiar {
     display: none;
+  }
+
+  .BotonA {
+    margin-top: 0.5rem;
   }
 
 @media (max-width: 950px) {

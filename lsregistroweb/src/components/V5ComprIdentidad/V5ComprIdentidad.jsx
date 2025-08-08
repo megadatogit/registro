@@ -52,17 +52,21 @@ const V5ComprIdentidad = () => {
           onClick={() => navigate(ROUTES.ADJUNTAR_DOCUMENTOS)}
         />
       </div>
-
-      {/* Enlaces adicionales */}
       <div className={styles.opciones}>
-        <a onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
+        <a 
+          className={styles.enlace}
+          onClick={() => navigate(ROUTES.COMPLETAR_INE)}>
           Llenar datos manualmente
         </a>
 
-        <a onClick={() => navigate(ROUTES.INVITACION_DOC)}>
+        <a 
+          className={styles.enlace}
+          onClick={() => navigate(ROUTES.INVITACION_DOC)}>
           Subir más tarde desde tu perfil
         </a>
       </div>
+
+      
     </div>
   );
 };

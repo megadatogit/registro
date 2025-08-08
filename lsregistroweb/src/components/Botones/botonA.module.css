@@ -54,3 +54,26 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* botonA.module.css */
+.loading {
+  pointer-events: none;
+  opacity: .6;
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  right: 1.5rem;          /* ajústalo a tu padding */
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -.5rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
