@@ -1,14 +1,13 @@
 // src/components/Formulario/FormularioINE.jsx
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import api from "@/services/api"; // ← ya lo tienes creado
+import api from "@/services/api";
 import styles from "./formulario.module.css";
 import BotonA from "../Botones/BotonA";
 
-/* --- esquema --- */
 const schema = z.object({
   curp: z
     .string()
@@ -21,13 +20,13 @@ const schema = z.object({
 });
 
 const FormularioINE = ({ onSuccess }) => {
-  /* RHF */
   const {
     register,
     handleSubmit,
     reset,
     watch,
     setError,
+    setValue, // ⬅️ usamos setValue
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: zodResolver(schema),
@@ -41,46 +40,49 @@ const FormularioINE = ({ onSuccess }) => {
     },
   });
 
-  /* estado local */
   const [loadingCurp, setLoadingCurp] = useState(false);
   const [curpOk, setCurpOk] = useState(false);
+  const navigate = useNavigate();
 
-  /* --- VALIDAR CURP --- */
+  const toInputDate = (s = "") => {
+    const [d, m, y] = s.split("/");
+    return y && m && d
+      ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`
+      : "";
+  };
+
   const validarCurp = async () => {
-    const curp = watch("curp").toUpperCase();
+    const curp = (watch("curp") || "").toUpperCase();
 
-    // si no cumple regex, deja que RHF muestre su error
+    // Deja que RHF marque error si no pasa regex
     if (!schema.shape.curp.safeParse(curp).success) return;
 
     try {
       setLoadingCurp(true);
-      /* Llama al endpoint */
-      const { data } = await api.get(
-        `http://192.168.100.100:8007/consultar-curp/${curp}`
+      // usa baseURL del api o fuerza aquí el host del microservicio
+      const res = await api.get(
+        `http://192.168.100.100:8008/consultar-curp/${curp}`
       );
+      const data =
+        typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 
-      // helper para fecha dd/mm/aaaa → yyyy-mm-dd
-      const toInputDate = (s) => {
-        const [d, m, y] = s.split("/");
-        return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
-      };
-
-      /* Autocompleta */
-      reset({
-        curp,
-        nombre: data.nombre ?? "",
-        apellido1: data.primer_apellido ?? "",
-        apellido2: data.segundo_apellido ?? "",
-        fechaNac: data.fecha_nacimiento
-          ? toInputDate(data.fecha_nacimiento)
-          : "",
-        sexo: data.sexo ?? "",
+      // Autocompletar con setValue
+      setValue("curp", curp, { shouldDirty: true });
+      setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
+      setValue("apellido1", data?.primer_apellido ?? "", { shouldDirty: true });
+      setValue("apellido2", data?.segundo_apellido ?? "", {
+        shouldDirty: true,
       });
+      setValue("fechaNac", toInputDate(data?.fecha_nacimiento), {
+        shouldDirty: true,
+      });
+      setValue("sexo", data?.sexo ?? "", { shouldDirty: true });
+
       setCurpOk(true);
     } catch (err) {
       setCurpOk(false);
       const msg =
-        err?.response?.data?.detail ??
+        err?.response?.data?.detail ||
         "No se encontró la CURP o el servicio no respondió.";
       setError("curp", { message: msg });
     } finally {
@@ -88,15 +90,11 @@ const FormularioINE = ({ onSuccess }) => {
     }
   };
 
-  /* --- SUBMIT FINAL --- */
   const onSubmit = async (formData) => {
-    /* aquí puedes POSTear al backend o simplemente avisar al padre */
     console.table(formData);
-    onSuccess?.(); // avisa a V5ACompletarIne para pasar al domicilio
+    onSuccess?.();
   };
 
-  const navigate  = useNavigate();
-  /* --- UI --- */
   return (
     <div className={styles.cntFormulario}>
       <form
@@ -120,19 +118,19 @@ const FormularioINE = ({ onSuccess }) => {
           <BotonA
             className={styles.BotonA}
             type="button"
-            loadig={loadingCurp}
+            loading={loadingCurp}
             variant="secondary"
             onClick={validarCurp}
             disabled={loadingCurp}
           >
-            {loadingCurp ? "Validando…" : curpOk ? "Validada" : "Validar"}
+            {loadingCurp ? "Validando..." : curpOk ? "Validada" : "Validar"}
           </BotonA>
         </div>
         {errors.curp && (
           <span className={styles.errors}>{errors.curp.message}</span>
         )}
 
-        {/* NOMBRE Y DEMÁS CAMPOS – sin cambios visuales, solo quité comentarios */}
+        {/* Campos */}
         <label className={styles.label}>
           Nombre(s):
           <input {...register("nombre")} className={styles.input} />
@@ -181,11 +179,8 @@ const FormularioINE = ({ onSuccess }) => {
           )}
         </label>
 
-        {/* BOTONES */}
         <div className={styles.cntBoton}>
-          <a 
-            className={styles.volver} 
-            onClick={() => navigate(-1)}>
+          <a className={styles.volver} onClick={() => navigate(-1)}>
             Volver
           </a>
           <BotonA variant="secondary" onClick={() => reset()}>

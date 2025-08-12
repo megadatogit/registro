@@ -61,7 +61,7 @@ const V5ComprIdentidad = () => {
 
         <a 
           className={styles.enlace}
-          onClick={() => navigate(ROUTES.INVITACION_DOC)}>
+          onClick={() => navigate(ROUTES.OPCIONES)}>
           Subir más tarde desde tu perfil
         </a>
       </div>

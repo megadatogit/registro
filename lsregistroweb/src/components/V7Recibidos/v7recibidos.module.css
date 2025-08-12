@@ -32,3 +32,18 @@
         transform: translateX(13%);
     }
 }
+
+.acciones {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1rem;
+}
+
+.volver {
+    color: blue;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}

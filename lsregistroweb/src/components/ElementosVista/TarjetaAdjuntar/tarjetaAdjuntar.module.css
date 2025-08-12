@@ -101,7 +101,7 @@
 .cntArchivosSeleccionados {
     width: 90%;
     margin: 0 auto;
-    min-height: 3.5rem;
+    min-height: 0.5rem;
     /* 💡 alto reservado ≈ una tarjeta */
 }
 
