@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { login } from "../../components/auth";
+import styles from "./login.module.css";
+import logo from "@/images/Capa_1-2.png";
+import eyeIcon from "@/images/Icons _ eye-empty.png";      // ✅ importa el icono
+import { login } from "@/services/auth";            // ✅ importa el servicio
+
 // import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -17,7 +21,6 @@ const Login = () => {
   const onChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "switch" && type === "checkbox") {
-      // checkbox activado => "medico", desactivado => "paciente"
       setForm((f) => ({ ...f, role: checked ? "medico" : "paciente" }));
     } else {
       setForm((f) => ({ ...f, [name]: value }));
@@ -26,7 +29,6 @@ const Login = () => {
 
   const validate = () => {
     if (!form.email.trim()) return "El correo es obligatorio.";
-    // Validación simple de email
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
     if (!emailOk) return "Formato de correo inválido.";
     if (!form.password) return "La contraseña es obligatoria.";
@@ -38,10 +40,8 @@ const Login = () => {
     e.preventDefault();
     setErrorMsg("");
     const v = validate();
-    if (v) {
-      setErrorMsg(v);
-      return;
-    }
+    if (v) return setErrorMsg(v);
+
     try {
       setLoading(true);
       const data = await login({
@@ -49,36 +49,36 @@ const Login = () => {
         password: form.password,
         role: form.role,
       });
-      // Si usas cookies httpOnly, ya estás autenticado.
-      // Si usas token en el body, ya se guardó con setAuthToken(...)
-      // Aquí podrías redirigir:
-      // navigate("/dashboard");
       console.log("Login OK:", data);
+      // navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      // Muestra mensaje legible:
       const apiMsg = err?.response?.data?.message;
-      setErrorMsg(
-        apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo."
-      );
+      setErrorMsg(apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="tarjeta-login">
-      <div className="cnt-logo">
-        <img className="logo" src="./Capa_1-2.png" alt="Liber Salus Logo" />
+    <div className={styles.cntTarjeta}>
+      <div className={styles.cntLogo}>
+        <img className={styles.logo} src={logo} alt="Liber Salus Logo" />
       </div>
 
-      <h2 className="h2">
+      <h2 className={styles.h2}>
         Bienvenido a <br /> Liber Salus
       </h2>
 
-      <form className="formulario" onSubmit={onSubmit} noValidate>
+      <form className={styles.formulario} onSubmit={onSubmit} noValidate>
         {/* Switch Paciente/Médico */}
-        <div className="cnt-switch">
+        <div
+          className={
+            form.role === "medico"
+              ? `${styles.cntSwitch} ${styles.switchActivo}`
+              : styles.cntSwitch
+          }
+        >
           <input
             type="checkbox"
             name="switch"
@@ -87,26 +87,39 @@ const Login = () => {
             onChange={onChange}
             aria-label="Cambiar a perfil Médico"
           />
-          <div className="perfil">
-            <span
-              className={`span paciente ${
-                form.role === "paciente" ? "activo" : ""
-              }`}
-            >
-              Paciente
-            </span>
-            <span
-              className={`span medico ${
-                form.role === "medico" ? "activo" : ""
-              }`}
-            >
-              Medico
-            </span>
+          <div className={styles.cntSwitch}>
+            <div
+              className={
+                form.role === "medico"
+                  ? `${styles.switchBg} ${styles.switchBgRight}`
+                  : styles.switchBg
+              }
+            />
+            <div className={styles.perfil}>
+              <span
+                className={`${styles.span} ${
+                  form.role === "paciente" ? styles.activo : styles.inactivo
+                }`}
+                onClick={() => setForm((f) => ({ ...f, role: "paciente" }))}
+                style={{ cursor: "pointer" }}
+              >
+                Paciente
+              </span>
+              <span
+                className={`${styles.span} ${
+                  form.role === "medico" ? styles.activo : styles.inactivo
+                }`}
+                onClick={() => setForm((f) => ({ ...f, role: "medico" }))}
+                style={{ cursor: "pointer" }}
+              >
+                Médico
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Email */}
-        <div className="cnt-input">
+        {/* ✅ Email (antes estaba cortado) */}
+        <div className={styles.cntInput}>
           <label htmlFor="email">Correo electrónico</label>
           <input
             id="email"
@@ -121,22 +134,24 @@ const Login = () => {
         </div>
 
         {/* Password */}
-        <div className="cnt-input">
+        <div className={styles.cntInput}>
           <label htmlFor="password">Contraseña</label>
-          <div className="cnt-inp-contra">
+          <div className={styles.cntInpContra}>
             <button
               type="button"
-              className="ojo"
+              className={styles.imgOjo}
               onClick={() => setShowPwd((s) => !s)}
               aria-label={showPwd ? "Ocultar contraseña" : "Mostrar contraseña"}
             >
               <img
-                src="./Icons _ eye-empty.png"
+                className={styles.imgOjo}
+                src={eyeIcon}
                 alt={showPwd ? "Ocultar contraseña" : "Mostrar contraseña"}
               />
             </button>
 
             <input
+              className={styles.input}
               id="password"
               name="password"
               type={showPwd ? "text" : "password"}
@@ -150,26 +165,25 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Error global */}
         {errorMsg && (
-          <div className="mensaje-error" role="alert" aria-live="assertive">
+          <div className={styles.mensajeError} role="alert" aria-live="assertive">
             {errorMsg}
           </div>
         )}
 
-        <a className="olvida" href="/recuperar">
+        <a className={styles.olvida} href="/recuperar">
           ¿Olvidaste tu contraseña?
         </a>
 
         <input
-          className="btn"
+          className={styles.btn}
           type="submit"
           value={loading ? "Iniciando..." : "Iniciar Sesión"}
           disabled={loading}
         />
       </form>
 
-      <div className="cnt-registro">
+      <div className={styles.cntRegistro}>
         <p>
           ¿Aún no tienes cuenta? <a href="/registro">Registrarme</a>
         </p>

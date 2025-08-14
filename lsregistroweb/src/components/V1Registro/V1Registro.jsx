@@ -27,6 +27,7 @@ const schema = z.object({
 });
 
 const Registro = () => {
+
   const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [showConf, setShowConf] = useState(false);
