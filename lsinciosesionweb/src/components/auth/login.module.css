@@ -8,11 +8,13 @@
   padding: 3rem 2rem;
   border-radius: 1rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  background-color: #ffffff34;
+  backdrop-filter: blur(7px);
 }
 
 /* Estilos para el contenedor del logo */
 .cntLogo {
-  filter: invert(0.7);
+  filter: invert(0.6);
   margin: 1rem 0;
 }
 
@@ -39,7 +41,7 @@
   width: 18rem;
   height: 2.5rem;
   border-radius: 25px;
-  background-color: #e3e3e3;
+  background-color: #f1f0f0;
   overflow: hidden;
   align-items: center;
 }
@@ -52,7 +54,7 @@
   height: 100%;
   background-color: #0e69f1;
   border-radius: 25px;
-  transition: transform 0.3s cubic-bezier(0.4, 2, 0.6, 1);
+  transition: transform 0.3s ease;
   z-index: 1;
   transform: translateX(0);
 }
@@ -137,5 +139,50 @@ input[type="email"], input[type="password"],input[type="text"] {
   right: 1rem;
   transform: translateY(-50%);
   cursor: pointer;
+  
+}
+
+.btn {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #0e69f1;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0c5bb5;
+}
+
+input:focus {
+  border-color: #0e69f1;
+  outline: 2px solid #4c8dee;
+}
+input {
+  background-color: rgba(255, 255, 255, 0.541);
+}
+
+label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.0rem;
+  width: 90%;
+  text-align: start;
+  
+}
+
+.mensajeError {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  width: 90%;
+  text-align: center;
+}
+
+.olvida {
   
 }

@@ -1,0 +1,34 @@
+.cntTarjetaUsuario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+
+    & .imgUsuario {
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        object-fit: cover;
+    }
+}
+
+.datosUsuario {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.idPerfil {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    & .nombreUsuario {
+        font-weight: bold;
+    }
+    & .estado {
+        font-size: 0.8rem;
+        color: rgb(235, 141, 141);
+    }
+}
