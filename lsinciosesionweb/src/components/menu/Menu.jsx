@@ -2,11 +2,11 @@ import React from "react";
 import styles from "./menu.module.css";
 import logo         from "../../images/Capa_1-2.png";
 import inicio       from "./inicio.svg";
-import cuestionario from "./diagnostico.png";
-import historial    from "./expediente.png";
-import cabina       from "./cabina.png";
-import ayuda        from "./question.svg"
-
+import cuestionario from "./cuestionario.svg";
+import historial    from "./historial.svg";
+import cabina       from "./cabina.svg";
+import ayuda        from "./ayda.svg";
+/* import fondo        from 'fondo.png' */
 
 
 const Menu = () => {

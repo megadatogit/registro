@@ -1,0 +1,162 @@
+.cntTarjetaEvaluacion {
+    display: flex;
+    flex-direction: column;
+    min-width: 35vw;
+    width: 100%;
+    margin: 0.5rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.cntInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    & .cntTxt, & .cntGrafica {
+        flex: 1 0 50%;
+    }
+}
+
+.cntEstado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    & .cntDesc, & .cntBtn {
+        flex: 1 0 50%;
+    }
+    
+    & p {
+        margin: 0;
+    }
+}
+
+.cntTxt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    & > h3 {
+        margin: 0;
+    }
+    & > :nth-child(2){
+        font-size: 1.125rem;
+        font-weight: bold;
+        color: darkblue;
+    }
+    & > :nth-child(3) {
+        font-weight: 700;
+    }
+    & > :nth-child(4) {
+        font-style: italic;
+    }
+}
+
+.cntDesc {
+    & > :nth-child(1) {
+        font-size: 0.75rem;
+    }
+    & > :nth-child(2) {
+        font-style: italic;
+    }
+}
+
+.cntGrafica {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.25rem;
+    & > :nth-child(2) {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.grafica{
+    width:  8rem;
+    height: 8rem;
+    /* border: 2px dashed; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: -webkit-linear-gradient(top, #75d99c, #0f4e8a);
+    position: relative;
+    box-shadow:inset 0 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.grafica::before {
+    position: absolute;
+    content: '';
+    width:  4rem;
+    height: 4rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 50%;
+}
+
+.grafica::after {
+    position: absolute;
+    content: '';
+    width:  101%;
+    height: 101%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    background: conic-gradient(
+        white 90deg,
+        transparent 90deg
+    );
+    border-radius: 50%;
+}
+
+.valor {
+    z-index: 1;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.cntBtn {
+    display: flex;
+    justify-content: center;
+
+    & > .btn{
+        font-size: 0.65rem;
+        padding: 0.5rem 1.5rem;
+        line-height: 1;
+        text-align: left;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+        background-color:#145294  ;
+        
+        & > .flecha {
+            position: relative;
+            width:  0.65rem;
+            height: 0.65rem;
+            border-top: 2px solid;
+            border-right: 2px solid;
+            transform: rotate(45deg);
+            
+        }
+    }
+}
+
+.flecha::before {
+    position: absolute;
+    content: '';
+    width: 130%;
+    height: 100%;
+    border-top: 2px solid;
+    top: 50%;
+    
+    transform: rotate(-45deg) translate(10%, -5%);
+}

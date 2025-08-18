@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './tarjetaCuestionario.module.css';
 import TrjEstadoCuestionario from './TrjEstadoCuestionario';
+import TarjetaEvaluacion from './TarjetaEvaluacion';
 
 const TarjetaCuestionario = () => {
   return (
@@ -10,9 +11,10 @@ const TarjetaCuestionario = () => {
         <div className={styles.cntEstadosCuestionario}>
             <TrjEstadoCuestionario />
             <TrjEstadoCuestionario />
-            <TrjEstadoCuestionario />
-            <TrjEstadoCuestionario />
+            
+            
         </div>
+        
         
     </div>
   )
