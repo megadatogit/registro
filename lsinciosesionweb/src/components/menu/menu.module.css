@@ -8,9 +8,9 @@
     justify-content: center;
     /* padding: 1rem; */
     /* background-color: #010318 ; */
-    background-image: url('./fondo2.png');
+    /* background-image: url('./fondo2.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
 .cntLogo {
@@ -32,6 +32,8 @@
     flex-direction: column;
     width: 100%;
     gap: 1rem  0;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .icono {
@@ -58,6 +60,7 @@
     flex-direction: column;
     transition: background-color 0.3s ease, transform 0.3s ease;
     gap: 0.5rem;
+    position: relative;
     
 }
 
@@ -68,11 +71,89 @@
 }
 
 .menuItem:hover .link {
-    color: #010318;
+    color: #f3f3f3;
 }
 
 .menuItem:hover .icono {
-    filter: grayscale(1) brightness(0);
+    filter: grayscale(0) brightness(100);
     transform: scale(1.8);
 }
 
+.menuItem:hover::before {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+    z-index: -1;
+}
+
+.menuItem::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+    
+}
+
+.menuItem:nth-child(1)::before {
+    background-color: #ffffff;
+    border-left: 5px solid #ffffff;
+}
+.menuItem:nth-child(2)::before {
+    background-image: url("./fondcuest.png");
+    background-size: contain;
+    opacity: 1;
+    border-left: 5px solid #4FB9D2;
+    
+}
+.menuItem:nth-child(3)::before {
+    background-image: url("./fondhist.png");
+    background-size: contain;
+    opacity: 1;
+    border-left: 5px solid #F6A430;
+}
+.menuItem:nth-child(4)::before {
+    background-image: url("./fondcabi.png");
+    background-size: contain;
+    opacity: 1;
+    border-left: 5px solid #ED6B24;
+}
+.menuItem:nth-child(5)::before {
+    background-image: url("./fondayuda.png");
+    background-size: contain;
+    opacity: 1;
+    border-left: 5px solid #B9147E;
+}
+
+.opciones {
+    & > :nth-child(1) {
+        border-right: 5px solid #ffffff;
+        
+    }
+    & > :nth-child(2) {
+        border-right: 5px solid #4FB9D2;
+        
+    }
+    & > :nth-child(3) {
+        border-right: 5px solid #F6A430;
+    }
+    & > :nth-child(4) {
+        border-right: 5px solid #ED6B24;
+    }
+    & > :nth-child(5) {
+        border-right: 5px solid #B9147E;
+    }
+}
+
+.fondoEstelas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    border-radius: 0;
+
+}

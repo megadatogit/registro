@@ -4,8 +4,9 @@ import Menu from "@/components/menu/Menu";
 import BackgroundPanel from "@/components/background/backgroundPanel/BackgroundPanel";
 import TarjetaUsuario from "@/components/Tarjetas/TarjetaUsuario/TarjetaUsuario";
 import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaCuestionario";
-import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaCuestionarios/TarjetaEvaluacion";
-
+import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
+import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
+import TarjetaAlerta from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 
 const Panel = () => {
   return (
@@ -22,12 +23,20 @@ const Panel = () => {
         <TarjetaUsuario />
       </div>
 
+      
+
       <div className={styles.cntModulos}>
+        <div className={styles.cntTrjBienestar}>
+          <TarjetaBienestar />
+        </div>
         <div className={styles.cntTrjCuestionario}>
           <TarjetaCuestionario />
         </div>
-        <div className={styles.cntTarjetaEvaluacion}>
+        <div className={styles.cntTrjEvaluacion}>
             <TarjetaEvaluacion />
+        </div>
+        <div className={styles.cntTrjAlertas}>
+          <TarjetaAlerta />
         </div>
       </div>
 

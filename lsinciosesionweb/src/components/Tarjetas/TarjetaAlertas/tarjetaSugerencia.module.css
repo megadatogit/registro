@@ -1,0 +1,36 @@
+.cntTarjetaSugerencia {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffe1e1;
+    padding: 1rem;
+    border-radius: 8px;
+    gap: 1rem;
+}
+
+.cnInfo {
+    display: flex;
+}
+
+.cntSujerencia {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.btn {
+    background-color: #fdafbc;
+    color: #EA425D;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: rgb(4, 61, 90);
+}
+
+

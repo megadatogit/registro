@@ -1,0 +1,11 @@
+.cntTarjetaAlerta {
+    display: flex;
+    flex-direction: column;
+    min-width: 40vw;
+    margin: 0.5rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    gap: 1rem;
+}

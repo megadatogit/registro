@@ -6,13 +6,16 @@ import cuestionario from "./cuestionario.svg";
 import historial    from "./historial.svg";
 import cabina       from "./cabina.svg";
 import ayuda        from "./ayda.svg";
-/* import fondo        from 'fondo.png' */
+import Estelas      from "./estelas.jsx";
 
 
 const Menu = () => {
   return (
     <div className={styles.cntMenu}>
-      
+
+      <div className={styles.fondoEstelas}>
+        <Estelas/>
+      </div>
       <div className={styles.cntLogo}>
         <img className={styles.imglogo} src={logo} alt="Logo" />
       </div>

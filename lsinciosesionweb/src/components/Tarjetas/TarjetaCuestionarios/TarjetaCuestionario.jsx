@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './tarjetaCuestionario.module.css';
 import TrjEstadoCuestionario from './TrjEstadoCuestionario';
-import TarjetaEvaluacion from './TarjetaEvaluacion';
+import TarjetaEvaluacion from '../TarjetaEvaluacion/TarjetaEvaluacion';
 
 const TarjetaCuestionario = () => {
   return (
