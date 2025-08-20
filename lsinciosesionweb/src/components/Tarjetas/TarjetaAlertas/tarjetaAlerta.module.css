@@ -7,5 +7,5 @@
     background-color: white;
     border-radius: 8px;
     font-size: 0.85rem;
-    gap: 1rem;
+    gap: 1rem; /* separación entre tarjetas sugerencia */
 }

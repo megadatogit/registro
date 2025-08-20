@@ -26,7 +26,10 @@
     align-items: center;
     justify-content: end;
     margin-top: 1rem;
+    margin-left: 6.5rem;
     padding: 0 2.5rem;
+    
+    border-bottom: 1px solid rgba(201, 199, 199, 0.8);
 }
 
 .cntModulos {
@@ -61,4 +64,10 @@
     width: 50%;
     
     
+}
+
+.cntTrjSeguimiento {
+    display: flex;
+    width: 42%;
+    margin: 0 auto;
 }

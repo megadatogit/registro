@@ -6,18 +6,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.6s 0.35s ease;
     /* padding: 1rem; */
     /* background-color: #010318 ; */
     /* background-image: url('./fondo2.png');
     background-repeat: no-repeat;
     background-size: cover; */
+    
 }
 
 .cntLogo {
     align-self: center;
-    flex: 3;
     text-align: center;
-    padding-top: 2rem;
+    margin: 2rem 0;
     & .imglogo {
         filter: invert();
         width: 100%;
@@ -27,13 +28,14 @@
 }
 
 .opciones {
-    flex: 7;
+    flex: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 1rem  0;
+    
+    gap: 1rem 0;
     position: relative;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 .icono {
@@ -56,7 +58,7 @@
     text-align: center;
     display: flex;
     align-items: center;
-    padding: 0.5em 0;
+    padding: 1.5em 0;
     flex-direction: column;
     transition: background-color 0.3s ease, transform 0.3s ease;
     gap: 0.5rem;
@@ -65,8 +67,7 @@
 }
 
 .menuItem:hover {
-    background-color: #d7eafb00;
-    backdrop-filter: blur(10px);
+    transform: translateX(0.3rem);
     cursor: pointer;
 }
 
@@ -74,9 +75,14 @@
     color: #f3f3f3;
 }
 
+
+
+.icono {
+    transition: transform 0.3s;
+} 
+
 .menuItem:hover .icono {
-    filter: grayscale(0) brightness(100);
-    transform: scale(1.8);
+    transform: scale(1.9);
 }
 
 .menuItem:hover::before {
@@ -85,10 +91,43 @@
     z-index: -1;
 }
 
+/* .menuItem:nth-child(2):hover::before {
+    
+}
+.menuItem:nth-child(3):hover .icono {
+
+    filter: brightness(0) saturate(100%) invert(84%) sepia(83%) saturate(696%) hue-rotate(0deg) brightness(102%) contrast(97%);
+}
+.menuItem:nth-child(4):hover .icono {
+
+    filter: brightness(0) saturate(100%) invert(75%) sepia(69%) saturate(828%) hue-rotate(3deg) brightness(96%) contrast(98%);
+}
+.menuItem:nth-child(5):hover .icono {
+
+    filter: brightness(0) saturate(100%) invert(26%) sepia(70%) saturate(750%) hue-rotate(307deg) brightness(94%) contrast(95%);
+} */
+
+
+/* .cntMenu:has(.menuItem:nth-child(1):hover) {
+  background-color: rgb(255, 255, 255, 0.5);
+}
+.cntMenu:has(.menuItem:nth-child(2):hover) {
+  background-color: rgba(146, 235, 255, 0.5);
+}
+.cntMenu:has(.menuItem:nth-child(3):hover) {
+  background-color: rgb(246, 164, 48, 0.5);
+}
+.cntMenu:has(.menuItem:nth-child(4):hover) {
+  background-color: rgba(237, 107, 36, 0.5);
+}
+.cntMenu:has(.menuItem:nth-child(5):hover) {
+  background-color: rgba(185, 20, 126, 0.5);
+} */
+
 .menuItem::before {
     position: absolute;
     content: '';
-    width: 100%;
+    width: 12%;
     height: 100%;
     top: 0;
     right: 0;
@@ -96,35 +135,31 @@
     
 }
 
-.menuItem:nth-child(1)::before {
-    background-color: #ffffff;
+/* .menuItem:nth-child(1)::before {
+    opacity: 1;
     border-left: 5px solid #ffffff;
+    background-color: rgb(255, 255, 255, 0.2);
 }
 .menuItem:nth-child(2)::before {
-    background-image: url("./fondcuest.png");
-    background-size: contain;
+    background-color: hsla(191, 59%, 57%, 0.2);
     opacity: 1;
     border-left: 5px solid #4FB9D2;
-    
 }
 .menuItem:nth-child(3)::before {
-    background-image: url("./fondhist.png");
-    background-size: contain;
+    background-color: rgb(246, 164, 48, 0.2);
     opacity: 1;
     border-left: 5px solid #F6A430;
 }
 .menuItem:nth-child(4)::before {
-    background-image: url("./fondcabi.png");
-    background-size: contain;
+    background-color: rgba(237, 107, 36, 0.2);
     opacity: 1;
     border-left: 5px solid #ED6B24;
 }
 .menuItem:nth-child(5)::before {
-    background-image: url("./fondayuda.png");
-    background-size: contain;
+    background-color: rgba(185, 20, 126, 0.2);
     opacity: 1;
     border-left: 5px solid #B9147E;
-}
+} */
 
 .opciones {
     & > :nth-child(1) {
@@ -150,7 +185,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+
+    /* estelas */
+    
+    width: fit-content;
     height: 100%;
     z-index: -1;
     overflow: hidden;

@@ -1,17 +1,18 @@
 .cntTarjetaSugerencia {
     display: flex;
     flex-direction: column;
-    background-color: #ffe1e1;
+    background-color: var(--bg);
     padding: 1rem;
     border-radius: 8px;
+        
+}
+
+.cntInfo {
+    display: flex;
     gap: 1rem;
 }
 
-.cnInfo {
-    display: flex;
-}
-
-.cntSujerencia {
+.cntSugerencia {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -20,8 +21,8 @@
 }
 
 .btn {
-    background-color: #fdafbc;
-    color: #EA425D;
+    background-color: var(--btn);
+    color: white;
     border: none;
     border-radius: 2rem;
     padding: 0.5rem 1rem;
@@ -30,7 +31,8 @@
 }
 
 .btn:hover {
-    background-color: rgb(4, 61, 90);
+    background-color: var(--btn-hover);
+    color: white;
 }
 
 

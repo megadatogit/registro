@@ -1,14 +1,30 @@
-import React from 'react'
-import styles from './tarjetaAlerta.module.css'
-import TarjetaSugerencia from './TarjetaSugerencia'
+import TarjetaSugerencia from "./TarjetaSugerencia";
+import { AREAS } from "./areas.config";
+import styles from "./tarjetaAlerta.module.css";
 
-const TarjetaAlerta = () => {
+export default function TarjetaAlertas({ areas = ["a1", "a2",  "a3", "a4", "a5"] }) {
+  // Quitamos duplicados y descartamos códigos desconocidos
+  const unicas = Array.from(new Set(areas)).filter((a) => AREAS[a]);
+
   return (
     <div className={styles.cntTarjetaAlerta}>
-        <p>Alertas y sugerencias</p>
-        <TarjetaSugerencia />
-    </div>
-  )
-}
+      <h3>Alertas y sugerencias</h3>
+      {unicas.map((code) => {
+        const cfg = AREAS[code];
+        return (
 
-export default TarjetaAlerta
+          
+          <TarjetaSugerencia
+            key={code}
+            icon={cfg.icon}         // ruta al svg
+            titulo={cfg.label}
+            theme={cfg.theme}       // { "--bg":..., "--btn":..., "--btn-hover":... }
+            texto={cfg.texto ?? "Hay áreas en las que puedes fortalecer tu bienestar."}
+            cta={cfg.cta ?? "Explorar herramientas"}
+            onClick={() => console.log("Abrir", code)}
+          />
+        );
+      })}
+    </div>
+  );
+}

@@ -7,6 +7,7 @@ import TarjetaCuestionario from "@/components/Tarjetas/TarjetaCuestionarios/Tarj
 import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEvaluacion";
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
 import TarjetaAlerta from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
+import TarjetaSeguimiento from "@/components/Tarjetas/TarjetaSeguimiento/TarjetaSeguimiento";
 
 const Panel = () => {
   return (
@@ -37,6 +38,9 @@ const Panel = () => {
         </div>
         <div className={styles.cntTrjAlertas}>
           <TarjetaAlerta />
+        </div>
+        <div className={styles.cntTrjSeguimiento}>
+          <TarjetaSeguimiento />
         </div>
       </div>
 
