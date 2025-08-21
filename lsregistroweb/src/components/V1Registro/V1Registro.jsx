@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/AppRouter';
-
 import styles from './v1registro.module.css';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg';
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg';

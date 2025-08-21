@@ -28,7 +28,7 @@
     margin-top: 1rem;
     margin-left: 6.5rem;
     padding: 0 2.5rem;
-    
+    transition: all 0.3s 0.15s ease;
     border-bottom: 1px solid rgba(201, 199, 199, 0.8);
 }
 
@@ -37,19 +37,17 @@
     margin-top: 1rem;
     top: calc(4rem + 1%);
     left: calc(2.5rem + 8rem);
-    width: calc(100vw - 8rem - 5rem);
+    width: calc(100vw - 8rem - 4rem);
+    min-width: 22rem ;
     /* height: calc(100vh - 4rem - 5%); */
-    
-    display: flex;
-    flex-wrap: wrap;
     gap: 1rem;
-    padding: 1rem;
     
-    /* border: 1px dashed lightgrey; */
+
+    flex-wrap: wrap;
+    border: 1px dashed lightgrey;
     border-radius: 12px;
 
-    background-color: #ffffff1f;
-    backdrop-filter: blur(3px);
+    transition: all 0.5s 0.15s ease;
 }
 
 .cntTrjBienestar {
@@ -59,15 +57,32 @@
     
 }
 
-.cntTrjAlertas {
-    display: flex;
-    width: 50%;
-    
-    
-}
-
+.cntTrjCuestionario,
+.cntTrjEvaluacion,
+.cntTrjAlertas,
 .cntTrjSeguimiento {
     display: flex;
-    width: 42%;
-    margin: 0 auto;
+    max-width: 35%;
+    min-width: 20rem;
+    height: fit-content;
+    transition: all 0.3s 0.15s ease;
+    
+}
+@media (max-width: 905px) {
+    .cntTrjUsuario {
+        width: calc(100vw - 4rem);
+        margin-left: 2rem;
+    }
+    .cntModulos {
+        width: calc(100vw - 8rem);
+        margin-left: 6rem;
+        left: 2rem;
+    }
+    .cntTrjCuestionario,
+    .cntTrjEvaluacion,
+    .cntTrjAlertas,
+    .cntTrjSeguimiento {
+        max-width: 100%;
+        min-width: 100%;
+    }
 }

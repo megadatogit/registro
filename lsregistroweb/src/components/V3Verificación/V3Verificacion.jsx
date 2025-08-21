@@ -50,7 +50,7 @@ const Verificacion = () => {
         codigo,
       });
 
-      navigate(ROUTES.CONFIRMACION_EXITO);       // éxito ✔️
+      navigate(ROUTES.CONFIRMACION_EXITO, { state: payload });       // éxito ✔️
     } catch (err) {
       /* convierte cualquier estructura a string */
       let msg = 'Código incorrecto o expirado';

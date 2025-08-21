@@ -11,6 +11,9 @@ const TarjetaCuestionario = () => {
         <div className={styles.cntEstadosCuestionario}>
             <TrjEstadoCuestionario />
             <TrjEstadoCuestionario />
+            <TrjEstadoCuestionario />
+            <TrjEstadoCuestionario />
+            <TrjEstadoCuestionario />
             
             
         </div>

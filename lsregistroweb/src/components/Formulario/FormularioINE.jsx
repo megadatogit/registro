@@ -61,7 +61,9 @@ const FormularioINE = ({ onSuccess }) => {
       setLoadingCurp(true);
       // usa baseURL del api o fuerza aquí el host del microservicio
       const res = await api.get(
-        `http://192.168.100.100:8008/consultar-curp/${curp}`
+        `http://192.168.100.100:8060/curp/extraer/${curp}`, {
+          withCredentials: true
+        }
       );
       const data =
         typeof res.data === "string" ? JSON.parse(res.data) : res.data;

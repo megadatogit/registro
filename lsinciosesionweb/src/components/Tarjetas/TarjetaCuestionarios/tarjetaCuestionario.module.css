@@ -1,7 +1,6 @@
 .cntTarjetaCuestionario {
     display: flex;
     flex-direction: column;
-    min-width: 40vw;
     width: 100%;
     margin: 0.5rem;
     padding: 1rem;
