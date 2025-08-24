@@ -1,9 +1,10 @@
 .cntTarjetaUsuario {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     gap: 1rem;
     padding: 1rem;
+    width:100%;
 
     & .imgUsuario {
         border-radius: 50%;
