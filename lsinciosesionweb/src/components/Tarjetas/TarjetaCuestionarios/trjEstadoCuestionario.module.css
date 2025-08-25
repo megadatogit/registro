@@ -13,11 +13,25 @@
 .cuestionarioDato {
     margin-left: 1rem;
     padding-left: 1rem;
-    border-left: 2px solid green;
+    border-left: 2px solid;
     & p {
         font-size: 0.8rem;
+        color: rgb(70, 69, 69);
     }
 }
+
+.cntTarjetaEstado:has(.cuestionarioDato[data-estado="completado"]) {
+    background-color: #e6f4ea;
+}
+.cntTarjetaEstado:has(.cuestionarioDato[data-estado="proceso"]) {
+    background-color: #fcfee8;
+}
+.cntTarjetaEstado:has(.cuestionarioDato[data-estado="inactivo"]) {
+    background-color: #f0f0f0;
+}
+.cuestionarioDato[data-estado="completado"] {border-color: #4CAF50;}
+.cuestionarioDato[data-estado="proceso"] {border-color: #ffc507; }
+.cuestionarioDato[data-estado="inactivo"] {border-color: #444242; }
 
 .estado {
     display: flex;
@@ -27,3 +41,4 @@
     align-items: center;
     gap: 0.5rem;
 }
+
