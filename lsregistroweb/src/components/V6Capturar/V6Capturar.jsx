@@ -1,3 +1,5 @@
+//V6 capturar versión react
+
 // src/components/V6Capturar/V6Capturar.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import styles   from './v6capturar.module.css';
