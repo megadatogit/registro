@@ -28,19 +28,23 @@ const Confirmacion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(!metodo) return;
-6
     try {
       setLoading(true);
-
-      await api.post(`/preregistro/preregistro/enviar-codigo-${metodo}`, { 
+      //puerto 8040
+      await api.post(`/preregistro/preregistro/enviar-codigo-${metodo}/`, { 
         identificador: state[metodo]
       });
 
       navigate(ROUTES.VERIFICACION, {state:{...state, metodo}});
 
     } catch (err) {
-      console.log(err)
-      alert(err.response.data.detail);
+      console.log(err);
+      const msg = 
+      err?.response?.data?.detail ||
+      err?.response?.data?.message ||
+      err?.message ||
+      "No se pudo enviar el código. Intenta de nuevo.";
+      alert(String(msg));
     } finally {
       setLoading(false);
     }

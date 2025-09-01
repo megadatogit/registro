@@ -1,96 +1,50 @@
 // src/services/api.js
-import axios from 'axios';
+import axios from "axios";
 
-/** =========================
- *  Axios base (registro web)
- *  ========================= */
-export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,  // p.ej. https://api.tu-dominio.com
-  withCredentials: true,                  // <- NECESARIO para cookies HttpOnly (refresh)
+const baseURL = import.meta.env.DEV
+  ? "/api"                                // fuerza proxy en dev
+  : (import.meta.env.VITE_API_URL || "/api");
+
+const api = axios.create({
+  baseURL,
+  withCredentials: true,
   timeout: 30000,
 });
 
-let _accessToken = null;                  // access token en memoria (no localStorage)
+let _accessToken = null;
+export function setAuthToken(t){ _accessToken = t ?? null; }
+export function clearAuthToken(){ _accessToken = null; }
+export function getAuthToken(){ return _accessToken; }
 
-/** Opcional: un “hop” temporal entre pantallas del mismo proyecto (no entre dominios)
-const SESSION_KEY = 'access_token_hop';
-function getHop() { return sessionStorage.getItem(SESSION_KEY); }
-function setHop(t) { t ? sessionStorage.setItem(SESSION_KEY, t) : sessionStorage.removeItem(SESSION_KEY); }
-*/
-
-export function setAuthToken(token) {
-  _accessToken = token ?? null;
-  // setHop(token); // <- solo si quieres persistir durante un “hop” (opcional)
-}
-export function clearAuthToken() {
-  _accessToken = null;
-  // setHop(null);
-}
-export function getAuthToken() {
-  return _accessToken; // || getHop();  // si activaste el “hop”
-}
-
-/** ======== Request: adjunta Authorization si hay access ======== */
 api.interceptors.request.use((config) => {
   const t = getAuthToken();
   if (t) config.headers.Authorization = `Bearer ${t}`;
   return config;
 });
 
-/** ======== Response: 401 -> intenta refresh (cookie HttpOnly) ======== */
-let isRefreshing = false;
-let queue = [];
-
-function onRefreshed(newToken) {
-  queue.forEach(({ resolve }) => resolve(newToken));
-  queue = [];
+// refresh con cookie HttpOnly (igual que ya lo tenías)
+let isRefreshing = false, queue = [];
+function flushQueue(err, newTok){ queue.forEach(({resolve,reject}) => err?reject(err):resolve(newTok)); queue=[]; }
+const raw = axios.create({ baseURL, withCredentials: true, timeout: 15000 });
+async function refreshAccess(){
+  const { data } = await raw.post("/auth/refresh");
+  const newTok = data?.access_token || null;
+  setAuthToken(newTok);
+  return newTok;
 }
-function onRefreshError(err) {
-  queue.forEach(({ reject }) => reject(err));
-  queue = [];
-}
-
-async function refreshAccess() {
-  // Backend debe leer cookie "refresh_token" y devolver { access_token }
-  const { data } = await api.post('/auth/refresh'); // withCredentials:true envía la cookie
-  const newToken = data?.access_token || null;
-  setAuthToken(newToken);
-  return newToken;
-}
-
 api.interceptors.response.use(
-  (res) => res,
-  async (error) => {
+  (r)=>r,
+  async (error)=>{
     const { config, response } = error;
-    if (!response) return Promise.reject(error);
-    if (response.status !== 401) return Promise.reject(error);
-    if (config._retry) return Promise.reject(error);  // evita bucle
+    if (!response || response.status !== 401 || config._retry) return Promise.reject(error);
     config._retry = true;
-
-    // Si NO se está refrescando, lánzate y luego despierta a la cola
-    if (!isRefreshing) {
+    if (!isRefreshing){
       isRefreshing = true;
-      try {
-        const newToken = await refreshAccess();
-        isRefreshing = false;
-        onRefreshed(newToken);
-      } catch (e) {
-        isRefreshing = false;
-        onRefreshError(e);
-        clearAuthToken();
-        return Promise.reject(error);
-      }
+      try { const t = await refreshAccess(); isRefreshing = false; flushQueue(null, t); }
+      catch(e){ isRefreshing = false; flushQueue(e, null); clearAuthToken(); return Promise.reject(e); }
     }
-
-    // Espera a que termine el refresh, luego reintenta la request original
-    return new Promise((resolve, reject) => {
-      queue.push({
-        resolve: (newToken) => {
-          if (newToken) config.headers.Authorization = `Bearer ${newToken}`;
-          resolve(api(config));
-        },
-        reject,
-      });
+    return new Promise((resolve,reject)=>{
+      queue.push({ resolve:(t)=>{ if(t) config.headers.Authorization=`Bearer ${t}`; resolve(api(config)); }, reject });
     });
   }
 );

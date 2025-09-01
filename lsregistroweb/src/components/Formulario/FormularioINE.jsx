@@ -61,8 +61,9 @@ const FormularioINE = ({ onSuccess }) => {
       setLoadingCurp(true);
       // usa baseURL del api o fuerza aquí el host del microservicio
       const res = await api.get(
-        `http://192.168.100.100:8060/curp/extraer/${curp}`, {
-          withCredentials: true
+        //8060
+        `/ine/preregistro/curp/extraer/${encodeURIComponent(curp)}`, {
+          //withCredentials: true
         }
       );
       const data =
@@ -83,9 +84,9 @@ const FormularioINE = ({ onSuccess }) => {
       setCurpOk(true);
     } catch (err) {
       setCurpOk(false);
-      const msg =
-        err?.response?.data?.detail ||
-        "No se encontró la CURP o el servicio no respondió.";
+      const msg = Array.isArray(detail)
+      ? detail.map(d=> d?.msg || JSON.stringify(d)).join(" · ")
+      : (detail || err?.response.data?.message || err?.message || "Error al validar CURP");
       setError("curp", { message: msg });
     } finally {
       setLoadingCurp(false);

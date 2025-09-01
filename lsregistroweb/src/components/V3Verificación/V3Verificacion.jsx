@@ -44,11 +44,13 @@ const Verificacion = () => {
 
     try {
       setLoading(true);
-
+      //puerto 8040
       await api.post(`/preregistro/preregistro/validar-${state.metodo}/`, {
         identificador: state[state.metodo], // correo o teléfono
         codigo,
       });
+
+      await api.post('/preregistro/preregistro/registro/', state);
 
       navigate(ROUTES.CONFIRMACION_EXITO, { state });       // éxito ✔️
     } catch (err) {
