@@ -8,6 +8,7 @@ import TarjetaEvaluacion from "@/components/Tarjetas/TarjetaEvaluacion/TarjetaEv
 import TarjetaBienestar from "@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar";
 import TarjetaAlerta from "@/components/Tarjetas/TarjetaAlertas/TarjetaAlerta";
 import TarjetaSeguimiento from "@/components/Tarjetas/TarjetaSeguimiento/TarjetaSeguimiento";
+import TarjetaCarrucel from "@/components/Tarjetas/TarjetaCarrucel/TarjetaCarrucel";
 
 const Panel = () => {
   return (
@@ -27,6 +28,10 @@ const Panel = () => {
       
 
       <div className={styles.cntModulos}>
+
+        <div className={styles.cntTrjCarrucel}>
+          <TarjetaCarrucel/>
+        </div>
         <div className={styles.cntTrjBienestar}>
           <TarjetaBienestar />
         </div>
