@@ -1,12 +1,13 @@
 // src/components/Formulario/FormularioINE.jsx
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/services/api";
 import styles from "./formulario.module.css";
 import BotonA from "../Botones/BotonA";
+import { ROUTES } from "@/routes/AppRouter";
 
 const schema = z.object({
   curp: z
@@ -20,16 +21,20 @@ const schema = z.object({
 });
 
 const FormularioINE = ({ onSuccess }) => {
+  const navigate = useNavigate();
+  const { state } = useLocation(); // por si quieres conservar contexto
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     setError,
-    setValue, // ⬅️ usamos setValue
-    formState: { errors, isSubmitting, isValid },
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
+    mode: "onChange",
     defaultValues: {
       curp: "",
       nombre: "",
@@ -42,9 +47,10 @@ const FormularioINE = ({ onSuccess }) => {
 
   const [loadingCurp, setLoadingCurp] = useState(false);
   const [curpOk, setCurpOk] = useState(false);
-  const navigate = useNavigate();
+  const [resCurp, setResCurp] = useState({})
 
   const toInputDate = (s = "") => {
+    // backend te devuelve dd/mm/yyyy → input date necesita yyyy-mm-dd
     const [d, m, y] = s.split("/");
     return y && m && d
       ? `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`
@@ -54,22 +60,21 @@ const FormularioINE = ({ onSuccess }) => {
   const validarCurp = async () => {
     const curp = (watch("curp") || "").toUpperCase();
 
-    // Deja que RHF marque error si no pasa regex
+    // valida formato con zod sin bloquear UI
     if (!schema.shape.curp.safeParse(curp).success) return;
 
     try {
       setLoadingCurp(true);
-      // usa baseURL del api o fuerza aquí el host del microservicio
+
+      // Si este microservicio corre en otro host/puerto, crea otra instancia axios o usa URL absoluta <<para extraer curp
       const res = await api.get(
-        //8060
-        `/ine/preregistro/curp/extraer/${encodeURIComponent(curp)}`, {
-          //withCredentials: true
-        }
+        `/ine/preregistro/curp/extraer/${encodeURIComponent(curp)}`
       );
       const data =
         typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 
-      // Autocompletar con setValue
+      setResCurp(data)
+
       setValue("curp", curp, { shouldDirty: true });
       setValue("nombre", data?.nombre ?? "", { shouldDirty: true });
       setValue("apellido1", data?.primer_apellido ?? "", { shouldDirty: true });
@@ -84,9 +89,13 @@ const FormularioINE = ({ onSuccess }) => {
       setCurpOk(true);
     } catch (err) {
       setCurpOk(false);
+      const detail =
+        err?.response?.data?.detail ??
+        err?.response?.data?.message ??
+        err?.message;
       const msg = Array.isArray(detail)
-      ? detail.map(d=> d?.msg || JSON.stringify(d)).join(" · ")
-      : (detail || err?.response.data?.message || err?.message || "Error al validar CURP");
+        ? detail.map((d) => d?.msg || JSON.stringify(d)).join(" · ")
+        : detail || "Error al validar CURP";
       setError("curp", { message: msg });
     } finally {
       setLoadingCurp(false);
@@ -94,8 +103,38 @@ const FormularioINE = ({ onSuccess }) => {
   };
 
   const onSubmit = async (formData) => {
-    console.table(formData);
-    onSuccess?.();
+    try {
+      const payload = {
+        curp: formData.curp,
+        nombre: formData.nombre,
+        primer_apellido: formData.apellido1,
+        segundo_apellido: formData.apellido2 || "",
+        sexo: formData.sexo,
+        fecha_nacimiento: formData.fechaNac, // yyyy-mm-dd desde input date
+        nacionalidad: formData.nacionalidad,
+        entidad_nacimiento: "CDMX",
+        abr_entidad: "CMX",
+        municipio_registro: "CDMX-01",
+      };
+
+      // ⚠️ Usa tu instancia axios (envía cookie HttpOnly para refresh/access si aplica)<< avienta el curp
+      const { data } = await api.post("/ine/preregistro/curp/subir", resCurp);
+      console.log("✅ CURP guardada:", data);
+
+      // Continúa al formulario de domicilio
+      navigate(ROUTES.COMPLETAR_DOMICILIO, { state });
+      // o si prefieres notificar al padre:
+      // onSuccess?.(data);
+    } catch (err) {
+      const detail =
+        err?.response?.data?.detail ??
+        err?.response?.data?.message ??
+        err?.message;
+      const msg = Array.isArray(detail)
+        ? detail.map((d) => d?.msg || JSON.stringify(d)).join(" · ")
+        : detail || "Error al guardar CURP";
+      alert(msg);
+    }
   };
 
   return (
@@ -189,7 +228,7 @@ const FormularioINE = ({ onSuccess }) => {
           <BotonA variant="secondary" onClick={() => reset()}>
             Limpiar
           </BotonA>
-          <BotonA type="submit" disabled={!isValid || isSubmitting}>
+          <BotonA type="submit" disabled={isSubmitting || !curpOk}>
             Continuar
           </BotonA>
         </div>

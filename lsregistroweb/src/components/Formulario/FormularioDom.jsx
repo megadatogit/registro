@@ -16,7 +16,8 @@ const schema = z.object({
         .string()
         .length(5, 'El C.P. de tener 5 digitos')
         .regex(/^\d{5}$/, 'Código Postal inválido'),
-    estado: z.string().min(1, "Estado requerido")
+    estado: z.string().min(1, "Estado requerido"),
+    referencia: z.string().optional()
 })
 
 const FormularioDom = () => {
@@ -38,6 +39,7 @@ const FormularioDom = () => {
             alcaldiaMunicipio: "",
             codigoPostal: "",
             estado: "",
+            referencia: ""
         },
     });
 
