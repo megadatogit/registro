@@ -13,6 +13,7 @@ import Logo       from '@/components/ElementosVista/Logo/Logo';
 import BotonA     from '@/components/Botones/BotonA';
 import Switch     from '@/components/Seleccion/Switch';
 import Derechos   from './Derechos';
+import LiberSalusPoly from './LiberSalusLowPoly/LiberSalusPoly'
 
 /* ---------- Validación ---------- */
 const schema = z.object({
@@ -65,7 +66,7 @@ const Registro = () => {
   return (
     <div className={styles.cntV1Registro}>
       <div className={styles.cntBienvenida}>
-
+        <LiberSalusPoly/>
         <div className={styles.cntSaludo}>
           <div>
             <p>¡Bienvenido a Liber Salus!</p>
@@ -89,6 +90,8 @@ const Registro = () => {
           <div className={styles.elementoPaso}>
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
           </div>
+
+          <div className={styles.cntafter}>❤️</div>
         </div>
 
         <div className={styles.cntDerechosInfo}>
