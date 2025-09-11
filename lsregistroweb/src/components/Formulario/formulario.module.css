@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    position: relative;
   }
 
   .formulario {
@@ -124,6 +125,79 @@
   .BotonA {
     margin-top: 0.5rem;
   }
+
+  .cntSolCodigo {
+    display: flex;
+    align-items: end;
+    gap: 1rem;
+  }
+
+  .cntInput > :nth-child(1) {
+    padding-bottom: 0.5rem;
+  }
+
+  .cntNumeros {
+    display: flex;
+    gap: 0.5rem;
+    
+    label{
+      width: 100%;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .instruccion > :nth-child(2) {
+    font-size: 0.85rem;
+    color: rgba(68, 70, 68, 0.533);
+    font-style: italic;
+  }
+
+  textarea:placeholder-shown {
+    font-family: Arial, Helvetica, sans-serif;
+    
+  }
+  textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    resize: vertical;
+    height: 80px !important;
+  }
+
+  .capaModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: opacity 0.4s;
+  }
+
+  .capaModalVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    min-width: 20rem;
+    text-align: center;
+    transform: scale(0.92) translateY(-30px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .modalVisible {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    display: flex;
+  }
+  
 
 @media (max-width: 950px) {
   .cntFormulario {

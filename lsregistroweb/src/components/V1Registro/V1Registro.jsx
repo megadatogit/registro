@@ -6,6 +6,7 @@ import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes/AppRouter';
 
+
 import styles from './v1registro.module.css';
 import srcAbierto from './eye-password-see-view-svgrepo-com.svg';
 import srcCerrado from './eye-key-look-password-security-see-svgrepo-com.svg';
@@ -66,7 +67,16 @@ const Registro = () => {
   return (
     <div className={styles.cntV1Registro}>
       <div className={styles.cntBienvenida}>
-        <LiberSalusPoly/>
+        <div className={styles.fondo}>
+          <LiberSalusPoly
+         autoMorph={true}        // morph automático
+        morphEveryMs={3000}     // intervalo de morph
+        spray={false}            // triángulos sueltos
+        curveAlpha={1}        // opacidad ola superior
+        dirGlow={0.16}          // vignette/glow
+        className="w-full h-full"
+        />
+        </div>
         <div className={styles.cntSaludo}>
           <div>
             <p>¡Bienvenido a Liber Salus!</p>
@@ -91,7 +101,7 @@ const Registro = () => {
             <p className={styles.paso}>Completa tus cuestionarios de saliud</p>
           </div>
 
-          <div className={styles.cntafter}>❤️</div>
+          
         </div>
 
         <div className={styles.cntDerechosInfo}>

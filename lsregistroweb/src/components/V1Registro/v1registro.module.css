@@ -1,6 +1,6 @@
 .cntV1Registro {
     width: 100%;
-    height: 100dvh;
+    /* height: 100%; */
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -22,6 +22,16 @@
     position: relative;
     
 }
+
+.fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -3;
+}
+
 
 .cntBienvenida::after {
     /* border: 2px dashed; */
@@ -73,7 +83,7 @@
 .cntPasos > :nth-child(1)::before, 
 .cntPasos > :nth-child(2)::before, 
 .cntPasos > :nth-child(3)::before { 
-    border: 2px dashed;
+    /* border: 2px dashed; */
     position: absolute;
     width:  3rem;
     height: 3rem;
@@ -126,71 +136,19 @@
 }
 
 
-.cntafter {
-    width:  20px;
-    height: 20px;
-    /* background-color: white; */
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: cara 5s ease infinite alternate;
-}
-
-@keyframes cara {
-    0% {transform: scale(0.2);}
-    50%{transform: scale(2.5);}
-}
-
-.cntafter::before {
-    position: absolute;
-    content: '🖖';
-    width:  10px;
-    height: 10px;
-    
-    bottom: 0;
-    right: -5px;
-    
-    z-index: -1;
-    animation: mueve 5s ease infinite alternate;
-}
-
-.cntafter::after {
-    position: absolute;
-    content: '🖖';
-    width:  10px;
-    height: 10px;
-    
-    bottom: 0;
-    left: -5px;
-    
-    z-index: -1;
-    animation: mueve1 5s ease infinite alternate;
-}
-
-@keyframes mueve {
-    0%  {transform: translateX(0);}
-    50% {transform: translateX(2px) scale(1.9) rotate(90deg) translateY(-10px);}
-}
-@keyframes mueve1 {
-    0%  {transform: translateX(0);}
-    50% {transform: translateX(2px) scale(1.9) rotate(-90deg) translateY(-10px);}
-}
-
-
-
-
 .cntFormulario {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    
+    height: 100dvh;
+    z-index: 2;
+    background-color: white;
 }
 
 .logoForm {
-    margin: 1rem auto 2rem;
+    margin: 0rem auto 2rem;
     width: 100%;
 }
 
@@ -343,6 +301,14 @@ input::placeholder {
 
 @media (max-width: 950px) {
 
+    .cntBienvenida {
+        display: none;
+    }
+    .fondo {
+        
+        display: none;
+    }
+
     .cntSaludo {
         display: flex;
         flex-direction: column-reverse;
@@ -364,12 +330,12 @@ input::placeholder {
 
     .cntDerechosForm {
         display: block;
-        color: white;
+        
         width: 80%;
     }
 
     .logoForm {
-        display: none;
+        display: block;
     }
 
     
@@ -426,12 +392,14 @@ input::placeholder {
 
     .cntFormulario {
         min-width: 100%;
+        height: auto;
+        padding: 2rem 0;
     }
 
 
     .formulario {
         width: 90%;
-        color: white;
+        /* color: white; */
     }
 
     .error {
