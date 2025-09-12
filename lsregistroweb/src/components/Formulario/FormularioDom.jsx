@@ -6,6 +6,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import api from "@/services/api";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/AppRouter"; // <-- usa "@/" alias
+
 const schema = z.object({
   calle: z.string().min(1, "Calle requerida"),
   numeroExt: z.string().min(1, "Número exterior requerido"),
@@ -20,10 +24,12 @@ const schema = z.object({
   referencia: z.string().optional(),
 });
 
-const CP_API =
-  "/cp/codigos_postales?codigo_postal=";
+const CP_API = "/cp/codigos_postales?codigo_postal=";
 
 const FormularioDom = () => {
+  const navigate = useNavigate();               // <-- declara ANTES de usar
+  const [ciudad, setCiudad] = useState("");     // <-- declara ANTES de usar
+
   const {
     register,
     handleSubmit,
@@ -91,12 +97,14 @@ const FormularioDom = () => {
       const primero = data[0];
       const estado = primero?.D_ESTADO || "";
       const alcaldia = primero?.D_MNPIO || "";
+      const city = primero?.D_CIUDAD || "";
 
       setValue("estado", estado, { shouldDirty: true, shouldValidate: true });
       setValue("alcaldiaMunicipio", alcaldia, {
         shouldDirty: true,
         shouldValidate: true,
       });
+      setCiudad(city); // <-- ahora sí existe
 
       // Colonias únicas (D_ASENTA)
       const uniq = Array.from(
@@ -115,9 +123,7 @@ const FormularioDom = () => {
         setIsOpen(true);
       }
     } catch (e) {
-      setCpError(
-        e?.message || "Ocurrió un error al consultar el código postal"
-      );
+      setCpError(e?.message || "Ocurrió un error al consultar el código postal");
     } finally {
       setCpLoading(false);
     }
@@ -132,9 +138,36 @@ const FormularioDom = () => {
     setIsOpen(false);
   };
 
-  const onSubmit = (data) => {
-    console.table(data);
-    // aquí POST a tu backend de domicilio…
+  const onSubmit = async (form) => {
+    try {
+      const payload = {
+        calle: form.calle,
+        numero_int: form.numeroInt || "",
+        numero_ext: form.numeroExt,
+        codigo_postal: form.codigoPostal,
+        delegacion: form.alcaldiaMunicipio,
+        colonia: form.colonia,
+        estado: form.estado,
+        ciudad: ciudad || "",
+        referencia: form.referencia || "",
+      };
+
+      await api.post("/preregistro/direccion/guardar", payload);
+      navigate(ROUTES.RECIBIDOS);
+    } catch (err) {
+      const d =
+        err?.response?.data?.detail ??
+        err?.response?.data?.message ??
+        err?.message;
+      const msg = Array.isArray(d)
+        ? d.map((x) => x.msg || JSON.stringify(x)).join(" · ")
+        : d;
+      if (err?.response?.status === 401) {
+        alert("Sesión no válida. Inicia sesión de nuevo.");
+        return;
+      }
+      alert(msg || "Error al guardar dirección");
+    }
   };
 
   return (
@@ -149,9 +182,7 @@ const FormularioDom = () => {
           aria-modal="true"
           aria-labelledby="titulo-modal-colonia"
         >
-          <div
-            className={`${styles.modal} ${isOpen ? styles.modalVisible : ""}`}
-          >
+          <div className={`${styles.modal} ${isOpen ? styles.modalVisible : ""}`}>
             <p id="titulo-modal-colonia" className={styles.modalTitulo}>
               Confirma tu colonia
             </p>
@@ -167,7 +198,7 @@ const FormularioDom = () => {
                     onChange={() => setSeleccion(c)}
                     className={styles.radioColonia}
                   />
-                  <span className={styles.nomColonia} >{c}</span>
+                  <span className={styles.nomColonia}>{c}</span>
                 </label>
               ))}
             </div>
@@ -184,11 +215,7 @@ const FormularioDom = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={styles.formulario}
-        noValidate
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.formulario} noValidate>
         {/* solicitud codigo postal */}
         <div className={styles.cntSolCodigo}>
           <div className={styles.cntInput}>
@@ -203,18 +230,13 @@ const FormularioDom = () => {
               inputMode="numeric"
               placeholder="Ingresa código postal"
               onInput={(e) => {
-                // solo dígitos
                 e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5);
               }}
             />
             {errors.codigoPostal && (
-              <span className={styles.errors}>
-                {errors.codigoPostal.message}
-              </span>
+              <span className={styles.errors}>{errors.codigoPostal.message}</span>
             )}
-            {cpError && !isOpen && (
-              <div className={styles.errors}>{cpError}</div>
-            )}
+            {cpError && !isOpen && <div className={styles.errors}>{cpError}</div>}
           </div>
 
           <BotonA
@@ -237,9 +259,7 @@ const FormularioDom = () => {
           {...register("estado")}
           placeholder="Estado"
         />
-        {errors.estado && (
-          <span className={styles.errors}>{errors.estado.message}</span>
-        )}
+        {errors.estado && <span className={styles.errors}>{errors.estado.message}</span>}
 
         {/* Alcaldia o Municipio */}
         <label className={styles.label} htmlFor="alcaldiaMunicipio">
@@ -252,9 +272,7 @@ const FormularioDom = () => {
           placeholder="Ingresa Alcaldía o Municipio"
         />
         {errors.alcaldiaMunicipio && (
-          <span className={styles.errors}>
-            {errors.alcaldiaMunicipio.message}
-          </span>
+          <span className={styles.errors}>{errors.alcaldiaMunicipio.message}</span>
         )}
 
         {/* Colonia */}
@@ -267,9 +285,7 @@ const FormularioDom = () => {
           {...register("colonia")}
           placeholder="Ingresa colonia"
         />
-        {errors.colonia && (
-          <span className={styles.errors}>{errors.colonia.message}</span>
-        )}
+        {errors.colonia && <span className={styles.errors}>{errors.colonia.message}</span>}
 
         <div className={styles.instruccion}>
           <p>Detalla tu ubicación según corresponda</p>
@@ -280,15 +296,8 @@ const FormularioDom = () => {
         <label className={styles.label} htmlFor="calle">
           Calle:
         </label>
-        <input
-          id="calle"
-          className={styles.input}
-          {...register("calle")}
-          placeholder="Ingresa calle"
-        />
-        {errors.calle && (
-          <span className={styles.errors}>{errors.calle.message}</span>
-        )}
+        <input id="calle" className={styles.input} {...register("calle")} placeholder="Ingresa calle" />
+        {errors.calle && <span className={styles.errors}>{errors.calle.message}</span>}
 
         <div className={styles.cntNumeros}>
           <div className={styles.cntInputsNum}>
@@ -302,9 +311,7 @@ const FormularioDom = () => {
               {...register("numeroExt")}
               placeholder="Ingresa número exterior"
             />
-            {errors.numeroExt && (
-              <span className={styles.errors}>{errors.numeroExt.message}</span>
-            )}
+            {errors.numeroExt && <span className={styles.errors}>{errors.numeroExt.message}</span>}
           </div>
 
           <div className={styles.cntInputsNum}>
@@ -318,9 +325,7 @@ const FormularioDom = () => {
               {...register("numeroInt")}
               placeholder="Ingresa número interior"
             />
-            {errors.numeroInt && (
-              <span className={styles.errors}>{errors.numeroInt.message}</span>
-            )}
+            {errors.numeroInt && <span className={styles.errors}>{errors.numeroInt.message}</span>}
           </div>
         </div>
 

@@ -12,29 +12,44 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
     },
+    // vite.config.js
     server: {
       proxy: {
-        // Microservicio CURP (8060) — regla específica primero
+        // --- 8060: reglas específicas primero ---
+        "/api/preregistro/direccion": {
+          // 👈 esta ruta
+          target: "http://192.168.100.100:8060",
+          changeOrigin: true,
+          secure: false,
+          rewrite: (p) =>
+            p.replace(
+              /^\/api\/preregistro\/direccion/,
+              "/preregistro/direccion"
+            ),
+        },
+
         "/api/ine": {
           target: "http://192.168.100.100:8060",
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api\/ine/, ""),
         },
-        // Backend principal (8040)
+
+        // --- 8040: el resto ---
         "/api": {
           target: "http://192.168.100.100:8040",
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ""),
         },
+
+        // Servicio CP externo (ya lo tienes)
         "/cp": {
           target:
             "https://catalogos-nom024-fastapi-bigquery-967885369144.europe-west1.run.app",
           changeOrigin: true,
           secure: false,
-          // NO reescribas si prefieres conservar la ruta tal cual
-          rewrite: (p) => p.replace(/^\/cp/, ''),
+          rewrite: (p) => p.replace(/^\/cp/, ""),
         },
       },
     },
