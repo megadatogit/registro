@@ -30,7 +30,6 @@ const schema = z.object({
 
 const Registro = () => {
 
-  alert("Estás en el entorno de registro. Una vez completado el proceso, serás redirigido al panel principal.");
   const navigate = useNavigate();
   const [showPass, setShowPass] = useState(false);
   const [showConf, setShowConf] = useState(false);
