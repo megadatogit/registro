@@ -18,7 +18,7 @@ import V8Opciones       from '@/components/V8Opciones/V8Opciones';
 
 /* --- Rutas --- */
 export const ROUTES = {
-  REGISTRO:            '/registro',
+  REGISTRO:            '/',
   CONFIRMACION:        '/confirmacion',
   VERIFICACION:        '/verificacion',
   CONFIRMACION_EXITO:  '/confirmacion-exito',
