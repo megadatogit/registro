@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
           ws: true, // 👈 HMR del panel a través del proxy
-          rewrite: (p) => p.replace(/^\/panel/, ""),
+          //rewrite: (p) => p.replace(/^\/panel/, ""),
         },
         // ... tus reglas /api, /cp, etc
       },

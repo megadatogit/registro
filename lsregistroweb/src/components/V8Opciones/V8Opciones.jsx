@@ -16,7 +16,7 @@ import BotonA from '../Botones/BotonA'
 const V8Opciones = () => {
 
   const irAlPanel = () => {
-    window.location.href = '/panel';
+    window.location.href = '/panel/';
   }
 
   return (
