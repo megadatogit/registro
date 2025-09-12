@@ -18,7 +18,7 @@ export const ROUTES = {
 
 export const AppRouter = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename="/panel">
             <Routes>
                 <Route path={ROUTES.LOGIN} element={<Login />} />
                 <Route path={ROUTES.CUESTIONARIOS} element={<Cuestionarios />} />

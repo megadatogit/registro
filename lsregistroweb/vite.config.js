@@ -4,10 +4,12 @@ import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
 
 export default defineConfig(({ mode }) => {
+  
   const env = loadEnv(mode, process.cwd());
 
   return {
-    base: env.VITE_BASE || "/",
+    base: '/registro/',
+    //base: env.VITE_BASE || "/",
     plugins: [react()],
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
@@ -51,6 +53,16 @@ export default defineConfig(({ mode }) => {
           secure: false,
           rewrite: (p) => p.replace(/^\/cp/, ""),
         },
+
+        // al panel
+        "/panel": {
+          target: "http://localhost:5174", // o 192.168.100.34:5174 como pusiste
+          changeOrigin: true,
+          secure: false,
+          ws: true, // 👈 HMR del panel a través del proxy
+          rewrite: (p) => p.replace(/^\/panel/, ""),
+        },
+        // ... tus reglas /api, /cp, etc
       },
     },
   };

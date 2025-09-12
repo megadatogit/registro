@@ -14,6 +14,11 @@ import botiquin from '../ElementosVista/TarjetaOpcion/botiquin.png'
 import BotonA from '../Botones/BotonA'
 
 const V8Opciones = () => {
+
+  const irAlPanel = () => {
+    window.location.href = '/panel';
+  }
+
   return (
     <div className={styles.cntV8Opciones}>
         <div className={styles.cntLogo}>
@@ -61,7 +66,7 @@ const V8Opciones = () => {
             
         
         </div>
-        <BotonA>Comcenzar</BotonA>
+        <BotonA onClick={irAlPanel}>Comenzar</BotonA>
 
     </div>
   )
