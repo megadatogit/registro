@@ -37,7 +37,6 @@ export const AppRoutes = () => (
   <BrowserRouter basename="/registro">
     <Routes>
       {/* Raíz → redirige al primer paso del flujo */}
-      <Route path="/" element={<Navigate to={ROUTES.REGISTRO} replace />} />
 
       <Route path={ROUTES.REGISTRO}               element={<V1Registro />} />
       <Route path={ROUTES.CONFIRMACION}           element={<V2Confirmacion />} />
