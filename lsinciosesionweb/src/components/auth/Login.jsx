@@ -3,17 +3,18 @@ import styles from "./login.module.css";
 import logo from "@/images/Capa_1-2.png";
 import eyeIcon from "@/images/Icons _ eye-empty.png";      // ✅ importa el icono
 import { login } from "@/services/auth";            // ✅ importa el servicio
-
-// import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom"
 
 const Login = () => {
-  // const navigate = useNavigate();
+  
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
     password: "",
     role: "paciente", // paciente | medico
   });
+
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -50,7 +51,9 @@ const Login = () => {
         role: form.role,
       });
       console.log("Login OK:", data);
-      // navigate("/dashboard");
+      // marca sesión iniciada (temporal)
+      localStorage.setItem("auth_ready", "1");
+      navigate("/inicio", {replace: true}); 
     } catch (err) {
       console.error(err);
       const apiMsg = err?.response?.data?.message;
