@@ -37,6 +37,13 @@ export default defineConfig(({ mode }) => {
           rewrite: (p) => p.replace(/^\/api\/ine/, ""),
         },
 
+        "/api/auth": {
+          target: "http://192.168.100.100:8060",
+          changeOrigin: true,
+          secure: false,
+          rewrite: (p) => p.replace(/^\/api/, ""), // /api/auth/token -> /auth/token
+        },
+
         // --- 8040: el resto ---
         "/api": {
           target: "http://192.168.100.100:8040",

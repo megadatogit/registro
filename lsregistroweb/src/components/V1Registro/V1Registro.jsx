@@ -199,7 +199,7 @@ const Registro = () => {
             {/* Políticas */}
             <div className={styles.cntPoliticas}>
               <input id="politicas" type="checkbox" {...register('politicas')} />
-              <label htmlFor="politicas">
+              <label htmlFor="politicas"> 
                 He leído y acepto <a href="#">Términos</a> y <a href="#">Privacidad</a>
               </label>
               {errors.politicas && touchedFields.politicas && <span className={styles.error}>{errors.politicas.message}</span>}

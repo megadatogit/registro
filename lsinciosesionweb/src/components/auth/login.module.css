@@ -2,6 +2,8 @@
 
 
 .cntTarjeta {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +24,7 @@
 .h2 {
   color: rgb(83, 83, 83);
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 /* Estilos para el formulario */
@@ -112,7 +115,7 @@ input[type="checkbox" i] {
 }
 
 input[type="email"], input[type="password"],input[type="text"] {
-  width: 90%;
+  width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
@@ -125,20 +128,21 @@ input[type="email"], input[type="password"],input[type="text"] {
   margin: 0;
   padding: 0;
   width: 100%;
+  
 }
 
-.ojo {
-  appearance: none;
-  border: none;
-  background: none;
-  outline: none;
-}
+
 .imgOjo, .ojo {
+  margin: 0;
+  padding: 0 ;
+  box-sizing: border-box;
   position: absolute;
   top: 50%;
-  right: 1rem;
+  right: 0.25rem;
   transform: translateY(-50%);
   cursor: pointer;
+  z-index: 2;
+
   
 }
 

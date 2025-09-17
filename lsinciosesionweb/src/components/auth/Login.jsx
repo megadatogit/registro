@@ -1,20 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 import logo from "@/images/Capa_1-2.png";
-import eyeIcon from "@/images/Icons _ eye-empty.png";      // ✅ importa el icono
-import { login } from "@/services/auth";            // ✅ importa el servicio
-import { useNavigate} from "react-router-dom"
+import eyeIcon from "@/images/Icons _ eye-empty.png"; // ✅ importa el icono
+import { login } from "@/services/auth"; // ✅ importa el servicio
+//import { setAuthToken } from "@/services/apiClient";
+import Derechos from "../Derechos/Derechos";
 
 const Login = () => {
-  
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     email: "",
     password: "",
     role: "paciente", // paciente | medico
   });
-
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -46,18 +45,35 @@ const Login = () => {
     try {
       setLoading(true);
       const data = await login({
-        email: form.email.trim(),
+        username: form.email.trim(),
         password: form.password,
-        role: form.role,
+        role: form.role, // "paciente" | "medico"
       });
-      console.log("Login OK:", data);
-      // marca sesión iniciada (temporal)
+
+      // si usas cookie HttpOnly, no necesitas guardarla manualmente.
+      // marcamos auth para el ProtectedRoute “temporal”:
       localStorage.setItem("auth_ready", "1");
-      navigate("/inicio", {replace: true}); 
+
+      // ...después de obtener los datos del login/usuario:
+      localStorage.setItem(
+        "perfil_min",
+        JSON.stringify({
+          nombre: data?.user?.first_name && data?.user?.last_name || data?.user?.nombre || "Usuario",
+          // puedes guardar más campos si quieres:
+          // avatarUrl: data?.user?.avatar,
+        })
+      );
+
+      navigate("/inicio", { replace: true });
     } catch (err) {
       console.error(err);
-      const apiMsg = err?.response?.data?.message;
-      setErrorMsg(apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo.");
+      const apiMsg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        err?.message;
+      setErrorMsg(
+        apiMsg || "No fue posible iniciar sesión. Inténtalo de nuevo."
+      );
     } finally {
       setLoading(false);
     }
@@ -169,7 +185,11 @@ const Login = () => {
         </div>
 
         {errorMsg && (
-          <div className={styles.mensajeError} role="alert" aria-live="assertive">
+          <div
+            className={styles.mensajeError}
+            role="alert"
+            aria-live="assertive"
+          >
             {errorMsg}
           </div>
         )}
@@ -191,6 +211,7 @@ const Login = () => {
           ¿Aún no tienes cuenta? <a href="/registro">Registrarme</a>
         </p>
       </div>
+      <Derechos />
     </div>
   );
 };

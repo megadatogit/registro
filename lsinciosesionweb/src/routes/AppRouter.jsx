@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 /* accesos */
 
 import
+    import Panel from '@/pages/Panel/Panel';
 
 export const ROUTES = {
   
@@ -18,6 +19,7 @@ export const AppRouter = () => {
         <BrowserRouter basename="/panel">
             <Routes>
                 <Route path={ROUTES.LOGIN} element={<Login />} />
+                <Route path={ROUTES.INICIO} element={<Inicio />} />
                 <Route path={ROUTES.CUESTIONARIOS} element={<Cuestionarios />} />
                 <Route path={ROUTES.HISTORIAL} element={<Historial />} />
                 <Route path={ROUTES.CABINA} element={<Cabina />} />

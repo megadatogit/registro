@@ -7,6 +7,7 @@ import Cuestionarios from '@/pages/Cuestionarios/Cuestionarios';
 import Historial from '@/pages/Historial/Historial';
 import Cabina from '@/pages/Cabina/Cabina';
 import Ayuda from '@/pages/Ayuda/Ayuda';
+import Panel from '@/pages/Panel/Panel';
 
 import ProtectedRoute from './protected-route';
 
@@ -17,6 +18,7 @@ export const ROUTES = {
   HISTORIAL: '/historial',
   CABINA: '/cabina',
   AYUDA: '/ayuda',
+  PANEL: '/panelayout'
 };
 
 export const AppRouter = () => (
@@ -31,6 +33,7 @@ export const AppRouter = () => (
         <Route path={ROUTES.HISTORIAL} element={<Historial />} />
         <Route path={ROUTES.CABINA} element={<Cabina />} />
         <Route path={ROUTES.AYUDA} element={<Ayuda />} />
+        <Route path={ROUTES.PANEL} element={<Panel />} />
       </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
