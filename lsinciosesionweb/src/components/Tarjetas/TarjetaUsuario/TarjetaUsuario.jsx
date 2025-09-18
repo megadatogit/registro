@@ -1,62 +1,66 @@
 // src/components/Tarjetas/TarjetaUsuario/TarjetaUsuario.jsx
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './tarjetaUsuario.module.css';
 import defaultAvatar from './foto-perfil.png';
-import { getProfilePhoto, uploadProfilePhoto } from '@/services/perfil';
+import ModalUsuario from './ModalUsuario';
+import { logout } from '@/services/auth'; // ya lo tienes
+// import { uploadProfilePhoto } from '@/services/perfil'; // cuando el back esté listo
 
 const TarjetaUsuario = () => {
-  const [nombre, setNombre] = useState('Usuario');
+  const [isOpen, setIsOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(defaultAvatar);
-  const [subiendo, setSubiendo] = useState(false);
-  const [error, setError] = useState('');
+  const [nombre, setNombre] = useState('Usuario');
+  const [correo, setCorreo] = useState('');
+  const inputFileRef = useRef(null);
 
-  // nombre desde localStorage guardado al hacer login
+  // lee nombre/correo del storage que guardaste al hacer login
   useEffect(() => {
     try {
       const raw = localStorage.getItem('perfil_min');
       if (raw) {
         const p = JSON.parse(raw);
-        if (p?.nombre) setNombre(p.nombre);
+        // nombre y apellido (si vienen)
+        const fullName =
+          (p?.first_name && p?.last_name && `${p.first_name} ${p.last_name}`) ||
+          p?.nombre ||
+          'Usuario';
+        setNombre(fullName);
+        if (p?.email) setCorreo(p.email);
       }
     } catch {}
   }, []);
 
-  // cargar foto
-  useEffect(() => {
-    let revokeUrl;
-    (async () => {
-      setError('');
-      try {
-        const blob = await getProfilePhoto('original');
-        const url = URL.createObjectURL(blob);
-        setAvatarUrl(url);
-        revokeUrl = url;
-      } catch (e) {
-        // si no hay foto aún, dejamos el default, no es error fatal
-        // console.log('sin foto de perfil (aún)');
-      }
-    })();
-    return () => {
-      if (revokeUrl) URL.revokeObjectURL(revokeUrl);
-    };
-  }, []);
+  // abre modal al hacer click en la foto
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
+  // cambiar foto → abre selector
+  const onChangePhotoClick = () => {
+    inputFileRef.current?.click();
+  };
+
+  // recibe archivo (cuando back esté listo lo subimos)
   const onSelectFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setSubiendo(true);
-    setError('');
+    // 🔜 cuando el back esté ok:
+    // try {
+    //   await uploadProfilePhoto(file);
+    //   // refrescar foto si tu servicio la regresa por GET
+    // } catch (err) {
+    //   console.error(err);
+    // }
+  };
+
+  const onLogout = async () => {
     try {
-      await uploadProfilePhoto(file);
-      // refrescar preview
-      const blob = await getProfilePhoto('original');
-      const url = URL.createObjectURL(blob);
-      setAvatarUrl(url);
-    } catch (e) {
-      setError('No se pudo subir la imagen de perfil.');
+      await logout();
+    } catch {
+      // si falla, igual limpiamos
     } finally {
-      setSubiendo(false);
-      e.target.value = ''; // limpia input
+      localStorage.removeItem('auth_ready');
+      localStorage.removeItem('perfil_min');
+      window.location.assign('/panel/login'); // regresa al login del panel
     }
   };
 
@@ -68,19 +72,40 @@ const TarjetaUsuario = () => {
           <span className={styles.estado}>Perfil</span>
         </div>
 
-        <label className={styles.avatarWrap} title="Cambiar foto">
+        {/* FOTO: al clicar abre el modal */}
+        <button
+          type="button"
+          className={styles.imgUsuarioBtn}
+          onClick={openModal}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen ? 'true' : 'false'}
+          title="Abrir opciones de perfil"
+        >
           <img className={styles.imgUsuario} src={avatarUrl} alt="Foto de perfil" />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onSelectFile}
-            style={{ display: 'none' }}
-          />
-          {subiendo && <span className={styles.badge}>Subiendo…</span>}
-        </label>
+        </button>
 
-        {error && <div className={styles.err}>{error}</div>}
+        {/* input oculto para subir foto (lo dispara el modal) */}
+        <input
+          ref={inputFileRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={onSelectFile}
+        />
       </div>
+
+      {/* MODAL */}
+      {isOpen && (
+        <ModalUsuario
+          onClose={closeModal}
+          nombre={nombre}
+          correo={correo}
+          // si quieres mostrar última sesión más adelante, pásala como prop:
+          ultimaSesion={null}
+          onChangePhoto={onChangePhotoClick}
+          onLogout={onLogout}
+        />
+      )}
     </div>
   );
 };
