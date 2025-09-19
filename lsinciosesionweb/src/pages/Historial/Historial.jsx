@@ -1,10 +1,13 @@
 import React from 'react'
 import styles from './historial.module.css';
+import Principal from '@/Layout/Principal';
+import TarjetaBienestar from '@/components/Tarjetas/TarjetaBienestar/TarjetaBienestar';
 const Historial = () => {
   return (
-    <div className={styles.cntHistorial}>
-        <h1 className={styles.tit}>Historial Page</h1>
-    </div>
+    <Principal>
+      <h1 className={styles.tit}>Historial Page</h1>
+      <TarjetaBienestar></TarjetaBienestar>
+    </Principal>
   )
 }
 

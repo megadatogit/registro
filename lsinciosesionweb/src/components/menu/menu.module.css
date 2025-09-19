@@ -124,6 +124,21 @@
   background-color: rgba(185, 20, 126, 0.5);
 } */
 
+/* Menu.module.css */
+.link {
+  text-decoration: none;
+  color: #1e293b; /* ejemplo */
+  transition: color .2s ease;
+}
+
+.link:hover { color: #111827; }
+
+.active {
+  font-weight: 700;
+  color: #0a4789; /* ejemplo de color activo */
+}
+
+
 .menuItem::before {
     position: absolute;
     content: '';

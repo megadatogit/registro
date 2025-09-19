@@ -1,11 +1,13 @@
 import React from 'react'
 import styles from './cabina.module.css';
+import Principal from '@/Layout/Principal';
 
 const Cabina = () => {
   return (
-    <div className={styles.cntCabina}>
+    <Principal>
       <h1 className={styles.tit}>Cabina Page</h1>
-    </div>
+      <h1>proximamente</h1>
+    </Principal>
   )
 }
 

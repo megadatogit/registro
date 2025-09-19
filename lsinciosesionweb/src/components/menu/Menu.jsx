@@ -1,8 +1,10 @@
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback, useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import styles from "./Menu.module.css";
 import Estelas, { PALETTES } from "./estelas";
+import { ROUTES } from "@/routes";
 
-// tus assets…
+// assets
 import logo from "../../images/Capa_1-2.png";
 import inicio       from "./inicio.svg";
 import cuestionario from "./cuestionario.svg";
@@ -10,49 +12,95 @@ import historial    from "./historial.svg";
 import cabina       from "./cabina.svg";
 import ayuda        from "./ayuda.svg";
 
+const MenuItem = ({ to, text, icon, paletteKey, onEnter, onLeave, end }) => {
+  return (
+    <div
+      className={styles.menuItem}
+      onMouseEnter={() => onEnter(paletteKey)}
+      onMouseLeave={onLeave}
+      onFocus={() => onEnter(paletteKey)}
+      onBlur={onLeave}
+    >
+      <img src={icon} alt="" className={styles.icono} />
+      <NavLink
+        to={to}
+        end={end}
+        className={({ isActive }) =>
+          isActive ? `${styles.link} ${styles.active}` : styles.link
+        }
+        onMouseEnter={(e) => e.stopPropagation()}
+        onMouseLeave={(e) => e.stopPropagation()}
+        aria-label={text}
+      >
+        {text}
+      </NavLink>
+    </div>
+  );
+};
+
 const Menu = () => {
   const estelasRef = useRef(null);
+  const location = useLocation();
+  const [baseKey, setBaseKey] = useState("inicio"); // clave de paleta base actual
 
-  // Mapa Item -> Paleta
-  const ITEM_PALETTES = useMemo(() => ({
-    inicio:       PALETTES.principal,
-    cuestionario: PALETTES.turquesa,
-    historial:    PALETTES.dorado,
-    cabina:       PALETTES.naranja,
-    ayuda:        PALETTES.magenta,
-  }), []);
+  const ITEM_PALETTES = useMemo(
+    () => ({
+      inicio:       PALETTES.principal,
+      cuestionario: PALETTES.turquesa,
+      historial:    PALETTES.dorado,
+      cabina:       PALETTES.naranja,
+      ayuda:        PALETTES.magenta,
+    }),
+    []
+  );
 
-  // Entrar: color + morph
-  const handleEnter = useCallback((key) => {
-    const pal = ITEM_PALETTES[key];
-    if (!pal) return;
+  const PATH_TO_KEY = useMemo(
+    () => ({
+      [ROUTES.INICIO]: "inicio",
+      [ROUTES.CUESTIONARIOS]: "cuestionario",
+      [ROUTES.HISTORIAL]: "historial",
+      [ROUTES.CABINA]: "cabina",
+      [ROUTES.AYUDA]: "ayuda",
+    }),
+    []
+  );
+
+  // Fija paleta base según ruta activa
+  useEffect(() => {
+    const key = PATH_TO_KEY[location.pathname] ?? "inicio";
+    setBaseKey(key);
+    const pal = ITEM_PALETTES[key] ?? PALETTES.principal;
     estelasRef.current?.transitionToPalette(pal);
-    estelasRef.current?.morph();
-  }, [ITEM_PALETTES]);
+  }, [location.pathname, PATH_TO_KEY, ITEM_PALETTES]);
 
-  // Salir: volver a la paleta base
+  const handleEnter = useCallback(
+    (key) => {
+      const pal = ITEM_PALETTES[key];
+      if (!pal) return;
+      estelasRef.current?.transitionToPalette(pal);
+      // Throttle opcional si notas spam de morph:
+      estelasRef.current?.morph();
+    },
+    [ITEM_PALETTES]
+  );
+
   const handleLeave = useCallback(() => {
-    estelasRef.current?.transitionToPalette(PALETTES.principal);
-  }, []);
-
-  const onFocusItem = (key) => handleEnter(key);
-  const onBlurItem  = () => handleLeave();
+    const pal = ITEM_PALETTES[baseKey] ?? PALETTES.principal;
+    estelasRef.current?.transitionToPalette(pal);
+  }, [ITEM_PALETTES, baseKey]);
 
   return (
     <div className={styles.cntMenu}>
       <div className={styles.fondoEstelas}>
         <Estelas
           ref={estelasRef}
-          // Ajustes para que las estelas se vean bien
           targetParticles={7}
           maxParticles={10}
           speedFactor={0.5}
           dirGlowStrength={1.0}
           dirGlowMaxAlpha={0.65}
-          // Borde: matar en orilla
           killMarginPx={12}
           viewMargin={64}
-          // Curvas/tiempos
           colorEase="cubic-bezier(0.075, 0.82, 0.165, 1)"
           morphEase="cubic-bezier(0.075, 0.82, 0.165, 1)"
           colorDurationMs={900}
@@ -61,69 +109,51 @@ const Menu = () => {
       </div>
 
       <div className={styles.cntLogo}>
-        <img className={styles.imglogo} src={logo} alt="Logo" />
+        <img className={styles.imglogo} src={logo} alt="Logo Liber Salus" />
       </div>
 
       <div className={styles.opciones}>
-        <div
-          className={styles.menuItem}
-          onMouseEnter={() => handleEnter("inicio")}
-          onMouseLeave={handleLeave}
-          onFocus={() => onFocusItem("inicio")}
-          onBlur={onBlurItem}
-          tabIndex={0}
-        >
-          <img src={inicio} alt="Inicio" className={styles.icono} />
-          <a href="/inicio" className={styles.link}>Inicio</a>
-        </div>
-
-        <div
-          className={styles.menuItem}
-          onMouseEnter={() => handleEnter("cuestionario")}
-          onMouseLeave={handleLeave}
-          onFocus={() => onFocusItem("cuestionario")}
-          onBlur={onBlurItem}
-          tabIndex={0}
-        >
-          <img src={cuestionario} alt="Cuestionarios" className={styles.icono} />
-          <a href="/cuestionarios" className={styles.link}>Cuestionarios</a>
-        </div>
-
-        <div
-          className={styles.menuItem}
-          onMouseEnter={() => handleEnter("historial")}
-          onMouseLeave={handleLeave}
-          onFocus={() => onFocusItem("historial")}
-          onBlur={onBlurItem}
-          tabIndex={0}
-        >
-          <img src={historial} alt="Historial" className={styles.icono} />
-          <a href="/historial" className={styles.link}>Historial</a>
-        </div>
-
-        <div
-          className={styles.menuItem}
-          onMouseEnter={() => handleEnter("cabina")}
-          onMouseLeave={handleLeave}
-          onFocus={() => onFocusItem("cabina")}
-          onBlur={onBlurItem}
-          tabIndex={0}
-        >
-          <img src={cabina} alt="Cabina" className={styles.icono} />
-          <a href="/cabina" className={styles.link}>Cabina</a>
-        </div>
-
-        <div
-          className={styles.menuItem}
-          onMouseEnter={() => handleEnter("ayuda")}
-          onMouseLeave={handleLeave}
-          onFocus={() => onFocusItem("ayuda")}
-          onBlur={onBlurItem}
-          tabIndex={0}
-        >
-          <img src={ayuda} alt="Ayuda" className={styles.icono} />
-          <a href="/ayuda" className={styles.link}>Ayuda</a>
-        </div>
+        <MenuItem
+          to={ROUTES.INICIO}
+          text="Inicio"
+          icon={inicio}
+          paletteKey="inicio"
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+          end
+        />
+        <MenuItem
+          to={ROUTES.CUESTIONARIOS}
+          text="Cuestionarios"
+          icon={cuestionario}
+          paletteKey="cuestionario"
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+        />
+        <MenuItem
+          to={ROUTES.HISTORIAL}
+          text="Historial"
+          icon={historial}
+          paletteKey="historial"
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+        />
+        <MenuItem
+          to={ROUTES.CABINA}
+          text="Cabina"
+          icon={cabina}
+          paletteKey="cabina"
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+        />
+        <MenuItem
+          to={ROUTES.AYUDA}
+          text="Ayuda"
+          icon={ayuda}
+          paletteKey="ayuda"
+          onEnter={handleEnter}
+          onLeave={handleLeave}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import React from 'react'
 import styles from './ayuda.module.css';
+import Principal from '@/Layout/Principal';
 
 const Ayuda = () => {
   return (
-    <div className={styles.cntAyuda}>
-      <h1 className={styles.tit}>Ayuda Page</h1>    
-    </div>
+    <Principal>
+      <h1 className={styles.tit}>Ayuda Page</h1>
+    </Principal>
   )
 }
 
